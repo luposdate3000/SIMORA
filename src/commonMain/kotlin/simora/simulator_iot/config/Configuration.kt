@@ -139,7 +139,7 @@ public class Configuration(private val simRun: SimulationRun) {
                 JsonParserObject(mutableMapOf()),
             )
             SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:142"/*SOURCE_FILE_END*/ },
+                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:141"/*SOURCE_FILE_END*/ },
                 { namedAddresses[name] == null },
                 { "name $name must be unique" }
             )
@@ -275,7 +275,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:278"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:277"/*SOURCE_FILE_END*/ },
             { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
             { "The performance level of a device can not be 0.0 %" },
         )

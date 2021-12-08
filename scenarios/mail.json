@@ -56,6 +56,10 @@
             "enabled": true,
         },
     },
-    "outputDirectory": "",
+    "outputDirectory": "simulator_output",
     "rootRouter": "DEVICE_1",
+    "routing": {
+        "multicast": "None",
+        "protocol": "RPL_Fast",
+    },
 }

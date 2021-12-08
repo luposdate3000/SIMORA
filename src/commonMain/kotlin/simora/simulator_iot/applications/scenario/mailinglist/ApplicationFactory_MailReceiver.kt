@@ -32,6 +32,9 @@ public class ApplicationFactory_MailReceiverFeature : IApplicationFeature {
 }
 
 public class ApplicationFactory_MailReceiver : IApplication_Factory {
+public companion object{
+public var allReceivers:MutableList<Int> =mutableListOf()
+}
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
         features.add(ApplicationFactory_MailReceiverFeature())
     }
@@ -39,6 +42,7 @@ public class ApplicationFactory_MailReceiver : IApplication_Factory {
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
         json as JsonParserObject
         if (json.getOrDefault("enabled", true)) {
+allReceivers.add(ownAddress)
             return listOf(
                 Application_MailReceiver()
             )
