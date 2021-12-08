@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ public class Application_ReceiveParkingSample(private val ownAddress: Int) : IAp
         if (pck is Package_Application_ParkingSample) {
             val query = StringBuilder()
             query.appendLine("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>")
-            query.appendLine("PREFIX parking: <https://github.com/simoradate3000/parking#>")
+            query.appendLine("PREFIX parking: <https://github.com/luposdate3000/parking#>")
             query.appendLine("")
             query.appendLine("INSERT DATA {")
             query.appendLine(" _:b0 a parking:Observation ;")
@@ -45,6 +45,7 @@ public class Application_ReceiveParkingSample(private val ownAddress: Int) : IAp
             query.appendLine(" parking:isOccupied \"${pck.isOccupied}\"^^xsd:boolean ;")
             query.appendLine(" parking:resultTime \"${pck.sampleTime}\"^^xsd:dateTime .")
             query.appendLine("}")
+println(query.toString())
             parent.send(ownAddress, Package_Query(ownAddress, query.toString().encodeToByteArray()))
             return null
         } else {
