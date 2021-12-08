@@ -16,16 +16,10 @@
  */
 package simora.shared.inline
 
+import kotlinx.cinterop.*
+import platform.posix.*
 import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.nio.file.Files
-import java.nio.file.Paths
-import platform.posix.*
-import kotlinx.cinterop.*
 internal actual class File {
     internal val filename: String
 
@@ -33,59 +27,53 @@ internal actual class File {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")
     }
 
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun exists() = access(filename, F_OK) == 0
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun exists() = java.io.File(filename).exists()
+    internal actual inline fun mkdirs() = mkdir(filename, S_IRWXU) == 0
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun mkdirs() = java.io.File(filename).mkdirs()
+    internal actual inline fun length(): Long {
+        val stream = fopen(filename, "rb")
+        fseek(stream, 0, SEEK_END)
+        val size = ftell(stream).toLong()
+        fclose(stream)
+        return size
+    }
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun deleteRecursively() = java.io.File(filename).deleteRecursively()
-
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun length() :Int{
-val stream=fopen(filename,"rb")
-fseek (stream, 0, SEEK_END)
-val    size=ftell (stream).toInt()
-fclose(stream)
-return size
-}
-
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun readAsString() :String{
-val stream=fopen(filename,"rb")
-fseek (stream, 0, SEEK_END)
-val    size=ftell (stream).toInt()
-fseek (stream, 0, SEEK_SET)
-val buf=ByteArray(size)
-var o = 0
+    internal actual inline fun readAsString(): String {
+        val stream = fopen(filename, "rb")
+        fseek(stream, 0, SEEK_END)
+        val size = ftell(stream).toInt()
+        fseek(stream, 0, SEEK_SET)
+        val buf = ByteArray(size)
+        var o = 0
         var s = size
         while (s > 0) {
-val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
+            val tmp = fread(buf.refTo(o), s.toULong(), 1, stream).toInt()
             if (tmp <= 0) {
-break
+                break
             }
             s -= tmp
             o += tmp
         }
-fclose(stream)
-return buf.decodeToString()
-}
-
-
+        fclose(stream)
+        return buf.decodeToString()
+    }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-if(append){
-return MyOutputStream(fopen(filename,"ab"))
-}else{
-return MyOutputStream(fopen(filename,"wb"))
-}
-}
+        if (append) {
+            return MyOutputStream(fopen(filename, "ab"))
+        } else {
+            return MyOutputStream(fopen(filename, "wb"))
+        }
+    }
 
     internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit) {
-        val printer = MyOutputStream(fopen(filename,"wb"))
+        val printer = MyOutputStream(fopen(filename, "wb"))
         try {
             action(printer)
         } finally {
@@ -94,13 +82,11 @@ return MyOutputStream(fopen(filename,"wb"))
     }
 
     internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit) {
-        val printer = MyInputStream(fopen(filename,"rb"))
+        val printer = MyInputStream(fopen(filename, "rb"))
         try {
             action(printer)
         } finally {
             printer.close()
         }
     }
-
-
 }

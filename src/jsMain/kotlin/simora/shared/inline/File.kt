@@ -27,7 +27,6 @@ internal actual class File {
         this.filename = filename
     }
 
-
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean = ExternalModule_fs.exists(filename)
 
@@ -35,15 +34,12 @@ internal actual class File {
     internal actual inline fun mkdirs(): Boolean = ExternalModule_fs.mkdirs(filename)
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun deleteRecursively(): Boolean = ExternalModule_fs.deleteRecursively(filename)
-
-    @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun length(): Long = ExternalModule_fs.length(filename)
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
         var res = StringBuilder()
-val stream = MyInputStream(filename)
+        val stream = MyInputStream(filename)
         val buffer = ByteArray(8192)
         var pos = 0
         val s = mutableListOf<Byte>()

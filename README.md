@@ -16,7 +16,7 @@ If you want to use the simulator from luposdate3000 or any external program
     For debugging purposes, place this file directly next to the previous one in the same folder.
     This will fail, if you rename the file.
     ./build/distributions/simora.js.map
-2. JVM :
+2. JVM
     The main jar is:
     ./build/libs/simora-jvm-0.0.1.jar
     include all dependencies from this file:
@@ -24,3 +24,6 @@ If you want to use the simulator from luposdate3000 or any external program
     run it with:
     java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt
     on Windows you must replace ":" with ";"
+3. Linux
+    Look into the subfolders of
+    ./build/bin/linuxX64/

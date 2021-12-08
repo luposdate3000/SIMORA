@@ -18,5 +18,5 @@
 package simora
 import simora.simulator_iot.Evaluation
 public fun main(args: Array<String>) {
-	Evaluation().evalConfigFileMerge(args.toList())
+    Evaluation().evalConfigFileMerge(args.toList())
 }

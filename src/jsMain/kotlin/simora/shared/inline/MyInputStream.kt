@@ -30,7 +30,6 @@ internal actual class MyInputStream : IMyInputStream {
         tmp = JSInputStream(fd)
     }
 
-
     actual override fun readByte(): Byte {
         return tmp.readByte()
     }

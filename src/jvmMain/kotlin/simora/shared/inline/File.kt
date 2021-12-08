@@ -22,8 +22,6 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.nio.file.Files
-import java.nio.file.Paths
 import kotlin.jvm.JvmField
 
 internal actual class File {
@@ -34,7 +32,6 @@ internal actual class File {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")
     }
 
-
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists() = java.io.File(filename).exists()
 
@@ -42,15 +39,10 @@ internal actual class File {
     internal actual inline fun mkdirs() = java.io.File(filename).mkdirs()
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun deleteRecursively() = java.io.File(filename).deleteRecursively()
-
-    @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun length() = java.io.File(filename).length()
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString() = java.io.File(filename).readText()
-
-
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream = MyOutputStream(BufferedOutputStream(FileOutputStream(filename, append)))
@@ -72,6 +64,4 @@ internal actual class File {
             printer.close()
         }
     }
-
-
 }

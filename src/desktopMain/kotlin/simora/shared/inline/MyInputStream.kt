@@ -16,12 +16,12 @@
  */
 package simora.shared.inline
 
+import kotlinx.cinterop.*
+import platform.posix.*
 import simora.shared.IMyInputStream
 import simora.shared.UUID_Counter
-import platform.posix.*
-import kotlinx.cinterop.*
 
-internal actual class MyInputStream( internal var stream: CPointer<FILE>?) : IMyInputStream {
+internal actual class MyInputStream(internal var stream: CPointer<FILE>?) : IMyInputStream {
 
     internal val buf8: ByteArray = ByteArray(8)
     internal var buffer = ByteArray(1)
@@ -39,7 +39,7 @@ internal actual class MyInputStream( internal var stream: CPointer<FILE>?) : IMy
         var o = 0
         var s = len
         while (s > 0) {
-val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
+            val tmp = fread(buf.refTo(o), s.toULong(), 1, stream).toInt()
             if (tmp <= 0) {
                 return len - s
             }
@@ -53,7 +53,7 @@ val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
         var o = off
         var s = len
         while (s > 0) {
-val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
+            val tmp = fread(buf.refTo(o), s.toULong(), 1, stream).toInt()
             if (tmp <= 0) {
                 return len - s
             }
@@ -70,8 +70,8 @@ val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
 
     actual override fun close() {
         // kotlin.io.println("MyInputStream.close $this")
-fclose(stream)
-stream=null
+        fclose(stream)
+        stream = null
     }
 
     actual override fun readLine(): String? {

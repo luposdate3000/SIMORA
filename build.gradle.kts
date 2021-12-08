@@ -12,7 +12,7 @@ buildscript {
 }
 plugins {
     id("org.jetbrains.kotlinx.kover") version "SNAPSHOT-255"
-id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("org.jetbrains.kotlin.multiplatform") version "1.6.0"
 }
 repositories {
@@ -46,28 +46,28 @@ kotlin {
             }
         }
     }
-linuxX64("linuxX64"){
+    linuxX64("linuxX64") {
         compilations.forEach {
             it.kotlinOptions {
-freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-freeCompilerArgs += "-Xnew-inference"
-}
-}
-binaries {
-sharedLib (listOf(RELEASE)){
-baseName = "simora_release"
-}
- sharedLib (listOf(DEBUG)){
-baseName = "simora_debug"
-}
-executable(listOf(RELEASE,DEBUG)) {
-}
-}
-}
+                freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+                freeCompilerArgs += "-Xnew-inference"
+            }
+        }
+        binaries {
+            sharedLib(listOf(RELEASE)) {
+                baseName = "simora_release"
+            }
+            sharedLib(listOf(DEBUG)) {
+                baseName = "simora_debug"
+            }
+            executable(listOf(RELEASE, DEBUG)) {
+            }
+        }
+    }
     js {
         moduleName = "simora"
         browser {
-            compilations.forEach{
+            compilations.forEach {
                 it.kotlinOptions {
                     freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
                     freeCompilerArgs += "-Xnew-inference"
@@ -100,7 +100,7 @@ executable(listOf(RELEASE,DEBUG)) {
             dependencies {
             }
         }
-val desktopMain by creating {
+        val desktopMain by creating {
             dependsOn(commonMain)
         }
         val linuxX64Main by getting {
@@ -125,7 +125,7 @@ val desktopMain by creating {
     }
 }
 tasks.register("luposSetup") {
-dependsOn("ktlintFormat")
+    dependsOn("ktlintFormat")
     fun fixPathNames(s: String): String {
         var res = s.trim()
         var back = ""
@@ -138,25 +138,25 @@ dependsOn("ktlintFormat")
     val regexDisableNoInline = "(^|[^a-zA-Z])noinline ".toRegex()
     val regexDisableInline = "(^|[^a-zA-Z])inline ".toRegex()
     val regexDisableCrossInline = "(^|[^a-zA-Z])crossinline ".toRegex()
-val bp=File(buildDir.parentFile, "/src")
-        for (it in bp.walk()) {
-            val tmp = it.toString()
-            val ff = File(tmp)
-            if (ff.isFile && ff.name.endsWith(".kt")) {
-                File(ff.absolutePath + ".tmp").printWriter().use { out ->
-                    var line = 0
-                    ff.forEachLine { line2 ->
-                        var s = line2
-                        s = s.replace("SOURCE_FILE_START.*SOURCE_FILE_END".toRegex(), "SOURCE_FILE_START*/\"${fixPathNames(ff.absolutePath)}:$line\"/*SOURCE_FILE_END")
-                        s = s.replace("/*NOINLINE*/", "noinline ")
-                        s = s.replace("/*CROSSINLINE*/", "crossinline ")
-                        s = s.replace("/*INLINE*/", "inline ")
-                        out.println(s)
-                        line++
-                    }
+    val bp = File(buildDir.parentFile, "/src")
+    for (it in bp.walk()) {
+        val tmp = it.toString()
+        val ff = File(tmp)
+        if (ff.isFile && ff.name.endsWith(".kt")) {
+            File(ff.absolutePath + ".tmp").printWriter().use { out ->
+                var line = 0
+                ff.forEachLine { line2 ->
+                    var s = line2
+                    s = s.replace("SOURCE_FILE_START.*SOURCE_FILE_END".toRegex(), "SOURCE_FILE_START*/\"${fixPathNames(ff.absolutePath)}:$line\"/*SOURCE_FILE_END")
+                    s = s.replace("/*NOINLINE*/", "noinline ")
+                    s = s.replace("/*CROSSINLINE*/", "crossinline ")
+                    s = s.replace("/*INLINE*/", "inline ")
+                    out.println(s)
+                    line++
                 }
-                File(ff.absolutePath + ".tmp").copyTo(ff, true)
-                File(ff.absolutePath + ".tmp").delete()
+            }
+            File(ff.absolutePath + ".tmp").copyTo(ff, true)
+            File(ff.absolutePath + ".tmp").delete()
         }
     }
 }
@@ -165,7 +165,7 @@ tasks.named("compileKotlinJvm") {
     doLast {
         File(buildDir, "external_jvm_dependencies").printWriter().use { out ->
             for (f in configurations.getByName("jvmRuntimeClasspath").resolve()) {
-                    out.println("$f")
+                out.println("$f")
             }
         }
     }
@@ -173,9 +173,9 @@ tasks.named("compileKotlinJvm") {
 tasks.named("compileKotlinJs") {
     dependsOn("luposSetup")
     doLast {
-        File(buildDir,"external_js_dependencies").printWriter().use { out ->
+        File(buildDir, "external_js_dependencies").printWriter().use { out ->
             for (f in configurations.getByName("jsRuntimeClasspath").resolve()) {
-                    out.println("$f")
+                out.println("$f")
             }
         }
     }
@@ -195,28 +195,28 @@ tasks.withType<Test> {
         events.add(TestLogEvent.STANDARD_OUT)
         events.add(TestLogEvent.STANDARD_ERROR)
     }
-        extensions.configure(kotlinx.kover.api.KoverTaskExtension::class) {
-            isEnabled = true
-            includes = listOf("lupos\\..*")
-            excludes = listOf("java\\..*")
-        }
+    extensions.configure(kotlinx.kover.api.KoverTaskExtension::class) {
+        isEnabled = true
+        includes = listOf("lupos\\..*")
+        excludes = listOf("java\\..*")
+    }
 }
-    tasks.koverHtmlReport {
-        isEnabled = true                        
-    }
-    tasks.koverXmlReport {
-        isEnabled = true                        
-    }
-    tasks.koverCollectReports {
-    }
-    kover {
-        isEnabled = true                        
-        coverageEngine.set(kotlinx.kover.api.CoverageEngine.INTELLIJ) 
-        //coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) 
-        intellijEngineVersion.set("1.0.637")    
-        jacocoEngineVersion.set("0.8.7")        
-        generateReportOnCheck.set(true)         
-    }
+tasks.koverHtmlReport {
+    isEnabled = true
+}
+tasks.koverXmlReport {
+    isEnabled = true
+}
+tasks.koverCollectReports {
+}
+kover {
+    isEnabled = true
+    coverageEngine.set(kotlinx.kover.api.CoverageEngine.INTELLIJ)
+    // coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) 
+    intellijEngineVersion.set("1.0.637")
+    jacocoEngineVersion.set("0.8.7")
+    generateReportOnCheck.set(true)
+}
 tasks.named("sourcesJar") {
     dependsOn("runKtlintFormatOverCommonMainSourceSet")
     dependsOn("runKtlintFormatOverJvmMainSourceSet")

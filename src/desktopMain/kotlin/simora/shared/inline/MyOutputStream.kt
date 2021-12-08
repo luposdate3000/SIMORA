@@ -16,10 +16,10 @@
  */
 package simora.shared.inline
 
+import kotlinx.cinterop.*
+import platform.posix.*
 import simora.shared.IMyOutputStream
 import simora.shared.SanityCheck
-import platform.posix.*
-import kotlinx.cinterop.*
 
 internal actual class MyOutputStream : IMyOutputStream {
     val buffer: ByteArray
@@ -60,14 +60,14 @@ internal actual class MyOutputStream : IMyOutputStream {
         )
         // kotlin.io.println("MyOutputStream.close $this")
         flush()
-fclose(stream)
+        fclose(stream)
         stream = null
     }
 
     private fun localFlush() {
         // kotlin.io.println("MyOutputStream.localFlush $this $bufferPos")
         if (bufferPos > 0) {
-fwrite(buffer.refTo(0),bufferPos.toULong(),1,stream)
+            fwrite(buffer.refTo(0), bufferPos.toULong(), 1, stream)
             bufferPos = 0
         }
     }
@@ -75,7 +75,7 @@ fwrite(buffer.refTo(0),bufferPos.toULong(),1,stream)
     actual override fun flush() {
         // kotlin.io.println("MyOutputStream.flush $this")
         localFlush()
-fflush(stream)
+        fflush(stream)
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -85,7 +85,7 @@ fflush(stream)
             localFlush()
         }
         if (len > buffer.size) {
-fwrite(buf.refTo(off),len.toULong(),1,stream)
+            fwrite(buf.refTo(off), len.toULong(), 1, stream)
         } else {
             buf.copyInto(buffer, bufferPos, off, off + len)
             bufferPos += len

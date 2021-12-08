@@ -17,7 +17,6 @@
 
 package simora.simulator_iot
 
-
 public class LoggerStdout : ILogger {
     private lateinit var simRun: SimulationRun
     override fun initialize(simRun: SimulationRun) {

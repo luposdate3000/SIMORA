@@ -31,21 +31,6 @@ public object ExternalModule_fs {
         return true
     }
 
-    public fun deleteRecursively(filename: String): Boolean {
-        var changed = true
-        loop@ while (changed) {
-            changed = false
-            for (k in inmemoryFs.keys) {
-                if (k.startsWith(filename)) {
-                    inmemoryFs.remove(k)
-                    changed = true
-                    continue@loop
-                }
-            }
-        }
-        return true
-    }
-
     public fun length(filename: String): Long {
         val f = inmemoryFs[filename]
         return if (f == null) {
