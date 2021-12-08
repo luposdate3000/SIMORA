@@ -165,6 +165,7 @@ tasks.named("generateProjectStructureMetadata") {
     dependsOn("luposSetup")
 }
 tasks.named("compileKotlinJvm") {
+    dependsOn("luposSetup")
     doLast {
         File(buildDir, "external_jvm_dependencies").printWriter().use { out ->
             for (f in configurations.getByName("jvmRuntimeClasspath").resolve()) {
