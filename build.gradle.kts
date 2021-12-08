@@ -45,6 +45,24 @@ kotlin {
             }
         }
     }
+linuxX64("linuxX64"){
+        compilations.forEach {
+            it.kotlinOptions {
+freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+freeCompilerArgs += "-Xnew-inference"
+}
+}
+binaries {
+sharedLib (listOf(RELEASE)){
+baseName = "simora_release"
+}
+ sharedLib (listOf(DEBUG)){
+baseName = "simora_debug"
+}
+executable(listOf(RELEASE,DEBUG)) {
+}
+}
+}
     js {
         moduleName = "simora"
         browser {
@@ -81,6 +99,18 @@ kotlin {
             dependencies {
             }
         }
+val desktopMain by creating {
+            dependsOn(commonMain)
+        }
+        val linuxX64Main by getting {
+            dependsOn(desktopMain)
+        }
+//        val mingwX64Main by getting {
+//            dependsOn(desktopMain)
+//        }
+//        val macosX64Main by getting {
+//            dependsOn(desktopMain)
+//        }
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
