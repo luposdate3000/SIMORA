@@ -5,7 +5,6 @@ blazegraph.jnl
 build
 build-cache
 build.config
-build.gradle.kts
 *.cov
 crash-*
 dist-js
@@ -30,8 +29,6 @@ resources/tests/blacklist
 rules.log
 run
 .scannerwork
-settings.gradle
-settings.gradle.kts
 simulator_output
 src/luposdate3000_spa_client/app/scripts/algos/luposdate3000
 src/luposdate3000_spa_client/bower_components
