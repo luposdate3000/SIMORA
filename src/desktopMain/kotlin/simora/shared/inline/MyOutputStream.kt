@@ -27,6 +27,7 @@ internal actual class MyOutputStream : IMyOutputStream {
     internal var stream: CPointer<FILE>?
 
     private var closedBy: MutableList<Throwable>? = null
+
     internal constructor(it: CPointer<FILE>?) {
         // kotlin.io.println("MyOutputStream.constructor $this")
         stream = it

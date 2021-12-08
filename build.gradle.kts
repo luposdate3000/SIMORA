@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 buildscript {
     repositories {
         mavenLocal()
@@ -11,7 +12,6 @@ buildscript {
     }
 }
 plugins {
-    id("org.jetbrains.kotlinx.kover") version "SNAPSHOT-255"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("org.jetbrains.kotlin.multiplatform") version "1.6.0"
 }
@@ -135,6 +135,7 @@ tasks.register("luposSetup") {
         }
         return res
     }
+
     val regexDisableNoInline = "(^|[^a-zA-Z])noinline ".toRegex()
     val regexDisableInline = "(^|[^a-zA-Z])inline ".toRegex()
     val regexDisableCrossInline = "(^|[^a-zA-Z])crossinline ".toRegex()
@@ -160,8 +161,10 @@ tasks.register("luposSetup") {
         }
     }
 }
-tasks.named("compileKotlinJvm") {
+tasks.named("generateProjectStructureMetadata") {
     dependsOn("luposSetup")
+}
+tasks.named("compileKotlinJvm") {
     doLast {
         File(buildDir, "external_jvm_dependencies").printWriter().use { out ->
             for (f in configurations.getByName("jvmRuntimeClasspath").resolve()) {
@@ -195,62 +198,6 @@ tasks.withType<Test> {
         events.add(TestLogEvent.STANDARD_OUT)
         events.add(TestLogEvent.STANDARD_ERROR)
     }
-    extensions.configure(kotlinx.kover.api.KoverTaskExtension::class) {
-        isEnabled = true
-        includes = listOf("lupos\\..*")
-        excludes = listOf("java\\..*")
-    }
-}
-tasks.koverHtmlReport {
-    isEnabled = true
-}
-tasks.koverXmlReport {
-    isEnabled = true
-}
-tasks.koverCollectReports {
-}
-kover {
-    isEnabled = true
-    coverageEngine.set(kotlinx.kover.api.CoverageEngine.INTELLIJ)
-    // coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) 
-    intellijEngineVersion.set("1.0.637")
-    jacocoEngineVersion.set("0.8.7")
-    generateReportOnCheck.set(true)
-}
-tasks.named("sourcesJar") {
-    dependsOn("runKtlintFormatOverCommonMainSourceSet")
-    dependsOn("runKtlintFormatOverJvmMainSourceSet")
-    dependsOn("runKtlintFormatOverCommonTestSourceSet")
-    dependsOn("runKtlintFormatOverJvmTestSourceSet")
-}
-tasks.named("compileKotlinMetadata") {
-    dependsOn("runKtlintFormatOverCommonMainSourceSet")
-}
-tasks.named("allMetadataJar") {
-    dependsOn("runKtlintFormatOverKotlinScripts")
-}
-tasks.named("runKtlintCheckOverKotlinScripts") {
-    dependsOn("runKtlintFormatOverKotlinScripts")
-}
-tasks.named("jvmTestProcessResources") {
-    dependsOn("runKtlintFormatOverKotlinScripts")
-}
-tasks.named("jvmProcessResources") {
-    dependsOn("runKtlintFormatOverKotlinScripts")
-}
-tasks.named("runKtlintCheckOverJvmTestSourceSet") {
-    dependsOn("runKtlintFormatOverKotlinScripts")
-    dependsOn("runKtlintFormatOverJvmTestSourceSet")
-}
-tasks.named("runKtlintCheckOverJvmMainSourceSet") {
-    dependsOn("runKtlintFormatOverKotlinScripts")
-    dependsOn("runKtlintFormatOverJvmMainSourceSet")
-}
-tasks.named("runKtlintCheckOverCommonMainSourceSet") {
-    dependsOn("runKtlintFormatOverCommonMainSourceSet")
-    dependsOn("runKtlintFormatOverKotlinScripts")
-}
-tasks.named("build") {
 }
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     enableExperimentalRules.set(true)
