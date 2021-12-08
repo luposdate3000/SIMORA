@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package lupos.shared
 
-package lupos.simulator_iot
-
-import lupos.simulator_core.ILoggerCore
-
-public interface ILogger : ILoggerCore {
-    public fun initialize(simRun: SimulationRun)
-    public fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
-    public fun onReceiveNetworkPackage(address: Int, pck: IPayload)
-    public fun onSendPackage(src: Int, dest: Int, pck: IPayload)
-    public fun onReceivePackage(address: Int, pck: IPayload)
-    public fun onStartSimulation()
-    public fun onStopSimulation()
-    public fun addConnectionTable(src: Int, dest: Int, hop: Int)
-    public fun addDevice(address: Int, x: Double, y: Double)
+public interface IMyOutputStream {
+    public fun writeDictionaryValueType(value: DictionaryValueType): Unit
+    public fun writeLong(value: Long): Unit
+    public fun write(buf: ByteArray): Unit
+    public fun write(buf: ByteArray, len: Int): Unit
+    public fun close(): Unit
+    public fun flush(): Unit
+    public fun println(x: String)
+    public fun print(x: String)
+    public fun print(x: Boolean)
+    public fun print(x: Int)
+    public fun print(x: Double)
+    public fun println()
 }

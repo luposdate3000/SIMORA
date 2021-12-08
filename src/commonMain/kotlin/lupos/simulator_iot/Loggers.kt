@@ -17,7 +17,6 @@
 
 package lupos.simulator_iot
 
-import lupos.shared.XMLElement
 
 public class Loggers public constructor(public val loggers: MutableList<ILogger>) : ILogger {
     override fun initialize(simRun: SimulationRun) {
@@ -47,18 +46,6 @@ public class Loggers public constructor(public val loggers: MutableList<ILogger>
     override fun onReceivePackage(address: Int, pck: IPayload) {
         for (logger in loggers) {
             logger.onReceivePackage(address, pck)
-        }
-    }
-
-    override fun addWork(queryID: Int, address: Int, operatorGraph: XMLElement, keysIn: Set<Int>, keysOut: Set<Int>) {
-        for (logger in loggers) {
-            logger.addWork(queryID, address, operatorGraph, keysIn, keysOut)
-        }
-    }
-
-    override fun addOperatorGraph(queryId: Int, operatorGraph: MutableMap<Int, XMLElement>) {
-        for (logger in loggers) {
-            logger.addOperatorGraph(queryId, operatorGraph)
         }
     }
 

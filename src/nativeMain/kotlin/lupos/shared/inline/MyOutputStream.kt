@@ -14,19 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package lupos.shared.inline
 
-package lupos.simulator_iot
+import lupos.shared.IMyOutputStream
 
-import lupos.simulator_core.ILoggerCore
+internal actual class MyOutputStream : IMyOutputStream {
+    internal actual constructor() {}
 
-public interface ILogger : ILoggerCore {
-    public fun initialize(simRun: SimulationRun)
-    public fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
-    public fun onReceiveNetworkPackage(address: Int, pck: IPayload)
-    public fun onSendPackage(src: Int, dest: Int, pck: IPayload)
-    public fun onReceivePackage(address: Int, pck: IPayload)
-    public fun onStartSimulation()
-    public fun onStopSimulation()
-    public fun addConnectionTable(src: Int, dest: Int, hop: Int)
-    public fun addDevice(address: Int, x: Double, y: Double)
+    actual override fun close(): Unit = TODO("MyOutputStream")
+    actual override fun flush(): Unit = TODO("MyOutputStream")
+    actual override fun write(buf: ByteArray): Unit = write(buf, 0, buf.size)
+    actual override fun write(buf: ByteArray, len: Int): Unit = write(buf, 0, len)
 }

@@ -14,19 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package lupos.shared.inline
 
-package lupos.simulator_iot
+import lupos.shared.DictionaryValueType
+import lupos.shared.IMyInputStream
 
-import lupos.simulator_core.ILoggerCore
-
-public interface ILogger : ILoggerCore {
-    public fun initialize(simRun: SimulationRun)
-    public fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
-    public fun onReceiveNetworkPackage(address: Int, pck: IPayload)
-    public fun onSendPackage(src: Int, dest: Int, pck: IPayload)
-    public fun onReceivePackage(address: Int, pck: IPayload)
-    public fun onStartSimulation()
-    public fun onStopSimulation()
-    public fun addConnectionTable(src: Int, dest: Int, hop: Int)
-    public fun addDevice(address: Int, x: Double, y: Double)
+internal expect class MyInputStream : IMyInputStream {
+    override fun readDictionaryValueType(): DictionaryValueType
+    override fun readLong(): Long
+    override fun readByte(): Byte
+    override fun read(buf: ByteArray): Int
+    override fun read(buf: ByteArray, len: Int): Int
+    override fun read(buf: ByteArray, off: Int, len: Int): Int
+    override fun close(): Unit
+    override fun readLine(): String?
 }

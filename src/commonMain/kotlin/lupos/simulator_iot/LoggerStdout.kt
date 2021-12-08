@@ -17,7 +17,6 @@
 
 package lupos.simulator_iot
 
-import lupos.shared.XMLElement
 
 public class LoggerStdout : ILogger {
     private lateinit var simRun: SimulationRun
@@ -39,14 +38,6 @@ public class LoggerStdout : ILogger {
 
     override fun onReceivePackage(address: Int, pck: IPayload) {
         println("${simRun.sim.clock} onReceivePackage $address $pck")
-    }
-
-    override fun addWork(queryID: Int, address: Int, operatorGraph: XMLElement, keysIn: Set<Int>, keysOut: Set<Int>) {
-        println("${simRun.sim.clock} addWork $queryID $address $operatorGraph $keysIn $keysOut")
-    }
-
-    override fun addOperatorGraph(queryId: Int, operatorGraph: MutableMap<Int, XMLElement>) {
-        println("${simRun.sim.clock} addOperatorGraph $queryId $operatorGraph")
     }
 
     override fun addConnectionTable(src: Int, dest: Int, hop: Int) {}

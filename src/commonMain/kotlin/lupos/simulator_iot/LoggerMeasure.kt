@@ -22,7 +22,6 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
-import lupos.shared.XMLElement
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -166,8 +165,6 @@ public class LoggerMeasure : ILogger {
     }
 
     override fun onReceivePackage(address: Int, pck: IPayload) {}
-    override fun addWork(queryID: Int, address: Int, operatorGraph: XMLElement, keysIn: Set<Int>, keysOut: Set<Int>) {}
-    override fun addOperatorGraph(queryId: Int, operatorGraph: MutableMap<Int, XMLElement>) {}
     override fun addConnectionTable(src: Int, dest: Int, hop: Int) {}
 
     override fun onStartSimulation() { // phase 1
