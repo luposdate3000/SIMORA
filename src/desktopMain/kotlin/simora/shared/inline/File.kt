@@ -44,7 +44,13 @@ internal actual class File {
     internal actual inline fun deleteRecursively() = java.io.File(filename).deleteRecursively()
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun length() = java.io.File(filename).length()
+    internal actual inline fun length() :Int{
+val stream=fopen(filename,"rb")
+fseek (stream, 0, SEEK_END)
+val    size=ftell (stream).toInt()
+fclose(stream)
+return size
+}
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString() :String{

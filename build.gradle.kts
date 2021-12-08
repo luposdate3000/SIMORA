@@ -12,6 +12,7 @@ buildscript {
 }
 plugins {
     id("org.jetbrains.kotlinx.kover") version "SNAPSHOT-255"
+id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("org.jetbrains.kotlin.multiplatform") version "1.6.0"
 }
 repositories {
@@ -124,6 +125,7 @@ val desktopMain by creating {
     }
 }
 tasks.register("luposSetup") {
+dependsOn("ktlintFormat")
     fun fixPathNames(s: String): String {
         var res = s.trim()
         var back = ""
@@ -215,3 +217,45 @@ tasks.withType<Test> {
         jacocoEngineVersion.set("0.8.7")        
         generateReportOnCheck.set(true)         
     }
+tasks.named("sourcesJar") {
+    dependsOn("runKtlintFormatOverCommonMainSourceSet")
+    dependsOn("runKtlintFormatOverJvmMainSourceSet")
+    dependsOn("runKtlintFormatOverCommonTestSourceSet")
+    dependsOn("runKtlintFormatOverJvmTestSourceSet")
+}
+tasks.named("compileKotlinMetadata") {
+    dependsOn("runKtlintFormatOverCommonMainSourceSet")
+}
+tasks.named("allMetadataJar") {
+    dependsOn("runKtlintFormatOverKotlinScripts")
+}
+tasks.named("runKtlintCheckOverKotlinScripts") {
+    dependsOn("runKtlintFormatOverKotlinScripts")
+}
+tasks.named("jvmTestProcessResources") {
+    dependsOn("runKtlintFormatOverKotlinScripts")
+}
+tasks.named("jvmProcessResources") {
+    dependsOn("runKtlintFormatOverKotlinScripts")
+}
+tasks.named("runKtlintCheckOverJvmTestSourceSet") {
+    dependsOn("runKtlintFormatOverKotlinScripts")
+    dependsOn("runKtlintFormatOverJvmTestSourceSet")
+}
+tasks.named("runKtlintCheckOverJvmMainSourceSet") {
+    dependsOn("runKtlintFormatOverKotlinScripts")
+    dependsOn("runKtlintFormatOverJvmMainSourceSet")
+}
+tasks.named("runKtlintCheckOverCommonMainSourceSet") {
+    dependsOn("runKtlintFormatOverCommonMainSourceSet")
+    dependsOn("runKtlintFormatOverKotlinScripts")
+}
+tasks.named("build") {
+}
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    enableExperimentalRules.set(true)
+    ignoreFailures.set(true)
+    filter {
+        exclude("**/build/**")
+    }
+}
