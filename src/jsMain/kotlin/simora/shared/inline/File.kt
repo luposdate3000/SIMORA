@@ -73,7 +73,7 @@ internal actual class File {
             }
             for (i in 0 until len) {
                 val b = buffer[i]
-                if (b == '\r'.toInt().toByte() || b == '\n'.toInt().toByte()) {
+                if (b == '\r'.code.toByte() || b == '\n'.code.toByte()) {
                     action(s.toByteArray().decodeToString())
                     s.clear()
                 } else {

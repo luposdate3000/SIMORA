@@ -44,7 +44,7 @@ internal actual class MyOutputStream : IMyOutputStream {
 
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/lupos/shared/inline/MyOutputStream.kt:46"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:46"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

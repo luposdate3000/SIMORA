@@ -101,7 +101,7 @@ internal class ApplicationStack_AllShortestPath(
         }
         for (i in 0 until config.devices.size) {
             SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/lupos/simulator_iot/applications/ApplicationStack_AllShortestPath.kt:103"/*SOURCE_FILE_END*/ },
+                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/ApplicationStack_AllShortestPath.kt:103"/*SOURCE_FILE_END*/ },
                 { routingTable[i] != -1 },
             )
         }
@@ -172,7 +172,7 @@ internal class ApplicationStack_AllShortestPath(
                     b to a
                 }
                 SanityCheck.check(
-                    { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/lupos/simulator_iot/applications/ApplicationStack_AllShortestPath.kt:174"/*SOURCE_FILE_END*/ },
+                    { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/ApplicationStack_AllShortestPath.kt:174"/*SOURCE_FILE_END*/ },
                     { distance > 0 },
                 )
                 if (globalParentCosts[p.second.address] > globalParentCosts[p.first.address] + distance) {

@@ -108,7 +108,12 @@ public class LoggerMeasure : ILogger {
         for (feature in simRun.config.features) {
             res.add("number of devices having '" + feature.getName() + "'")
         }
-        for ((topic, topicId) in packageByTopic) {
+        val packageByTopicReverse = mutableMapOf<Int, String>()
+        for ((k, v) in packageByTopic) {
+            packageByTopicReverse[v] = k
+        }
+        for (topicId in 0 until packageByTopic.size) {
+            val topic = packageByTopicReverse[topicId]
             res.add("package count for '$topic'")
             res.add("package size for '$topic'")
             res.add("package size aggregated for '$topic'")
@@ -126,14 +131,14 @@ public class LoggerMeasure : ILogger {
         }
         if (pck is IPayloadLayer) {
             for (p in pck.getApplicationPayload()) {
-                onSendNetworkPackageInternal(src, dest, hop, p, delay)
+                onSendNetworkPackageInternal(src, dest, hop, p)
             }
         } else {
-            onSendNetworkPackageInternal(src, dest, hop, pck, delay)
+            onSendNetworkPackageInternal(src, dest, hop, pck)
         }
     }
 
-    private fun onSendNetworkPackageInternal(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long) {
+    private fun onSendNetworkPackageInternal(src: Int, dest: Int, hop: Int, pck: IPayload) {
         val topic = pck.getTopic()
         var id = packageByTopic[topic]
         val size = pck.getSizeInBytes().toDouble()
@@ -160,7 +165,7 @@ public class LoggerMeasure : ILogger {
     override fun onSendPackage(src: Int, dest: Int, pck: IPayload) {
         if (src == dest) {
             // self messages never produce network packages .. therefore catch them here
-            onSendNetworkPackageInternal(src, dest, dest, pck, 0)
+            onSendNetworkPackageInternal(src, dest, dest, pck)
         }
     }
 

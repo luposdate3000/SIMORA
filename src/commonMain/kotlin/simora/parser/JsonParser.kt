@@ -193,7 +193,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         setAccessed()
         val tmp = getOrDefault(k, JsonParserBoolean(v))
         val res = when (tmp) {
-            is JsonParserString -> tmp.value.toLowerCase() == "true"
+            is JsonParserString -> tmp.value.lowercase() == "true"
             is JsonParserBoolean -> tmp.value
             is JsonParserInt -> tmp.value != 0
             is JsonParserLong -> tmp.value != 0L
@@ -215,7 +215,6 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
             is JsonParserBoolean -> if (tmp.value) 1 else 0
             is JsonParserInt -> tmp.value
             is JsonParserLong -> tmp.value.toInt()
-            is JsonParserInt -> tmp.value.toInt()
             else -> TODO("$tmp")
         }
         val tmp2 = JsonParserInt(res)
@@ -665,7 +664,7 @@ public class JsonParser {
     public fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
         try {
             val fileStr = File(fileName).readAsString()
-            val json = JsonParser().stringToJson(fileStr) as IJsonParserValue
+            val json = JsonParser().stringToJson(fileStr)
             if (autoformat) {
                 File(fileName).withOutputStream { out ->
                     out.println(JsonParser().jsonToString(json, false))

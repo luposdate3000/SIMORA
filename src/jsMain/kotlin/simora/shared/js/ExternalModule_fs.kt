@@ -116,7 +116,6 @@ public class JSOutputStream(private val filename: String, append: Boolean) {
     }
 
     public fun print(x: String) {
-        var p = bufferSize
         write(x.encodeToByteArray())
     }
 
