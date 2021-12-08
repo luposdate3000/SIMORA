@@ -16,14 +16,13 @@
  */
 package simora.simulator_iot.applications.scenario.mailinglist
 
-import simora.simulator_iot.applications.IApplicationStack_Middleware
-import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.Package_Query
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-public class Application_MailDistributor(private val ownAddress: Int,
-private val mailDistributorFlag:Int,
+public class Application_MailDistributor(
+    private val ownAddress: Int,
+    private val mailDistributorFlag: Int,
 ) : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware
     override fun setRouter(router: IApplicationStack_Middleware) {
@@ -38,25 +37,25 @@ private val mailDistributorFlag:Int,
 
     override fun receive(pck: IPayload): IPayload? {
         if (pck is Package_Application_MailGroup) {
-val destinations=pck.replacements.keys.toSet().toIntArray()
-val hops=parent.getNextFeatureHops(destinations,mailDistributorFlag)
-val packets=mutableMapOf<Int,MutableMap<Int,String>>()
-for((target,name) in pck.replacements){
-val hop=hops[destinations.indexOf(target)]
-var p=packets[hop]
-if(p==null){
-p=mutableMapOf()
-packets[hop]=p
-}
-p[target]=name
-}
-for((target,mapping) in packets){
-if(mapping.size==1){
-            parent.send(target, Package_Application_Mail(pck.text.replace("§",mapping[target]!!)))
-}else{
-            parent.send(target, Package_Application_MailGroup(pck.text,mapping))
-}
-}
+            val destinations = pck.replacements.keys.toSet().toIntArray()
+            val hops = parent.getNextFeatureHops(destinations, mailDistributorFlag)
+            val packets = mutableMapOf<Int, MutableMap<Int, String>>()
+            for ((target, name) in pck.replacements) {
+                val hop = hops[destinations.indexOf(target)]
+                var p = packets[hop]
+                if (p == null) {
+                    p = mutableMapOf()
+                    packets[hop] = p
+                }
+                p[target] = name
+            }
+            for ((target, mapping) in packets) {
+                if (mapping.size == 1) {
+                    parent.send(target, Package_Application_Mail(pck.text.replace("§", mapping[target]!!)))
+                } else {
+                    parent.send(target, Package_Application_MailGroup(pck.text, mapping))
+                }
+            }
             return null
         } else {
             return pck

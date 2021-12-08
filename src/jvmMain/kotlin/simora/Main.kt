@@ -17,8 +17,6 @@
 
 package simora
 
-import simora.simulator_iot.Evaluation
-
 public fun main(args: Array<String>) {
-mainfunc(args.toList())
+    mainfunc(args.toList())
 }

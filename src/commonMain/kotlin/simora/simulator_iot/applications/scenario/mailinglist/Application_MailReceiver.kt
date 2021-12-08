@@ -16,11 +16,9 @@
  */
 package simora.simulator_iot.applications.scenario.mailinglist
 
-import simora.simulator_iot.applications.IApplicationStack_Middleware
-import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.Package_Query
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplicationStack_Middleware
 
 public class Application_MailReceiver() : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware

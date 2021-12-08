@@ -19,17 +19,16 @@ package simora.simulator_iot.applications.scenario.mailinglist
 
 import simora.parser.IJsonParserValue
 import simora.parser.JsonParserObject
-import simora.simulator_iot.applications.IApplicationStack_Middleware
-import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplication_Factory
-import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.ILogger
 import simora.simulator_iot.RandomGenerator
+import simora.simulator_iot.applications.IApplicationFeature
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplication_Factory
 
 public class ApplicationFactory_MailReceiverFeature : IApplicationFeature {
     override fun getName(): String = "MailReceiver"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_MailReceiver
-override fun equals(other:Any?):Boolean=other is ApplicationFactory_MailReceiverFeature
+    override fun equals(other: Any?): Boolean = other is ApplicationFactory_MailReceiverFeature
 }
 
 public class ApplicationFactory_MailReceiver : IApplication_Factory {
@@ -41,7 +40,7 @@ public class ApplicationFactory_MailReceiver : IApplication_Factory {
         json as JsonParserObject
         if (json.getOrDefault("enabled", true)) {
             return listOf(
-                Application_MailReceiver(                )
+                Application_MailReceiver()
             )
         }
         return listOf()

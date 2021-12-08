@@ -16,19 +16,14 @@
  */
 package simora.simulator_iot.applications.scenario.mailinglist
 
-import simora.simulator_iot.applications.IApplicationStack_Middleware
-import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplication_Factory
-
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.RandomGenerator
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplicationStack_Middleware
 
 public class Application_MailSender(
     internal val startClockInSec: Int,
@@ -57,11 +52,13 @@ public class Application_MailSender(
             eventCounter++
             parent.send(
                 ownAddress,
-Package_Application_MailGroup(
-"ab § cde",
-mapOf(1 to "def",
-2 to "ghi")
-)
+                Package_Application_MailGroup(
+                    "ab § cde",
+                    mapOf(
+                        1 to "def",
+                        2 to "ghi"
+                    )
+                )
             )
             parent.flush()
             parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)

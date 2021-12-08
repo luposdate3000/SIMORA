@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import simora.simulator_iot.Evaluation
 import simora.mainfunc
 public fun main(args: Array<String>) {
-mainfunc(args.toList())
+    mainfunc(args.toList())
 }

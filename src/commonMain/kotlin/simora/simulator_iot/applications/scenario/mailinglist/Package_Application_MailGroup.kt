@@ -21,8 +21,8 @@ import simora.simulator_iot.IPayload
 
 internal class Package_Application_MailGroup(
     internal val text: String,
-    internal val replacements:Map<Int,String>,
+    internal val replacements: Map<Int, String>,
 ) : IPayload {
-    override fun getSizeInBytes(): Int = text.length+4*replacements.size+replacements.values.map{it.length}.sum()+4
+    override fun getSizeInBytes(): Int = text.length + 4 * replacements.size + replacements.values.map { it.length }.sum() + 4
     override fun getTopic(): String = "MailGroup"
 }
