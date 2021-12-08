@@ -40,15 +40,15 @@ public class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int) :
 
     override fun shutDown() {
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:42"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:42"/*SOURCE_FILE_END*/ },
             { idSampleInserted3.size == 0 }
         )
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:46"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:46"/*SOURCE_FILE_END*/ },
             { idCacheRequested.size == 0 }
         )
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:50"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:50"/*SOURCE_FILE_END*/ },
             { pendingPackages.size == 0 }
         )
     }

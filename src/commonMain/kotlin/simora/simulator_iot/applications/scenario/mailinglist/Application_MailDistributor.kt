@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package simora.simulator_iot.applications.scenario.parking
+package simora.simulator_iot.applications.scenario.mailinglist
 
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 import simora.simulator_iot.applications.IApplicationStack_Actuator
@@ -22,7 +22,9 @@ import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.Package_Query
 
-public class Application_ReceiveParkingSample(private val ownAddress: Int) : IApplicationStack_Actuator {
+public class Application_MailDistributor(private val ownAddress: Int,
+private val mailDistributorFlag:Int,
+) : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router
@@ -35,20 +37,26 @@ public class Application_ReceiveParkingSample(private val ownAddress: Int) : IAp
     }
 
     override fun receive(pck: IPayload): IPayload? {
-        if (pck is Package_Application_ParkingSample) {
-            val query = StringBuilder()
-            query.appendLine("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>")
-            query.appendLine("PREFIX parking: <https://github.com/luposdate3000/parking#>")
-            query.appendLine("")
-            query.appendLine("INSERT DATA {")
-            query.appendLine(" _:b0 a parking:Observation ;")
-            query.appendLine(" parking:area \"${pck.area}\"^^xsd:integer ;")
-            query.appendLine(" parking:sensorID \"${pck.sensorID}\"^^xsd:integer ;")
-            query.appendLine(" parking:spotInArea \"${pck.spotInArea}\"^^xsd:integer ;")
-            query.appendLine(" parking:isOccupied \"${pck.isOccupied}\"^^xsd:boolean ;")
-            query.appendLine(" parking:resultTime \"${pck.sampleTime}\"^^xsd:dateTime .")
-            query.appendLine("}")
-            parent.send(ownAddress, Package_Query(ownAddress, query.toString().encodeToByteArray()))
+        if (pck is Package_Application_MailGroup) {
+val destinations=pck.replacements.keys.toSet().toIntArray()
+val hops=parent.getNextFeatureHops(destinations,mailDistributorFlag)
+val packets=mutableMapOf<Int,MutableMap<Int,String>>()
+for((target,name) in pck.replacements){
+val hop=hops[destinations.indexOf(target)]
+var p=packets[hop]
+if(p==null){
+p=mutableMapOf()
+packets[hop]=p
+}
+p[target]=name
+}
+for((target,mapping) in packets){
+if(mapping.size==1){
+            parent.send(target, Package_Application_Mail(pck.text.replace("§",mapping[target]!!)))
+}else{
+            parent.send(target, Package_Application_MailGroup(pck.text,mapping))
+}
+}
             return null
         } else {
             return pck
