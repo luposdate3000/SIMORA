@@ -125,7 +125,6 @@ kotlin {
     }
 }
 tasks.register("luposSetup") {
-    dependsOn("ktlintFormat")
     fun fixPathNames(s: String): String {
         var res = s.trim()
         var back = ""
