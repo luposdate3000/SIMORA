@@ -46,7 +46,7 @@ public class ApplicationFactory_MailSender : IApplication_Factory {
                     json.getOrDefault("maxSamples", -1),
                     ownAddress,
                     random,
-ApplicationFactory_MailReceiver.allReceivers,
+                    ApplicationFactory_MailReceiver.allReceivers,
                 )
             )
         }

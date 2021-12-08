@@ -39,11 +39,11 @@ public class Application_MailDistributor(
         if (pck is Package_Application_MailGroup) {
             val destinations = pck.replacements.keys.toSet().toIntArray()
             val hops = parent.getNextFeatureHops(destinations, mailDistributorFlag)
-for(i in 0 until hops.size){
-if(hops[i]==-1){
-hops[i]=destinations[i]
-}
-}
+            for (i in 0 until hops.size) {
+                if (hops[i] == -1) {
+                    hops[i] = destinations[i]
+                }
+            }
             val packets = mutableMapOf<Int, MutableMap<Int, String>>()
             for ((target, name) in pck.replacements) {
                 val hop = hops[destinations.indexOf(target)]

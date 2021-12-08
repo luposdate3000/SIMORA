@@ -31,7 +31,7 @@ public class Application_MailSender(
     internal val maxNumber: Int,
     internal val ownAddress: Int,
     internal val random: RandomGenerator,
-internal val allReveivers:List<Int>,
+    internal val allReveivers: List<Int>,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
     private lateinit var startUpTimeStamp: Instant
@@ -55,7 +55,7 @@ internal val allReveivers:List<Int>,
                 ownAddress,
                 Package_Application_MailGroup(
                     "ab § cde",
-allReveivers.map{it to "name$it"}.toMap()
+                    allReveivers.map { it to "name$it" }.toMap()
                 )
             )
             parent.flush()
