@@ -39,7 +39,6 @@ import simora.simulator_iot.applications.ApplicationStack_MultipleChilds
 import simora.simulator_iot.applications.ApplicationStack_RPL
 import simora.simulator_iot.applications.ApplicationStack_RPL_Fast
 import simora.simulator_iot.applications.ApplicationStack_Sequence
-import simora.simulator_iot.applications.Application_QuerySender
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
@@ -66,7 +65,7 @@ public class Configuration(private val simRun: SimulationRun) {
     public var outputDirectory: String = defaultOutputDirectory
     public var json: JsonParserObject? = null
 
-    private var rootRouterAddress: Int = -1
+    public var rootRouterAddress: Int = -1
 
     internal var linker = DeviceLinker()
         private set
@@ -101,30 +100,6 @@ public class Configuration(private val simRun: SimulationRun) {
             }
         }
         return false
-    }
-
-    public fun addQuerySender(
-        startClockInSec: Int,
-        sendRateInSec: Int,
-        maxNumberOfQueries: Int,
-        query: String,
-        receiver: Int = rootRouterAddress
-    ) {
-        val sender = Application_QuerySender(startClockInSec, sendRateInSec, maxNumberOfQueries, query, receiver, outputDirectory)
-        val device = getDeviceByAddress(receiver)
-        device.applicationStack.addChildApplication(sender)
-    }
-
-    public fun addQuerySender(
-        startClockInSec: Int,
-        sendRateInSec: Int,
-        maxNumberOfQueries: Int,
-        queryPck: IPackage_Database,
-        receiver: Int = rootRouterAddress
-    ) {
-        val sender = Application_QuerySender(startClockInSec, sendRateInSec, maxNumberOfQueries, queryPck, receiver, outputDirectory)
-        val device = getDeviceByAddress(receiver)
-        device.applicationStack.addChildApplication(sender)
     }
 
     internal fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
@@ -165,7 +140,7 @@ public class Configuration(private val simRun: SimulationRun) {
                 JsonParserObject(mutableMapOf()),
             )
             SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:167"/*SOURCE_FILE_END*/ },
+                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:142"/*SOURCE_FILE_END*/ },
                 { namedAddresses[name] == null },
                 { "name $name must be unique" }
             )
@@ -301,7 +276,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:303"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:278"/*SOURCE_FILE_END*/ },
             { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
             { "The performance level of a device can not be 0.0 %" },
         )
@@ -325,7 +300,7 @@ public class Configuration(private val simRun: SimulationRun) {
         return devices.size
     }
 
-    internal fun getDeviceByAddress(address: Int): Device {
+    public fun getDeviceByAddress(address: Int): Device {
         return devices[address]
     }
 

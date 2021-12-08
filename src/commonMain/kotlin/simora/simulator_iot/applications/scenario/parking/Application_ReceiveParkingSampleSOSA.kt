@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package simora.simulator_iot.applications
+package simora.simulator_iot.applications.scenario.parking
 
+import simora.simulator_iot.applications.IApplicationStack_Middleware
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplication_Factory
 import simora.shared.SanityCheck
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.Package_Query
@@ -37,15 +40,15 @@ public class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int) :
 
     override fun shutDown() {
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:39"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:42"/*SOURCE_FILE_END*/ },
             { idSampleInserted3.size == 0 }
         )
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:43"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:46"/*SOURCE_FILE_END*/ },
             { idCacheRequested.size == 0 }
         )
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:47"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/Application_ReceiveParkingSampleSOSA.kt:50"/*SOURCE_FILE_END*/ },
             { pendingPackages.size == 0 }
         )
     }

@@ -15,34 +15,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications
-
+package simora.simulator_iot.applications.scenario.parking
+import simora.simulator_iot.applications.IApplicationStack_Middleware
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplication_Factory
 import simora.parser.IJsonParserValue
-import simora.parser.JsonParserArray
+import simora.simulator_iot.applications.IApplicationFeature
 import simora.parser.JsonParserObject
 import simora.simulator_iot.ILogger
 import simora.simulator_iot.RandomGenerator
 
-public class ApplicationFactory_QuerySender : IApplication_Factory {
+public class ApplicationFactory_ReceiveParkingSample : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {}
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
-        json as JsonParserArray
-        val res = mutableListOf<IApplicationStack_Actuator>()
-        for (it in json) {
-            it as JsonParserObject
-            if (it.getOrDefault("enabled", true)) {
-                res.add(
-                    Application_QuerySender(
-                        it.getOrDefault("sendStartClockInSec", 0),
-                        it.getOrDefault("sendRateInSec", 1),
-                        it.getOrDefault("maxNumberOfQueries", 1),
-                        it.getOrDefault("query", ""),
-                        ownAddress,
-                        outputDirectory + "/",
-                    )
-                )
-            }
+        json as JsonParserObject
+        if (json.getOrDefault("enabled", true)) {
+            return listOf(
+                Application_ReceiveParkingSample(ownAddress)
+            )
         }
-        return res
+        return listOf()
     }
 }

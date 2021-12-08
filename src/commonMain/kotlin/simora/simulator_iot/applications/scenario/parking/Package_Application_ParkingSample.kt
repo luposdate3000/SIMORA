@@ -15,22 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications
+package simora.simulator_iot.applications.scenario.parking
 
-import simora.parser.IJsonParserValue
-import simora.parser.JsonParserObject
-import simora.simulator_iot.ILogger
-import simora.simulator_iot.RandomGenerator
+import simora.simulator_iot.IPayload
 
-public class ApplicationFactory_ReceiveParkingSampleSOSA : IApplication_Factory {
-    override fun registerFeatures(features: MutableList<IApplicationFeature>) {}
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
-        json as JsonParserObject
-        if (json.getOrDefault("enabled", true)) {
-            return listOf(
-                Application_ReceiveParkingSampleSOSA(ownAddress)
-            )
-        }
-        return listOf()
-    }
+internal class Package_Application_ParkingSample(
+    internal val sensorID: Int,
+    internal val sampleTime: String,
+    internal val isOccupied: Boolean,
+    internal val area: Int,
+    internal val spotInArea: Int,
+) : IPayload {
+    override fun getSizeInBytes(): Int = 4 + sampleTime.length + 1 + 4 + 4
+    override fun getTopic(): String = "ParkingSample"
 }

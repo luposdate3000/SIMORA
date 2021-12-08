@@ -15,36 +15,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications
-
+package simora.simulator_iot.applications.scenario.parking
+import simora.simulator_iot.applications.IApplicationStack_Middleware
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplication_Factory
+import simora.simulator_iot.applications.IApplicationFeature
 import simora.parser.IJsonParserValue
 import simora.parser.JsonParserObject
 import simora.simulator_iot.ILogger
 import simora.simulator_iot.RandomGenerator
 
-public class ApplicationFactory_ParkingSensorFeature : IApplicationFeature {
-    override fun getName(): String = "Sensor"
-    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_ParkingSensor
-}
-
-public class ApplicationFactory_ParkingSensor : IApplication_Factory {
-    override fun registerFeatures(features: MutableList<IApplicationFeature>) {
-        features.add(ApplicationFactory_ParkingSensorFeature())
-    }
-
+public class ApplicationFactory_ReceiveParkingSampleSOSA : IApplication_Factory {
+    override fun registerFeatures(features: MutableList<IApplicationFeature>) {}
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
         json as JsonParserObject
         if (json.getOrDefault("enabled", true)) {
             return listOf(
-                Application_ParkingSensor(
-                    json.getOrDefault("sendStartClockInSec", 0),
-                    json.getOrDefault("rateInSec", 0),
-                    json.getOrDefault("maxSamples", -1),
-                    ownAddress,
-                    random,
-                    json.getOrDefault("area", 0),
-                    json.getOrDefault("spotInArea", 0),
-                )
+                Application_ReceiveParkingSampleSOSA(ownAddress)
             )
         }
         return listOf()
