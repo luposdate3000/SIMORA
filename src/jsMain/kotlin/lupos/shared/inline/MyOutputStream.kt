@@ -16,14 +16,11 @@
  */
 package lupos.shared.inline
 
-import lupos.shared.DictionaryValueType
 import lupos.shared.IMyOutputStream
 
 internal actual class MyOutputStream : IMyOutputStream {
     internal actual constructor() {}
 
-    actual override fun writeLong(value: Long): Unit = TODO("MyOutputStream")
-    actual override fun writeDictionaryValueType(value: DictionaryValueType): Unit = TODO("MyOutputStream")
     actual override fun close(): Unit = TODO("MyOutputStream")
     actual override fun flush(): Unit = TODO("MyOutputStream")
     actual override fun write(buf: ByteArray): Unit = write(buf, buf.size)

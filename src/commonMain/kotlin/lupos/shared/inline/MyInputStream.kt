@@ -16,12 +16,9 @@
  */
 package lupos.shared.inline
 
-import lupos.shared.DictionaryValueType
 import lupos.shared.IMyInputStream
 
 internal expect class MyInputStream : IMyInputStream {
-    override fun readDictionaryValueType(): DictionaryValueType
-    override fun readLong(): Long
     override fun readByte(): Byte
     override fun read(buf: ByteArray): Int
     override fun read(buf: ByteArray, len: Int): Int

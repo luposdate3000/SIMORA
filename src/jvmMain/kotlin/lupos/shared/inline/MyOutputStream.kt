@@ -16,8 +16,6 @@
  */
 package lupos.shared.inline
 
-import lupos.shared.DictionaryValueHelper
-import lupos.shared.DictionaryValueType
 import lupos.shared.IMyOutputStream
 import lupos.shared.SanityCheck
 import java.io.OutputStream
@@ -44,21 +42,9 @@ internal actual class MyOutputStream : IMyOutputStream {
         buffer = ByteArray(8192)
     }
 
-    actual override fun writeDictionaryValueType(value: DictionaryValueType) {
-        DictionaryValueHelper.sendToStream(this, value)
-    }
-
-    actual override fun writeLong(value: Long) {
-        if (bufferPos + 8 > buffer.size) {
-            localFlush()
-        }
-        ByteArrayHelper.writeLong8(buffer, bufferPos, value)
-        bufferPos += 8
-    }
-
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/lupos/shared/inline/MyOutputStream.kt:68"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/lupos/shared/inline/MyOutputStream.kt:46"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

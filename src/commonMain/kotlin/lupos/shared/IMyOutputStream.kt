@@ -17,8 +17,6 @@
 package lupos.shared
 
 public interface IMyOutputStream {
-    public fun writeDictionaryValueType(value: DictionaryValueType): Unit
-    public fun writeLong(value: Long): Unit
     public fun write(buf: ByteArray): Unit
     public fun write(buf: ByteArray, len: Int): Unit
     public fun close(): Unit

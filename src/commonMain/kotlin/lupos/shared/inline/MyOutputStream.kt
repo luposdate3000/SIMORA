@@ -16,14 +16,11 @@
  */
 package lupos.shared.inline
 
-import lupos.shared.DictionaryValueType
 import lupos.shared.IMyOutputStream
 
 internal expect class MyOutputStream : IMyOutputStream {
     internal constructor()
 
-    override fun writeDictionaryValueType(value: DictionaryValueType)
-    override fun writeLong(value: Long)
     override fun close(): Unit
     override fun flush(): Unit
     override fun write(buf: ByteArray): Unit

@@ -16,8 +16,6 @@
  */
 package lupos.shared.inline
 
-import lupos.shared.DictionaryValueHelper
-import lupos.shared.DictionaryValueType
 import lupos.shared.IMyInputStream
 import lupos.shared.js.JSInputStream
 
@@ -32,13 +30,6 @@ internal actual class MyInputStream : IMyInputStream {
         tmp = JSInputStream(fd)
     }
 
-    actual override fun readDictionaryValueType(): DictionaryValueType {
-        return DictionaryValueHelper.readFromStream(this)
-    }
-
-    actual override fun readLong(): Long {
-        return tmp.readLong()
-    }
 
     actual override fun readByte(): Byte {
         return tmp.readByte()

@@ -16,7 +16,6 @@
  */
 package lupos.shared.inline
 
-import lupos.shared.DictionaryValueType
 import lupos.shared.IMyInputStream
 import lupos.shared.IMyOutputStream
 import lupos.shared.js.ExternalModule_fs
@@ -108,7 +107,6 @@ internal actual class File {
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
         return object : IMyOutputStream {
             val tmp = ExternalModule_fs.openOutputStream(filename, append)
-            override fun writeLong(value: Long) = tmp.writeLong(value)
             override fun write(buf: ByteArray): Unit = tmp.write(buf)
             override fun write(buf: ByteArray, len: Int): Unit = tmp.write(buf, len)
             override fun close(): Unit = tmp.close()
