@@ -15,8 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+package simora
+
 import simora.simulator_iot.Evaluation
-import simora.mainfunc
-public fun main(args: Array<String>) {
-mainfunc(args.toList())
+
+public fun mainfunc(args: List<String>) {
+    Evaluation().evalConfigFileMerge(args)
 }

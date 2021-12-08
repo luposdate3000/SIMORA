@@ -27,3 +27,7 @@ If you want to use the simulator from luposdate3000 or any external program
 3. Linux
     Look into the subfolders of
     ./build/bin/linuxX64/
+    Run with
+    ./build/bin/linuxX64/debugExecutable/simora.kexe 
+    or
+    ./build/bin/linuxX64/releaseExecutable/simora.kexe

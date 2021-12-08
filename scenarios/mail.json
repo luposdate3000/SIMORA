@@ -1,0 +1,61 @@
+{
+"applications": {
+        "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailDistributor": {},
+        "simora.simulator_iot.applications.scenario.mailinglist.Application_MailReceiver": {},
+    },
+    "deterministic": true,
+    "deviceType": {
+        "baseDeviceType": {
+            "performance": 100.0,
+            "supportedLinkTypes": [
+                "WIRE"
+            ]
+        }
+    },
+    "fixedDevice": {
+        "DEVICE_1": {
+"applications": {
+"simora.simulator_iot.applications.scenario.mailinglist.Application_MailSender": {
+"sendStartClockInSec": 1000,
+"rateInSec" : 2,
+"maxSamples":100,
+},
+},
+            "deviceType": "baseDeviceType",
+            "latitude": 53.57865430622494,
+            "longitude": 10.055537389738404
+        },
+        "DEVICE_2": {
+            "deviceType": "baseDeviceType",
+            "latitude": 53.577863456304975,
+            "longitude": 10.06198925045995
+        },
+        "DEVICE_3": {
+            "deviceType": "baseDeviceType",
+            "latitude": 53.57397044934826,
+            "longitude": 10.062655542820172
+        },
+        "DEVICE_4": {
+            "deviceType": "baseDeviceType",
+            "latitude": 53.571825865757305,
+            "longitude": 10.055012822683036
+        }
+    },
+    "fixedLink": [],
+    "linkType": {
+        "WIRE": {
+            "dataRateInKbps": 50000,
+            "rangeInMeters": 40000
+        }
+    },
+    "logging": {
+        "lupos.simulator_iot.LoggerMeasure": {
+            "enabled": true
+        },
+        "lupos.simulator_iot.LoggerStdout": {
+            "enabled": true
+        },
+    },
+    "outputDirectory": "",
+    "rootRouter": "DEVICE_1"
+},
