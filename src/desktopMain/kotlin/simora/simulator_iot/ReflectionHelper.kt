@@ -25,6 +25,9 @@ internal actual object ReflectionHelper {
 "simora.simulator_iot.applications.scenario.parking.ApplicationFactory_QuerySender"->simora.simulator_iot.applications.scenario.parking.ApplicationFactory_QuerySender()
 "simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ReceiveParkingSample"->simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ReceiveParkingSample()
 "simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ReceiveParkingSampleSOSA"->simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ReceiveParkingSampleSOSA()
+"simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailDistributor"->simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailDistributor()
+"simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailReceiver"->simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailReceiver()
+"simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender"->simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender()
             else -> TODO("ReflectionHelper.create(\"$name\")")
         }
     }
