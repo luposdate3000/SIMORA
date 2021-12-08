@@ -17,32 +17,92 @@
 package simora.shared.inline
 
 import simora.shared.IMyInputStream
+import simora.shared.UUID_Counter
+import platform.posix.*
+import kotlinx.cinterop.*
 
-internal actual class MyInputStream : IMyInputStream {
-    actual override fun readByte(): Byte = TODO("MyInputStream")
-    actual override fun read(buf: ByteArray, off: Int, len: Int): Int = TODO("MyInputStream")
-    actual override fun read(buf: ByteArray, len: Int): Int = TODO("MyInputStream")
-    actual override fun read(buf: ByteArray): Int = TODO("MyInputStream")
+internal actual class MyInputStream( internal var stream: CPointer<FILE>?) : IMyInputStream {
+
+    internal val buf8: ByteArray = ByteArray(8)
+    internal var buffer = ByteArray(1)
+    internal val uuid = UUID_Counter.getNextUUID()
+
+    init {
+        // kotlin.io.println("MyInputStream.constructor $this")
+    }
+
+    actual override fun read(buf: ByteArray): Int {
+        return read(buf, buf.size)
+    }
+
+    actual override fun read(buf: ByteArray, len: Int): Int {
+        var o = 0
+        var s = len
+        while (s > 0) {
+val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
+            if (tmp <= 0) {
+                return len - s
+            }
+            s -= tmp
+            o += tmp
+        }
+        return len
+    }
+
+    actual override fun read(buf: ByteArray, off: Int, len: Int): Int {
+        var o = off
+        var s = len
+        while (s > 0) {
+val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
+            if (tmp <= 0) {
+                return len - s
+            }
+            s -= tmp
+            o += tmp
+        }
+        return len
+    }
+
+    actual override fun readByte(): Byte {
+        read(buf8, 1)
+        return buf8[0]
+    }
+
     actual override fun close() {
+        // kotlin.io.println("MyInputStream.close $this")
+fclose(stream)
+stream=null
     }
 
     actual override fun readLine(): String? {
-// TODO this may break on utf-8
-        var buf = mutableListOf<Byte>()
+// TODO this may break on utf-8 if '\r' or '\0' is part of another char
+        var len = 0
         try {
             var b = readByte()
-            while (b != '\n'.toByte()) {
-                if (b != '\r'.toByte()) {
-                    buf.add(b)
+            while (true) {
+                when (b) {
+                    '\n'.code.toByte() -> break
+                    '\r'.code.toByte() -> {
+                    }
+                    0.toByte() -> throw Exception("zero Bytes not allowed within utf8-string")
+                    else -> {
+                        if (len >= buffer.size) {
+                            val bb = ByteArray(len * 2)
+                            buffer.copyInto(bb)
+                            buffer = bb
+                        }
+                        buffer[len++] = b
+                    }
                 }
                 b = readByte()
             }
         } catch (e: Throwable) {
             e.printStackTrace()
-            if (buf.size == 0) {
+            if (len == 0) {
                 return null
             }
         }
-        return buf.toByteArray().decodeToString()
+        val res = buffer.decodeToString(0, len)
+        return res
     }
 }

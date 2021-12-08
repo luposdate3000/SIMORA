@@ -18,32 +18,83 @@ package simora.shared.inline
 
 import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
-import kotlin.jvm.JvmField
-
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import platform.posix.*
+import kotlinx.cinterop.*
 internal actual class File {
-    @JvmField
     internal val filename: String
 
     actual constructor(filename: String) {
-        this.filename = filename
+        this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")
     }
 
-    internal actual inline fun getAbsolutePath() = TODO("File")
-    internal actual inline fun exists(): Boolean = TODO("File")
-    internal actual inline fun mkdirs(): Boolean = TODO("File")
-    internal actual inline fun deleteRecursively(): Boolean = TODO("File")
-    internal actual inline fun length(): Long = TODO("File")
-    internal actual inline fun readAsString(): String = TODO("File")
-    internal actual inline fun readAsCharIterator(): CharIterator = TODO("File")
-    internal actual inline fun openInputStream(): IMyInputStream = TODO("File")
-    internal actual inline fun walk(crossinline action: (String) -> Unit): Unit = TODO("File")
-    internal actual inline fun walk(maxdepth: Int, crossinline action: (String) -> Unit): Unit = TODO("File")
-    internal actual inline fun withOutputStream(crossinline action: (MyPrintWriter) -> Unit): Unit = TODO("File")
-    internal /*suspend*/ actual inline fun withOutputStream(crossinline action: /*suspend*/ (MyPrintWriter) -> Unit): Unit = TODO("File")
-    internal actual inline fun forEachLine(crossinline action: (String) -> Unit): Unit = TODO("File")
-    internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit): Unit = TODO("File")
-    internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit): Unit = TODO("File")
-    internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit): Unit = TODO("File")
-    actual override fun equals(other: Any?): Boolean = TODO("File")
-    internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream = TODO("File")
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun exists() = java.io.File(filename).exists()
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun mkdirs() = java.io.File(filename).mkdirs()
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun deleteRecursively() = java.io.File(filename).deleteRecursively()
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun length() = java.io.File(filename).length()
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun readAsString() :String{
+val stream=fopen(filename,"rb")
+fseek (stream, 0, SEEK_END)
+val    size=ftell (stream).toInt()
+fseek (stream, 0, SEEK_SET)
+val buf=ByteArray(size)
+var o = 0
+        var s = size
+        while (s > 0) {
+val tmp=fread(buf.refTo(o),s.toULong(),1,stream).toInt()
+            if (tmp <= 0) {
+break
+            }
+            s -= tmp
+            o += tmp
+        }
+fclose(stream)
+return buf.decodeToString()
+}
+
+
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
+if(append){
+return MyOutputStream(fopen(filename,"ab"))
+}else{
+return MyOutputStream(fopen(filename,"wb"))
+}
+}
+
+    internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit) {
+        val printer = MyOutputStream(fopen(filename,"wb"))
+        try {
+            action(printer)
+        } finally {
+            printer.close()
+        }
+    }
+
+    internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit) {
+        val printer = MyInputStream(fopen(filename,"rb"))
+        try {
+            action(printer)
+        } finally {
+            printer.close()
+        }
+    }
+
+
 }

@@ -34,8 +34,6 @@ internal actual class File {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun getAbsolutePath() = java.io.File(filename).absolutePath.toString()
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists() = java.io.File(filename).exists()
@@ -52,28 +50,10 @@ internal actual class File {
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString() = java.io.File(filename).readText()
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun readAsCharIterator(): CharIterator = MyCharIterator(this)
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun openInputStream(): IMyInputStream = MyInputStream(BufferedInputStream(FileInputStream(java.io.File(filename))))
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream = MyOutputStream(BufferedOutputStream(FileOutputStream(filename, append)))
-    internal actual inline fun walk(maxdepth: Int, crossinline action: (String) -> Unit) {
-        java.nio.file.Files.walk(java.nio.file.Paths.get(filename), maxdepth).forEach {
-            val tmp = it.toString()
-            if (tmp.length > filename.length) {
-                action(tmp)
-            }
-        }
-    }
-
-    internal actual inline fun walk(crossinline action: (String) -> Unit) {
-        Files.walk(Paths.get(filename)).forEach { it ->
-            action(it.toString())
-        }
-    }
 
     internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit) {
         val printer = MyOutputStream(BufferedOutputStream(FileOutputStream(java.io.File(filename))))
@@ -93,52 +73,5 @@ internal actual class File {
         }
     }
 
-    internal actual inline fun forEachLine(crossinline action: (String) -> Unit) = java.io.File(filename).forEachLine {
-        action(it)
-    }
 
-    actual override fun equals(other: Any?): Boolean {
-        if (other !is File) {
-            return false
-        }
-        val file1 = java.io.File(filename)
-        val file2 = java.io.File(other.filename)
-        val EOF = -1
-        if (file1 == file2) {
-            return true
-        }
-        if (file1.canonicalFile.equals(file2.canonicalFile)) {
-            return true
-        }
-        val file1Exists = file1.exists()
-        if (file1Exists != file2.exists()) {
-            return false
-        }
-        if (!file1Exists) {
-            return true
-        }
-        if (file1.isDirectory || file2.isDirectory) {
-            TODO("File.equals")
-        }
-        if (file1.length() != file2.length()) {
-            return false
-        }
-        val input1 = BufferedInputStream(FileInputStream(file1))
-        val input2 = BufferedInputStream(FileInputStream(file2))
-        try {
-            var ch = input1.read()
-            while (EOF != ch) {
-                val ch2 = input2.read()
-                if (ch != ch2) {
-                    return false
-                }
-                ch = input1.read()
-            }
-            val ch2 = input2.read()
-            return ch2 == EOF
-        } finally {
-            input1.close()
-            input2.close()
-        }
-    }
 }

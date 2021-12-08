@@ -17,12 +17,99 @@
 package simora.shared.inline
 
 import simora.shared.IMyOutputStream
+import simora.shared.SanityCheck
+import platform.posix.*
+import kotlinx.cinterop.*
 
 internal actual class MyOutputStream : IMyOutputStream {
-    internal actual constructor() {}
+    val buffer: ByteArray
+    var bufferPos = 0
+    internal var stream: CPointer<FILE>?
 
-    actual override fun close(): Unit = TODO("MyOutputStream")
-    actual override fun flush(): Unit = TODO("MyOutputStream")
-    actual override fun write(buf: ByteArray): Unit = write(buf, 0, buf.size)
-    actual override fun write(buf: ByteArray, len: Int): Unit = write(buf, 0, len)
+    private var closedBy: MutableList<Throwable>? = null
+    internal constructor(it: CPointer<FILE>?) {
+        // kotlin.io.println("MyOutputStream.constructor $this")
+        stream = it
+        buffer = ByteArray(8192)
+    }
+
+    internal actual constructor() {
+        stream = null
+        buffer = ByteArray(8192)
+    }
+
+    actual override fun close() {
+        SanityCheck(
+            { /*SOURCE_FILE_START*/"/src/simora/src/desktopMain/kotlin/simora/shared/inline/MyOutputStream.kt:42"/*SOURCE_FILE_END*/ },
+            {
+                try {
+                    throw Exception()
+                } catch (e: Throwable) {
+                    if (closedBy == null) {
+                        closedBy = mutableListOf(e)
+                    } else {
+                        closedBy!!.add(e)
+                    }
+                }
+                if (stream == null) {
+                    for (e in closedBy!!) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        )
+        // kotlin.io.println("MyOutputStream.close $this")
+        flush()
+fclose(stream)
+        stream = null
+    }
+
+    private fun localFlush() {
+        // kotlin.io.println("MyOutputStream.localFlush $this $bufferPos")
+        if (bufferPos > 0) {
+fwrite(buffer.refTo(0),bufferPos.toULong(),1,stream)
+            bufferPos = 0
+        }
+    }
+
+    actual override fun flush() {
+        // kotlin.io.println("MyOutputStream.flush $this")
+        localFlush()
+fflush(stream)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun _write(buf: ByteArray, off: Int, len: Int) {
+        // kotlin.io.println("MyOutputStream._write $this")
+        if (bufferPos + len > buffer.size) {
+            localFlush()
+        }
+        if (len > buffer.size) {
+fwrite(buf.refTo(off),len.toULong(),1,stream)
+        } else {
+            buf.copyInto(buffer, bufferPos, off, off + len)
+            bufferPos += len
+        }
+    }
+
+    actual override fun write(buf: ByteArray) {
+        _write(buf, 0, buf.size)
+    }
+
+    actual override fun write(buf: ByteArray, len: Int) {
+        _write(buf, 0, len)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun _print(x: String) {
+        val buf = x.encodeToByteArray()
+        _write(buf, 0, buf.size)
+    }
+
+    actual override fun println(x: String) = _print("$x\n")
+    actual override fun print(x: String) = _print(x)
+    actual override fun print(x: Boolean) = _print("$x")
+    actual override fun print(x: Int) = _print("$x")
+    actual override fun print(x: Double) = _print("$x")
+    actual override fun println() = _print("\n")
 }

@@ -7,25 +7,17 @@
  * the Free Software Foundation, version 3.
  *
  * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package simora.shared.inline
+package simora.simulator_iot
 
-import simora.shared.IMyInputStream
-import simora.shared.IMyOutputStream
-
-internal expect class File(filename: String) {
-    internal inline fun exists(): Boolean
-    internal inline fun mkdirs(): Boolean
-    internal inline fun deleteRecursively(): Boolean
-    internal inline fun length(): Long
-    internal inline fun readAsString(): String
-    internal inline fun openOutputStream(append: Boolean): IMyOutputStream
-    internal inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit)
-    internal inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit)
+internal actual object ReflectionHelper {
+    internal actual fun create(name: String): Any {
+TODO("ReflectionHelper.create")
+    }
 }

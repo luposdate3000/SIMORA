@@ -27,8 +27,6 @@ internal actual class File {
         this.filename = filename
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun getAbsolutePath(): String = TODO("File.getAbsolutePath")
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean = ExternalModule_fs.exists(filename)
@@ -45,24 +43,7 @@ internal actual class File {
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
         var res = StringBuilder()
-        forEachLine { it ->
-            res.appendLine(it)
-        }
-        return res.toString()
-    }
-
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun readAsCharIterator(): CharIterator = TODO("File.readAsCharIterator")
-
-    @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun openInputStream(): IMyInputStream {
-        return MyInputStream(filename)
-    }
-
-    internal actual inline fun walk(crossinline action: (String) -> Unit): Unit = TODO("File.walk")
-    internal actual inline fun walk(maxdepth: Int, crossinline action: (String) -> Unit): Unit = TODO("File.walk")
-    internal actual inline fun forEachLine(crossinline action: (String) -> Unit) {
-        val stream = MyInputStream(filename)
+val stream = MyInputStream(filename)
         val buffer = ByteArray(8192)
         var pos = 0
         val s = mutableListOf<Byte>()
@@ -74,7 +55,7 @@ internal actual class File {
             for (i in 0 until len) {
                 val b = buffer[i]
                 if (b == '\r'.code.toByte() || b == '\n'.code.toByte()) {
-                    action(s.toByteArray().decodeToString())
+                    res.appendLine(s.toByteArray().decodeToString())
                     s.clear()
                 } else {
                     s.add(b)
@@ -82,8 +63,9 @@ internal actual class File {
             }
             pos += len
         }
-        action(s.toByteArray().decodeToString())
+        res.appendLine(s.toByteArray().decodeToString())
         stream.close()
+        return res.toString()
     }
 
     internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit) {
@@ -100,8 +82,6 @@ internal actual class File {
         action(stream)
         stream.close()
     }
-
-    actual override fun equals(other: Any?): Boolean = TODO("File.equals")
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
