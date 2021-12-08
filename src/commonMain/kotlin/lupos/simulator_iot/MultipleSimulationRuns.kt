@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lupos.simulator_iot
+package simora.simulator_iot
 
-import lupos.parser.JsonParserObject
-import lupos.shared.inline.File
+import simora.parser.JsonParserObject
+import simora.shared.inline.File
 import kotlin.math.sqrt
 
 public class MultipleSimulationRuns(
@@ -27,7 +27,7 @@ public class MultipleSimulationRuns(
 
     public fun startSimulationRuns() {
         val measurements = mutableListOf<LoggerMeasure>()
-        json.getOrEmptyObject("logging").getOrEmptyObject("lupos.simulator_iot.LoggerMeasure").set("enabled", true)
+        json.getOrEmptyObject("logging").getOrEmptyObject("simora.simulator_iot.LoggerMeasure").set("enabled", true)
         val outputDirectory = json.getOrDefault("outputDirectory", "simulator_output") + "/"
         File(outputDirectory).mkdirs()
         fun appendLineToFile(name: String, header: () -> String, line: String) {

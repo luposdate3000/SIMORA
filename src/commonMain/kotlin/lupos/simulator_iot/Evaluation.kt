@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lupos.simulator_iot
+package simora.simulator_iot
 
-import lupos.parser.JsonParser
-import lupos.parser.JsonParserObject
-import lupos.shared.inline.File
-import lupos.simulator_iot.config.Configuration
+import simora.parser.JsonParser
+import simora.parser.JsonParserObject
+import simora.shared.inline.File
+import simora.simulator_iot.config.Configuration
 
 public class Evaluation {
     public constructor() {}

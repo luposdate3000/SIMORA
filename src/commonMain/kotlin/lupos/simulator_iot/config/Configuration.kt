@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,38 +15,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lupos.simulator_iot.config
+package simora.simulator_iot.config
 
-import lupos.parser.IJsonParserValue
-import lupos.parser.JsonParser
-import lupos.parser.JsonParserArray
-import lupos.parser.JsonParserObject
-import lupos.parser.JsonParserString
-import lupos.shared.SanityCheck
-import lupos.shared.inline.File
-import lupos.simulator_core.Entity
-import lupos.simulator_iot.ILogger
-import lupos.simulator_iot.IPackage_Database
-import lupos.simulator_iot.ReflectionHelper
-import lupos.simulator_iot.SimulationRun
-import lupos.simulator_iot.applications.ApplicationStack_AllShortestPath
-import lupos.simulator_iot.applications.ApplicationStack_CatchSelfMessages
-import lupos.simulator_iot.applications.ApplicationStack_Logger
-import lupos.simulator_iot.applications.ApplicationStack_MergeMessages
-import lupos.simulator_iot.applications.ApplicationStack_MulticastNone
-import lupos.simulator_iot.applications.ApplicationStack_MulticastSimple
-import lupos.simulator_iot.applications.ApplicationStack_MultipleChilds
-import lupos.simulator_iot.applications.ApplicationStack_RPL
-import lupos.simulator_iot.applications.ApplicationStack_RPL_Fast
-import lupos.simulator_iot.applications.ApplicationStack_Sequence
-import lupos.simulator_iot.applications.Application_QuerySender
-import lupos.simulator_iot.applications.IApplicationFeature
-import lupos.simulator_iot.applications.IApplicationStack_Actuator
-import lupos.simulator_iot.applications.IApplication_Factory
-import lupos.simulator_iot.models.Device
-import lupos.simulator_iot.models.geo.GeoLocation
-import lupos.simulator_iot.models.net.DeviceLinker
-import lupos.simulator_iot.models.net.LinkManager
+import simora.parser.IJsonParserValue
+import simora.parser.JsonParser
+import simora.parser.JsonParserArray
+import simora.parser.JsonParserObject
+import simora.parser.JsonParserString
+import simora.shared.SanityCheck
+import simora.shared.inline.File
+import simora.simulator_core.Entity
+import simora.simulator_iot.ILogger
+import simora.simulator_iot.IPackage_Database
+import simora.simulator_iot.ReflectionHelper
+import simora.simulator_iot.SimulationRun
+import simora.simulator_iot.applications.ApplicationStack_AllShortestPath
+import simora.simulator_iot.applications.ApplicationStack_CatchSelfMessages
+import simora.simulator_iot.applications.ApplicationStack_Logger
+import simora.simulator_iot.applications.ApplicationStack_MergeMessages
+import simora.simulator_iot.applications.ApplicationStack_MulticastNone
+import simora.simulator_iot.applications.ApplicationStack_MulticastSimple
+import simora.simulator_iot.applications.ApplicationStack_MultipleChilds
+import simora.simulator_iot.applications.ApplicationStack_RPL
+import simora.simulator_iot.applications.ApplicationStack_RPL_Fast
+import simora.simulator_iot.applications.ApplicationStack_Sequence
+import simora.simulator_iot.applications.Application_QuerySender
+import simora.simulator_iot.applications.IApplicationFeature
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplication_Factory
+import simora.simulator_iot.models.Device
+import simora.simulator_iot.models.geo.GeoLocation
+import simora.simulator_iot.models.net.DeviceLinker
+import simora.simulator_iot.models.net.LinkManager
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.round

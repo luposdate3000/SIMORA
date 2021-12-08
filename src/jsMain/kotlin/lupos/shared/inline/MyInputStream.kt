@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package lupos.shared.inline
+package simora.shared.inline
 
-import lupos.shared.IMyInputStream
-import lupos.shared.js.JSInputStream
+import simora.shared.IMyInputStream
+import simora.shared.js.JSInputStream
 
 internal actual class MyInputStream : IMyInputStream {
     val tmp: JSInputStream

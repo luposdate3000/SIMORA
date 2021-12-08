@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,15 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lupos.simulator_iot.applications
+package simora.simulator_iot.applications
 
-import lupos.shared.SanityCheck
-import lupos.simulator_core.ITimer
-import lupos.simulator_iot.ILogger
-import lupos.simulator_iot.IPayload
-import lupos.simulator_iot.config.Configuration
-import lupos.simulator_iot.models.Device
-import lupos.simulator_iot.models.net.NetworkPackage
+import simora.shared.SanityCheck
+import simora.simulator_core.ITimer
+import simora.simulator_iot.ILogger
+import simora.simulator_iot.IPayload
+import simora.simulator_iot.config.Configuration
+import simora.simulator_iot.models.Device
+import simora.simulator_iot.models.net.NetworkPackage
 
 internal class ApplicationStack_AllShortestPath(
     private val child: IApplicationStack_Actuator,

@@ -18,7 +18,7 @@
 * The code was translated into Kotlin and cut to the required parts.
 * */
 
-package lupos.simulator_iot.models.geo
+package simora.simulator_iot.models.geo
 
 /**
  * A utility class for handling units and unit conversions

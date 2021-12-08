@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lupos.simulator_iot.models.net
+package simora.simulator_iot.models.net
 
-import lupos.simulator_iot.config.LinkType
-import lupos.simulator_iot.models.Device
+import simora.simulator_iot.config.LinkType
+import simora.simulator_iot.models.Device
 
 internal class DeviceLinker {
     internal var numberOfLinks = 0

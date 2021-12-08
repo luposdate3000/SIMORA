@@ -1,2 +1,2 @@
-package lupos.shared
-internal typealias SanityCheck = lupos.shared.inline.SanityCheckOn
+package simora.shared
+internal typealias SanityCheck = simora.shared.inline.SanityCheckOn

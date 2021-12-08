@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package lupos.simulator_iot.applications
+package simora.simulator_iot.applications
 
-import lupos.shared.SanityCheck
-import lupos.shared.inline.File
-import lupos.simulator_core.ITimer
-import lupos.simulator_iot.IPackage_Database
-import lupos.simulator_iot.IPayload
-import lupos.simulator_iot.Package_Query
-import lupos.simulator_iot.Package_QueryResponse
+import simora.shared.SanityCheck
+import simora.shared.inline.File
+import simora.simulator_core.ITimer
+import simora.simulator_iot.IPackage_Database
+import simora.simulator_iot.IPayload
+import simora.simulator_iot.Package_Query
+import simora.simulator_iot.Package_QueryResponse
 
 public class Application_QuerySender(
     internal val startClockInSec: Int,

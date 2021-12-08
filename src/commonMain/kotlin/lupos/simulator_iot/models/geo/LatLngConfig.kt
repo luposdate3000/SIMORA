@@ -15,7 +15,7 @@
 * Modified on June 3rd, 2021 by Johann Mantler.
 * The code was translated into Kotlin and cut to the required parts.
 * */
-package lupos.simulator_iot.models.geo
+package simora.simulator_iot.models.geo
 
 /**
  * Configuration parameters for latitude and longitude calculations.

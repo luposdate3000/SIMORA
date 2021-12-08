@@ -1,5 +1,5 @@
 /*
- * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/luposdate3000).
+ * This file is part of the Luposdate3000 distribution (https://github.com/simoradate3000/simoradate3000).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,18 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lupos.simulator_iot.models
+package simora.simulator_iot.models
 
 import kotlinx.datetime.Instant
-import lupos.simulator_core.Entity
-import lupos.simulator_core.ITimer
-import lupos.simulator_iot.SimulationRun
-import lupos.simulator_iot.applications.IApplicationStack_Actuator
-import lupos.simulator_iot.applications.IApplicationStack_Rooter
-import lupos.simulator_iot.models.geo.GeoLocation
-import lupos.simulator_iot.models.net.LinkManager
-import lupos.simulator_iot.models.net.NetworkPackage
-import lupos.simulator_iot.utils.TimeUtils
+import simora.simulator_core.Entity
+import simora.simulator_core.ITimer
+import simora.simulator_iot.SimulationRun
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+import simora.simulator_iot.applications.IApplicationStack_Rooter
+import simora.simulator_iot.models.geo.GeoLocation
+import simora.simulator_iot.models.net.LinkManager
+import simora.simulator_iot.models.net.NetworkPackage
+import simora.simulator_iot.utils.TimeUtils
 
 public class Device(
     internal val simRun: SimulationRun,
