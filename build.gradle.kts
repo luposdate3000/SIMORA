@@ -69,7 +69,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
-                implementation("com.ionspin.kotlin:bignum:0.3.3-SNAPSHOT")
             }
         }
         val commonTest by getting {
