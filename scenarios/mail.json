@@ -16,7 +16,7 @@
         "DEVICE_1": {
             "applications": {
                 "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender": {
-                    "maxSamples": 100,
+                    "maxSamples": 1,
                     "rateInSec": 2,
                     "sendStartClockInSec": 1000,
                 },
