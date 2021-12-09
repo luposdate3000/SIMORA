@@ -32,6 +32,8 @@ public class Application_MailSender(
     internal val ownAddress: Int,
     internal val random: RandomGenerator,
     internal val allReveivers: List<Int>,
+internal val text_length_fixed:Int,
+internal val text_length_dynamic:Int,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
     private lateinit var startUpTimeStamp: Instant
@@ -45,7 +47,12 @@ public class Application_MailSender(
         startUpTimeStamp = Clock.System.now()
         parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
     }
-
+private inline fun getRandomString(length: Int) : String {
+    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    return (1..length)
+        .map { allowedChars.random() }
+        .joinToString("")
+}
     override fun shutDown() {}
     override fun receive(pck: IPayload): IPayload? = pck
     override fun onTimerExpired(clock: Long) {
@@ -54,8 +61,8 @@ public class Application_MailSender(
             parent.send(
                 ownAddress,
                 Package_Application_MailGroup(
-                    "ab § cde",
-                    allReveivers.map { it to "name$it" }.toMap()
+                    "§${getRandomString(text_length_fixed)}",
+                    allReveivers.map { it to "${getRandomString(text_length_dynamic)}" }.toMap()
                 )
             )
             parent.flush()

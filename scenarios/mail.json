@@ -19,6 +19,8 @@
                     "maxSamples": 1,
                     "rateInSec": 2,
                     "sendStartClockInSec": 1000,
+                    "text_length_dynamic": 10,
+                    "text_length_fixed": 100,
                 },
             },
             "deviceType": "baseDeviceType",
