@@ -21,7 +21,7 @@ repositories {
     mavenCentral()
 }
 group = "simora"
-version = "0.0.1"
+version = "1.0.0-SNAPSHOT"
 apply(plugin = "maven-publish")
 kotlin {
     explicitApi()
