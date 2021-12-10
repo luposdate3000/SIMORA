@@ -14,6 +14,7 @@ buildscript {
 plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("org.jetbrains.kotlin.multiplatform") version "1.6.0"
+`maven-publish`
 }
 repositories {
     mavenLocal()
@@ -21,8 +22,7 @@ repositories {
     mavenCentral()
 }
 group = "simora"
-version = "1.0.0-SNAPSHOT"
-apply(plugin = "maven-publish")
+version = "0.0.1"
 kotlin {
     explicitApi()
     metadata {
@@ -204,5 +204,22 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     ignoreFailures.set(true)
     filter {
         exclude("**/build/**")
+    }
+}
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/luposdate3000/SIMORA")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["kotlin"])
+        }
     }
 }
