@@ -1,0 +1,6 @@
+{
+    "routing": {
+        "multicast": "RoutingAndApplication",
+        "protocol": "RPL_Fast",
+    },
+}

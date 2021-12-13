@@ -1,0 +1,6 @@
+{
+    "routing": {
+        "multicast": "ApplicationSide",
+        "protocol": "RPL_Fast",
+    },
+}

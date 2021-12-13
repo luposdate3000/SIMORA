@@ -1,0 +1,6 @@
+{
+    "routing": {
+        "multicast": "StateOfTheArt",
+        "protocol": "RPL_Fast",
+    },
+}

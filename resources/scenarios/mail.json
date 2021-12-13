@@ -57,8 +57,4 @@
     },
     "outputDirectory": "simulator_output",
     "rootRouter": "CentralTower",
-    "routing": {
-        "multicast": "Simple",
-        "protocol": "RPL_Fast",
-    },
 }
