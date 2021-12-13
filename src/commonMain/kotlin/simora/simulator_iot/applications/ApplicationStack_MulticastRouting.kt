@@ -21,9 +21,10 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.IPayloadBinary
 
 public class ApplicationStack_MulticastRouting(
-    private val child: IApplicationStack_Actuator,
     private val enableApplciationSideMulticast: Boolean,
     private val featureFlag: Int,
+    private val ownAddress: Int,
+    private val child: IApplicationStack_Actuator,
 ) : IApplicationStack_BothDirections {
     private lateinit var parent: IApplicationStack_Middleware
 
@@ -48,6 +49,7 @@ public class ApplicationStack_MulticastRouting(
     }
     private var myQueue = mutableSetOf<Package_ApplicationStack_Multicast>()
     private fun myFlush() {
+// indentify duplicates
         for (p in myQueue) {
             if (p.targets.size == 1) {
                 parent.send(p.targets[0], p.pck)
@@ -77,8 +79,22 @@ public class ApplicationStack_MulticastRouting(
     }
     override fun receive(pck: IPayload): IPayload? {
         val res = if (pck is Package_ApplicationStack_Multicast) {
-            TODO("weiterversenden")
-
+// detect self targets
+            var newTargets = mutableListOf<Int>()
+            for (t in pck.targets) {
+                if (t == ownAddress) {
+                    child.receive(pck.pck)
+                } else {
+                    newTargets.add(t)
+                }
+            }
+// add all remaining to send queue
+            val element = myQueue.find { it == pck }
+            if (element == null) {
+                myQueue.add(pck)
+            } else {
+                element.targets.addAll(newTargets)
+            }
             null
         } else {
             child.receive(pck)
@@ -88,6 +104,7 @@ public class ApplicationStack_MulticastRouting(
     }
     override fun send(destinationAddress: Int, pck: IPayload) {
         if (pck is IPayloadBinary) {
+// add all possible elements to send queue
             val p = Package_ApplicationStack_Multicast(mutableListOf(destinationAddress), pck)
             val element = myQueue.find { it == p }
             if (element == null) {

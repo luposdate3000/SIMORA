@@ -59,6 +59,7 @@ public class Configuration(private val simRun: SimulationRun) {
 
     private val factories = mutableMapOf<String, IApplication_Factory>()
     public val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
+    private val featureIDRouting = 0
 
     public var devices: MutableList<Device> = mutableListOf()
     private var namedAddresses: MutableMap<String, Int> = mutableMapOf()
@@ -252,8 +253,8 @@ public class Configuration(private val simRun: SimulationRun) {
             when (jsonRouting.getOrDefault("multicast", "None")) {
                 "None" -> ApplicationStack_MulticastNone(applicationStack)
                 "ApplicationSide", "Simple" -> ApplicationStack_MulticastSimple(applicationStack)
-                "StateOfTheArt", "Routing" -> ApplicationStack_MulticastRouting(applicationStack, false, 0)
-                "RoutingAndApplication" -> ApplicationStack_MulticastRouting(applicationStack, true, 0)
+                "StateOfTheArt", "Routing" -> ApplicationStack_MulticastRouting(false, featureIDRouting, ownAddress, applicationStack)
+                "RoutingAndApplication" -> ApplicationStack_MulticastRouting(true, featureIDRouting, ownAddress, applicationStack)
                 else -> TODO("unknown multicast implementation '${jsonRouting.getOrDefault("multicast", "None")}'")
             }
         )
