@@ -25,14 +25,14 @@ import kotlinx.datetime.plus
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
-private class LoggerMeasure : ILogger {
+internal class LoggerMeasure : ILogger {
     private lateinit var simRun: SimulationRun
     override fun initialize(simRun: SimulationRun) {
         this.simRun = simRun
     }
 
     internal companion object {
-        private var StatCounter: Int = 0
+        internal var StatCounter: Int = 0
         private val StatNumberOfDevices: Int = StatCounter++
         private val StatNetworkLinkCounter: Int = StatCounter++
 
@@ -77,7 +77,7 @@ private class LoggerMeasure : ILogger {
     private val packageSize = mutableListOf<Double>()
     private val packageSizeAggregated = mutableListOf<Double>()
     private val packageSizeSelfMessage = mutableListOf<Double>()
-    private fun getDataAggregated(): DoubleArray {
+    internal fun getDataAggregated(): DoubleArray {
         val res = mutableListOf<Double>()
         for (d in data) {
             res.add(d)
@@ -100,7 +100,7 @@ private class LoggerMeasure : ILogger {
         return res.toDoubleArray()
     }
 
-    private fun getHeadersAggregated(): Array<String> {
+    internal fun getHeadersAggregated(): Array<String> {
         val res = mutableListOf<String>()
         for (h in headers) {
             res.add(h)

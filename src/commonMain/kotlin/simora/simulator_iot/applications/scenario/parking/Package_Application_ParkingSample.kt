@@ -19,12 +19,12 @@ package simora.simulator_iot.applications.scenario.parking
 
 import simora.simulator_iot.IPayload
 
-private class Package_Application_ParkingSample(
-    private val sensorID: Int,
-    private val sampleTime: String,
-    private val isOccupied: Boolean,
-    private val area: Int,
-    private val spotInArea: Int,
+internal class Package_Application_ParkingSample(
+    internal val sensorID: Int,
+    internal val sampleTime: String,
+    internal val isOccupied: Boolean,
+    internal val area: Int,
+    internal val spotInArea: Int,
 ) : IPayload {
     override fun getSizeInBytes(): Int = 4 + sampleTime.length + 1 + 4 + 4
     override fun getTopic(): String = "ParkingSample"

@@ -21,7 +21,7 @@ import simora.shared.IMyOutputStream
 import simora.shared.js.ExternalModule_fs
 
 internal actual class File {
-    private val filename: String
+    internal val filename: String
 
     actual constructor(filename: String) {
         this.filename = filename

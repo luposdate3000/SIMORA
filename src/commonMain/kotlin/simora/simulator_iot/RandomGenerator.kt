@@ -29,7 +29,7 @@ public class RandomGenerator {
     private var random: Random = Random(seed)
         private set
 
-    private fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
+    internal fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
         if (minInclusive == maxInclusive) {
             return minInclusive
         }
@@ -41,12 +41,12 @@ public class RandomGenerator {
         return random.nextDouble(minInclusive, maxExclusive)
     }
 
-    private fun getInt(minInclusive: Int, maxInclusive: Int): Int =
+    internal fun getInt(minInclusive: Int, maxInclusive: Int): Int =
         getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toInt()
 
-    private fun getLong(minInclusive: Long, maxInclusive: Long): Long =
+    internal fun getLong(minInclusive: Long, maxInclusive: Long): Long =
         getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toLong()
 
-    private fun getBoolean(probabilityOfTrue: Float): Boolean =
+    internal fun getBoolean(probabilityOfTrue: Float): Boolean =
         random.nextFloat() < probabilityOfTrue
 }

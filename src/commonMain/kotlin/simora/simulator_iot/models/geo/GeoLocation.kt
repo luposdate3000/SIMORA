@@ -23,7 +23,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-public class GeoLocation(private var latitude: Double, private var longitude: Double) {
+public class GeoLocation(internal var latitude: Double, internal var longitude: Double) {
 
     internal companion object {
 
@@ -73,7 +73,7 @@ public class GeoLocation(private var latitude: Double, private var longitude: Do
         }
     }
 
-    private fun getDistanceInMeters(other: GeoLocation): Double {
+    internal fun getDistanceInMeters(other: GeoLocation): Double {
         val distance = LatLngTool.distance(
             LatLng(latitude, longitude),
             LatLng(other.latitude, other.longitude),

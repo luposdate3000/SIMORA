@@ -46,17 +46,17 @@ internal object TimeUtils {
     }
 
     @OptIn(ExperimentalTime::class)
-    private fun differenceInNanoSec(startInstant: Instant, endInstant: Instant): Long {
+    internal fun differenceInNanoSec(startInstant: Instant, endInstant: Instant): Long {
         val duration = endInstant - startInstant
         return duration.inWholeNanoseconds
     }
 
-    private fun toNanoSec(seconds: Int): Long =
+    internal fun toNanoSec(seconds: Int): Long =
         seconds.toLong() * 1000 * 1000 * 1000
 
-    private fun toNanoSec(seconds: Double): Long =
+    internal fun toNanoSec(seconds: Double): Long =
         (seconds * 1000 * 1000 * 1000).roundToLong()
 
-    private fun stamp(): Instant =
+    internal fun stamp(): Instant =
         Clock.System.now()
 }

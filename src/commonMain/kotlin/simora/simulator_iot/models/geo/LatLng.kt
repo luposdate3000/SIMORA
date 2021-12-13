@@ -37,7 +37,7 @@ import kotlin.random.Random
  *
  * @author Tyler Coles
  */
-private class LatLng(latitude: Double, longitude: Double) {
+internal class LatLng(latitude: Double, longitude: Double) {
     /**
      * Get the internal long representation of this point's latitude
      * in degrees. Intended for library use only.
@@ -59,7 +59,7 @@ private class LatLng(latitude: Double, longitude: Double) {
      *
      * @return latitude in degrees.
      */
-    private fun getLatitude(): Double {
+    internal fun getLatitude(): Double {
         return LatLngConfig.longToDouble(latitude)
     }
 
@@ -68,7 +68,7 @@ private class LatLng(latitude: Double, longitude: Double) {
      *
      * @return longitude in degrees.
      */
-    private fun getLongitude(): Double {
+    internal fun getLongitude(): Double {
         return LatLngConfig.longToDouble(longitude)
     }
 
@@ -111,7 +111,7 @@ private class LatLng(latitude: Double, longitude: Double) {
          * @return the random LatLng.
          */
 
-        private fun random(r: Random): LatLng {
+        internal fun random(r: Random): LatLng {
             return LatLng(
                 r.nextDouble() * -180.0 + 90.0,
                 r.nextDouble() * -360.0 + 180.0

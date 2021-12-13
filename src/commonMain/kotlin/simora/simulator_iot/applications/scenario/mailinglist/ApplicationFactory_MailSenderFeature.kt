@@ -20,7 +20,7 @@ package simora.simulator_iot.applications.scenario.mailinglist
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 
-private class ApplicationFactory_MailSenderFeature : IApplicationFeature {
+internal class ApplicationFactory_MailSenderFeature : IApplicationFeature {
     override fun getName(): String = "MailSender"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_MailSender
     override fun equals(other: Any?): Boolean = other is ApplicationFactory_MailSenderFeature

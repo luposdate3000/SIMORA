@@ -22,11 +22,9 @@ import java.io.OutputStream
 import kotlin.jvm.JvmField
 
 internal actual class MyOutputStream : IMyOutputStream {
-    @JvmField
-    val buffer: ByteArray
-    var bufferPos = 0
+private    val buffer: ByteArray
+private    var bufferPos = 0
 
-    @JvmField
     private var stream: OutputStream?
 
     private var closedBy: MutableList<Throwable>? = null
@@ -44,7 +42,7 @@ internal actual class MyOutputStream : IMyOutputStream {
 
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:46"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:44"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

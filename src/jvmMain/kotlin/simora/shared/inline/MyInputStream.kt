@@ -21,12 +21,10 @@ import simora.shared.UUID_Counter
 import java.io.InputStream
 import kotlin.jvm.JvmField
 
-internal actual class MyInputStream(@JvmField private val stream: InputStream) : IMyInputStream {
+internal actual class MyInputStream( private val stream: InputStream) : IMyInputStream {
 
-    @JvmField
     private val buf8: ByteArray = ByteArray(8)
 
-    @JvmField
     private val uuid = UUID_Counter.getNextUUID()
 
     init {
@@ -75,7 +73,6 @@ internal actual class MyInputStream(@JvmField private val stream: InputStream) :
         stream.close()
     }
 
-    @JvmField
     private var buffer = ByteArray(1)
     actual override fun readLine(): String? {
 // TODO this may break on utf-8 if '\r' or '\0' is part of another char

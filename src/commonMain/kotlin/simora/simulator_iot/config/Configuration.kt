@@ -54,11 +54,11 @@ import kotlin.math.sqrt
 
 public class Configuration(private val simRun: SimulationRun) {
     internal companion object {
-        private val defaultOutputDirectory: String = "simulator_output/"
+        internal const val defaultOutputDirectory: String = "simulator_output/"
     }
 
     private val factories = mutableMapOf<String, IApplication_Factory>()
-    private val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
+    internal val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
     private val featureIDRouting = 0
 
     public var devices: MutableList<Device> = mutableListOf()
@@ -71,7 +71,7 @@ public class Configuration(private val simRun: SimulationRun) {
     private var linker = DeviceLinker()
         private set
 
-    private fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
+    internal fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
     public fun featureIdForName(name: String): Int {
         for (i in 0 until features.size) {
             if (features[i].getName() == name) {
@@ -103,7 +103,7 @@ public class Configuration(private val simRun: SimulationRun) {
         return false
     }
 
-    private fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
+    internal fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
         this.json = json
         outputDirectory = json.getOrDefault("outputDirectory", defaultOutputDirectory) + "/"
         if (outputDirectory == "") {
@@ -177,7 +177,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
     }
 
-    private fun parse(fileName: String, autocorrect: Boolean = true) {
+    internal fun parse(fileName: String, autocorrect: Boolean = true) {
         val fileStr = File(fileName).readAsString()
         val json = JsonParser().stringToJson(fileStr) as JsonParserObject
         parse(json, fileName, autocorrect)

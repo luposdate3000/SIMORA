@@ -19,7 +19,7 @@ package simora.simulator_iot.applications.scenario.mailinglist
 
 import simora.simulator_iot.IPayloadBinary
 
-private class Package_Application_Mail(
+internal class Package_Application_Mail(
     private val text: String,
 ) : IPayloadBinary {
     override fun getSizeInBytes(): Int = text.length

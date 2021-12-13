@@ -17,7 +17,7 @@
 
 package simora.parser
 
-private class JsonParserLong(private var value: Long) : IJsonParserValue {
+internal class JsonParserLong(internal var value: Long) : IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true
@@ -25,10 +25,10 @@ private class JsonParserLong(private var value: Long) : IJsonParserValue {
 
     override fun isAccessed(): Boolean = accessed0
     private var default0: Long? = null
-    private fun setDefault(v: Long) {
+    internal fun setDefault(v: Long) {
         default0 = v
     }
 
-    private fun getDefault() = default0
+    internal fun getDefault() = default0
     override fun cloneJson(): JsonParserLong = this
 }

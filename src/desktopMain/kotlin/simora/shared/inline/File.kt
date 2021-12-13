@@ -22,7 +22,7 @@ import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
 
 internal actual class File {
-    private val filename: String
+    internal val filename: String
 
     actual constructor(filename: String) {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")

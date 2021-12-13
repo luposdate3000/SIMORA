@@ -18,7 +18,7 @@
 package simora.simulator_iot.config
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
-private class RoutingFeature : IApplicationFeature {
+internal class RoutingFeature : IApplicationFeature {
     override fun getName(): String = "RoutingFeature"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = true
     override fun equals(other: Any?): Boolean = other is RoutingFeature

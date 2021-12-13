@@ -19,8 +19,7 @@ package simora.shared
 import kotlin.jvm.JvmField
 
 internal object UUID_Counter {
-    @JvmField
     private var uuid = 0L
 
-    private fun getNextUUID(): Long = uuid++
+    internal fun getNextUUID(): Long = uuid++
 }

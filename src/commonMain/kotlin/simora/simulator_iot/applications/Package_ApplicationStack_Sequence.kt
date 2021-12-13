@@ -20,10 +20,10 @@ package simora.simulator_iot.applications
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.IPayloadLayer
 
-private class Package_ApplicationStack_Sequence(
-    private val data: IPayload,
-    private val num: Int,
-    private val src: Int,
+internal class Package_ApplicationStack_Sequence(
+    internal val data: IPayload,
+    internal val num: Int,
+    internal val src: Int,
 ) : IPayloadLayer {
 
     override fun getSizeInBytes(): Int = data.getSizeInBytes() + 8

@@ -17,7 +17,7 @@
 
 package simora.parser
 
-private class JsonParserDouble(private var value: Double) : IJsonParserValue {
+internal class JsonParserDouble(internal var value: Double) : IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true
@@ -25,10 +25,10 @@ private class JsonParserDouble(private var value: Double) : IJsonParserValue {
 
     override fun isAccessed(): Boolean = accessed0
     private var default0: Double? = null
-    private fun setDefault(v: Double) {
+    internal fun setDefault(v: Double) {
         default0 = v
     }
 
-    private fun getDefault() = default0
+    internal fun getDefault() = default0
     override fun cloneJson(): JsonParserDouble = this
 }

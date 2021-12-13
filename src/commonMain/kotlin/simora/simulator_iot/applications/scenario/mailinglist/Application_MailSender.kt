@@ -25,7 +25,7 @@ import simora.simulator_iot.RandomGenerator
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-private class Application_MailSender(
+internal class Application_MailSender(
     private val startClockInSec: Int,
     private val sendRateInSec: Int,
     private val maxNumber: Int,

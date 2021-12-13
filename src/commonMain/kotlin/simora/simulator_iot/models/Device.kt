@@ -30,7 +30,7 @@ import simora.simulator_iot.utils.TimeUtils
 
 public class Device(
     private val simRun: SimulationRun,
-    private var location: GeoLocation,
+    internal var location: GeoLocation,
     public val address: Int,
     private val performance: Double,
     public val linkManager: LinkManager,
@@ -38,7 +38,7 @@ public class Device(
     public val applicationStack: IApplicationStack_Rooter,
     private val hostNameLookUpTable: MutableMap<String, Int>,
 ) : Entity() {
-    private var isStarNetworkChild: Boolean = false
+    internal var isStarNetworkChild: Boolean = false
     private lateinit var deviceStart: Instant
 
     init {
@@ -55,7 +55,7 @@ public class Device(
         return scaled.toLong()
     }
 
-    private fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
+    internal fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
         val processingDelay = getProcessingDelay()
         return if (destinationAddress == address) {
             processingDelay
@@ -84,7 +84,7 @@ public class Device(
         applicationStack.shutDown()
     }
 
-    private fun closestDeviceWithFeature(name: String): Int {
+    internal fun closestDeviceWithFeature(name: String): Int {
         val devicesWithFeature = simRun.config.getAllDevicesForFeature(simRun.config.featureIdForName2(name)).toMutableList()
         if (devicesWithFeature.size == 0) {
             return -1
@@ -106,7 +106,7 @@ public class Device(
         return closestDevice!!.address
     }
 
-    private fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
+    internal fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
         val entity = simRun.config.getDeviceByAddress(hop)
         scheduleEvent(entity, pck, delay)
         simRun.logger.onSendNetworkPackage(address, dest, hop, pck.payload, delay)
@@ -116,7 +116,7 @@ public class Device(
     override fun hashCode(): Int = address
 
     override fun toString(): String = "Device(addr $address)"
-    private fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
-    private fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
+    internal fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
+    internal fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
     public fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
 }

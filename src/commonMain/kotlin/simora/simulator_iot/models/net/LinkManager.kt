@@ -21,12 +21,12 @@ import simora.simulator_iot.models.Device
 import simora.simulator_iot.utils.TimeUtils
 
 public class LinkManager(
-    private val supportedLinkTypes: IntArray
+    internal val supportedLinkTypes: IntArray
 ) {
 
-    private var links: MutableMap<Int, Link> = mutableMapOf()
+    internal var links: MutableMap<Int, Link> = mutableMapOf()
 
-    private fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
+    internal fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
         val link = links[destinationAddress]!!
         val kiloBits = numberOfBytesToSend.toDouble() / 125
         val seconds = kiloBits / link.dataRateInKbps.toDouble()
@@ -35,7 +35,7 @@ public class LinkManager(
 
     private fun getLink(otherDevice: Device): Link? = links[otherDevice.address]
 
-    private fun hasLink(otherDevice: Device): Boolean = getLink(otherDevice) != null
+    internal fun hasLink(otherDevice: Device): Boolean = getLink(otherDevice) != null
 
     public fun getNeighbours(): MutableSet<Int> = links.keys
 }

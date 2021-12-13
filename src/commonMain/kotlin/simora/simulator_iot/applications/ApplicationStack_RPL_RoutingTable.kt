@@ -77,10 +77,10 @@ public class ApplicationStack_RPL_RoutingTable(
             -1 // tell the caller that we dont know it
         }
 
-    private fun getNextFeatureHops(destinationAddresses: IntArray): IntArray =
+    internal fun getNextFeatureHops(destinationAddresses: IntArray): IntArray =
         IntArray(destinationAddresses.size) { getNextFeatureHop(destinationAddresses[it]) }
 
-    private fun removeDestinationsByHop(hop: Int): Boolean {
+    internal fun removeDestinationsByHop(hop: Int): Boolean {
         var updated = false
         if (hop != ownAddress) {
             for ((index, value) in nextHops.withIndex())
@@ -95,7 +95,7 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    private fun setDestinationsByHop(hop: Int, destinations: IntArray, existingDatabaseHops: IntArray): Boolean {
+    internal fun setDestinationsByHop(hop: Int, destinations: IntArray, existingDatabaseHops: IntArray): Boolean {
         var updated = updateHop(hop, hop, -1)
         for ((index, dest) in destinations.withIndex()) {
             val flag = updateHop(dest, hop, existingDatabaseHops[index])
@@ -104,7 +104,7 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    private fun setDestinationsByDatabaseHop(hop: Int, destinations: IntArray): Boolean {
+    internal fun setDestinationsByDatabaseHop(hop: Int, destinations: IntArray): Boolean {
         var updated = updateHop(hop, hop, hop)
         for (dest in destinations) {
             val flag = updateHop(dest, hop, hop)
@@ -124,5 +124,5 @@ public class ApplicationStack_RPL_RoutingTable(
         return destinations
     }
 
-    private fun getHops(): Set<Int> = hops
+    internal fun getHops(): Set<Int> = hops
 }

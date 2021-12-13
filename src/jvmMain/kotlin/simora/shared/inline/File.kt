@@ -26,7 +26,7 @@ import kotlin.jvm.JvmField
 
 internal actual class File {
     @JvmField
-    private val filename: String
+    internal val filename: String
 
     actual constructor(filename: String) {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")

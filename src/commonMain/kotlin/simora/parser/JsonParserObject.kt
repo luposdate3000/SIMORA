@@ -32,7 +32,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         return res
     }
 
-    private fun mergeWith(other: JsonParserObject) {
+    internal fun mergeWith(other: JsonParserObject) {
         for ((k, other_v) in other.map) {
             val my_v = map[k]
             if (my_v == null) {
@@ -75,7 +75,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         }
     }
 
-    private fun isEmpty(): Boolean = map.isEmpty()
+    internal fun isEmpty(): Boolean = map.isEmpty()
     internal operator fun set(k: String, v: IJsonParserValue) {
         setAccessed()
         v.setAccessed()
@@ -154,7 +154,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         return res
     }
 
-    private fun getOrEmptyArray(k: String): JsonParserArray {
+    internal fun getOrEmptyArray(k: String): JsonParserArray {
         setAccessed()
         val res = getOrDefault(k, JsonParserArray(mutableListOf())) as JsonParserArray
         res.setAccessed()

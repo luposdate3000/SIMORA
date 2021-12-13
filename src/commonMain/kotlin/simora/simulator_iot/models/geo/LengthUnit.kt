@@ -64,7 +64,7 @@ internal enum class LengthUnit(
      * @param value the value to convert.
      * @return the converted value.
      */
-    private fun convertTo(toUnit: LengthUnit, value: Double): Double {
+    internal fun convertTo(toUnit: LengthUnit, value: Double): Double {
         if (this == toUnit) {
             return value
         }

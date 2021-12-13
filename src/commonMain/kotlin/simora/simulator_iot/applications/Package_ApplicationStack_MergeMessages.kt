@@ -20,8 +20,8 @@ package simora.simulator_iot.applications
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.IPayloadLayer
 
-private class Package_ApplicationStack_MergeMessages(
-    private val data: MutableList<IPayload>,
+internal class Package_ApplicationStack_MergeMessages(
+    internal val data: MutableList<IPayload>,
 ) : IPayloadLayer {
     override fun toString(): String = "Package_ApplicationStack_MergeMessages($data)"
     override fun getSizeInBytes(): Int = data.map { it.getSizeInBytes() }.sum()

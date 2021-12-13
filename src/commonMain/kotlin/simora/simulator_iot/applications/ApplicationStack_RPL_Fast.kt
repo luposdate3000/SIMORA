@@ -25,7 +25,7 @@ import simora.simulator_iot.config.Configuration
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.NetworkPackage
 
-private class ApplicationStack_RPL_Fast(
+internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val logger: ILogger,
     private val config: Configuration,

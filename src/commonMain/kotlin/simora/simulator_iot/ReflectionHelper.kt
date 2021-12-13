@@ -17,5 +17,5 @@
 package simora.simulator_iot
 
 internal expect object ReflectionHelper {
-    private fun create(name: String): Any
+    internal fun create(name: String): Any
 }

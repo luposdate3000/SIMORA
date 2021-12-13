@@ -19,10 +19,10 @@ package simora.simulator_iot.models.net
 
 import simora.simulator_iot.IPayload
 
-private class NetworkPackage(
+internal class NetworkPackage(
     public val sourceAddress: Int,
-    private val destinationAddress: Int,
-    private val payload: IPayload
+    internal val destinationAddress: Int,
+    internal val payload: IPayload
 ) : IPayload {
     override fun getSizeInBytes(): Int = 40 + payload.getSizeInBytes()
     override fun toString(): String = "Pck(src $sourceAddress, dest $destinationAddress, size ${getSizeInBytes()}, payload $payload)"

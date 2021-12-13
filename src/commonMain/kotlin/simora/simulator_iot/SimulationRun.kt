@@ -28,10 +28,10 @@ public class SimulationRun {
 
     public lateinit var sim: Simulation
 
-    private val randGenerator = RandomGenerator()
+    internal val randGenerator = RandomGenerator()
     public val config: Configuration = Configuration(this)
 
-    private val logger: Loggers = Loggers(mutableListOf())
+    internal val logger: Loggers = Loggers(mutableListOf())
 
     public var notInitializedClock: Long = -1
 

@@ -50,7 +50,7 @@ internal object LatLngConfig {
      * @param unit the desired unit for the result.
      * @return the Earth's radius in the desired unit.
      */
-    private fun getEarthRadius(unit: LengthUnit): Double {
+    internal fun getEarthRadius(unit: LengthUnit): Double {
         return EARTH_RADIUS[unit.ordinal]
     }
 
@@ -76,7 +76,7 @@ internal object LatLngConfig {
      * @param value the value to convert.
      * @return the long value.
      */
-    private fun doubleToLong(value: Double): Long {
+    internal fun doubleToLong(value: Double): Long {
         return (value / DEGREE_TOLERANCE).toLong()
     }
 
@@ -87,7 +87,7 @@ internal object LatLngConfig {
      * @param value the value to convert.
      * @return the double value.
      */
-    private fun longToDouble(value: Long): Double {
+    internal fun longToDouble(value: Long): Double {
         return value.toDouble() * DEGREE_TOLERANCE
     }
 

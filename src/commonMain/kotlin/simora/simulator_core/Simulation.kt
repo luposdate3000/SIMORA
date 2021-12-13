@@ -22,7 +22,7 @@ import simora.shared.SanityCheck
 public class Simulation(
     private val entities: List<Entity>,
 ) {
-    private var logger: ILoggerCore = LoggerCoreNone()
+    internal var logger: ILoggerCore = LoggerCoreNone()
 
     private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
 
@@ -34,7 +34,7 @@ public class Simulation(
 
     private var addedEventCounter: Int = 0
 
-    private fun startSimulation() {
+    internal fun startSimulation() {
         startUp()
         run()
         shutDown()
@@ -99,7 +99,7 @@ public class Simulation(
         logger.onSteadyState() // call this last due to time measurement
     }
 
-    private fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
+    internal fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
         SanityCheck.check(
             { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_core/Simulation.kt:103"/*SOURCE_FILE_END*/ },
             { delay >= 0 },

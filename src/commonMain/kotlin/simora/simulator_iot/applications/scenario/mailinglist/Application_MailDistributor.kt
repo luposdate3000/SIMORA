@@ -20,7 +20,7 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-private class Application_MailDistributor(
+internal class Application_MailDistributor(
     private val ownAddress: Int,
     private val mailDistributorFlag: Int,
 ) : IApplicationStack_Actuator {
