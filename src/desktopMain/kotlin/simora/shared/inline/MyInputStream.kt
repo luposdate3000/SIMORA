@@ -19,7 +19,6 @@ package simora.shared.inline
 import kotlinx.cinterop.*
 import platform.posix.*
 import simora.shared.IMyInputStream
-import simora.shared.UUID_Counter
 
 internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
     private var stream: CPointer<FILE>? = file

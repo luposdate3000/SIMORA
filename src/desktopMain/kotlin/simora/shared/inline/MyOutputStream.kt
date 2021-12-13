@@ -30,7 +30,7 @@ internal actual class MyOutputStream internal constructor(file: CPointer<FILE>) 
 
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/desktopMain/kotlin/simora/shared/inline/MyOutputStream.kt:36"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/desktopMain/kotlin/simora/shared/inline/MyOutputStream.kt:32"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

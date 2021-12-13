@@ -16,11 +16,8 @@
  */
 package simora.shared.inline
 
-import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
-import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.jvm.JvmField
 
@@ -52,5 +49,4 @@ internal actual class File actual constructor(filename: String) {
             printer.close()
         }
     }
-
 }

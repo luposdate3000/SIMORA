@@ -17,12 +17,6 @@
 
 package simora.simulator_iot.models.geo
 
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.random.Random
-
 public class GeoLocation(internal var latitude: Double, internal var longitude: Double) {
 
     internal companion object {
@@ -36,7 +30,6 @@ public class GeoLocation(internal var latitude: Double, internal var longitude: 
             )
             return GeoLocation(loc.getLatitude(), loc.getLongitude())
         }
-
     }
 
     internal fun getDistanceInMeters(other: GeoLocation): Double {

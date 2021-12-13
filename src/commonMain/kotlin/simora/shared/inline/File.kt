@@ -16,7 +16,6 @@
  */
 package simora.shared.inline
 
-import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
 
 internal expect class File(filename: String) {

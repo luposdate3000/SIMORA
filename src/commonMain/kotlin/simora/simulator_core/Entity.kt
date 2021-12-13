@@ -52,5 +52,4 @@ public abstract class Entity {
     internal fun setTimer(time: Long, callback: ITimer) {
         scheduleEvent(this, callback, time)
     }
-
 }

@@ -24,5 +24,5 @@ internal class ApplicationFactory_MailSenderFeature : IApplicationFeature {
     override fun getName(): String = "MailSender"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_MailSender
     override fun equals(other: Any?): Boolean = other is ApplicationFactory_MailSenderFeature
-    override fun hashCode(): Int =getName().hashCode()
+    override fun hashCode(): Int = getName().hashCode()
 }

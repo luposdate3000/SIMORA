@@ -71,5 +71,4 @@ public class Evaluation {
             out.println(JsonParser().jsonToString(json, true))
         }
     }
-
 }

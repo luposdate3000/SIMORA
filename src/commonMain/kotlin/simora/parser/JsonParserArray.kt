@@ -66,5 +66,4 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         }
         return array.iterator()
     }
-
 }

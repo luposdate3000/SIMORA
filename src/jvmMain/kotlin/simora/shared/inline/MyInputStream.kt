@@ -17,10 +17,9 @@
 package simora.shared.inline
 
 import simora.shared.IMyInputStream
-import simora.shared.UUID_Counter
 import java.io.InputStream
 
-internal actual class MyInputStream( private val stream: InputStream) : IMyInputStream {
+internal actual class MyInputStream(private val stream: InputStream) : IMyInputStream {
 
     private val buf8: ByteArray = ByteArray(8)
 

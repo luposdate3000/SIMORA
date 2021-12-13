@@ -22,5 +22,5 @@ internal class RoutingFeature : IApplicationFeature {
     override fun getName(): String = "RoutingFeature"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = true
     override fun equals(other: Any?): Boolean = other is RoutingFeature
-    override fun hashCode(): Int =getName().hashCode()
+    override fun hashCode(): Int = getName().hashCode()
 }
