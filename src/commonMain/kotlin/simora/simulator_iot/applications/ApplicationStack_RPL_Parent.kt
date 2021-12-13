@@ -14,34 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package simora.shared.js
 
-public object ExternalModule_fs {
-    internal val inmemoryFs = mutableMapOf<String, ByteArray>()
-    private var tmpCounter = 0
-    public fun createTempDirectory(): String {
-        return "tmp${tmpCounter++}"
-    }
+package simora.simulator_iot.applications
 
-    public fun exists(filename: String): Boolean {
-        return inmemoryFs[filename] != null
-    }
+import simora.simulator_core.ITimer
+import simora.simulator_iot.ILogger
+import simora.simulator_iot.IPayload
+import simora.simulator_iot.config.Configuration
+import simora.simulator_iot.models.Device
+import simora.simulator_iot.models.net.NetworkPackage
+import simora.simulator_iot.utils.TimeUtils
 
-    public fun mkdirs(filename: String): Boolean {
-        return true
-    }
-
-    public fun length(filename: String): Long {
-        val f = inmemoryFs[filename]
-        return if (f == null) {
-            0
-        } else {
-            f.size.toLong()
-        }
-    }
-
-    public fun openOutputStream(filename: String, append: Boolean): JSOutputStream {
-        return JSOutputStream(filename, append)
-    }
-}
-
+public class ApplicationStack_RPL_Parent(internal var address: Int, internal var rank: Int )

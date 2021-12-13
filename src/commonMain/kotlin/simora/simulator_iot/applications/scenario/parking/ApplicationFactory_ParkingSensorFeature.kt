@@ -25,27 +25,8 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
-
-public class ApplicationFactory_ParkingSensor : IApplication_Factory {
-    override fun registerFeatures(features: MutableList<IApplicationFeature>) {
-        features.add(ApplicationFactory_ParkingSensorFeature())
-    }
-
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
-        json as JsonParserObject
-        if (json.getOrDefault("enabled", true)) {
-            return listOf(
-                Application_ParkingSensor(
-                    json.getOrDefault("sendStartClockInSec", 0),
-                    json.getOrDefault("rateInSec", 0),
-                    json.getOrDefault("maxSamples", -1),
-                    ownAddress,
-                    random,
-                    json.getOrDefault("area", 0),
-                    json.getOrDefault("spotInArea", 0),
-                )
-            )
-        }
-        return listOf()
-    }
+public class ApplicationFactory_ParkingSensorFeature : IApplicationFeature {
+    override fun getName(): String = "Sensor"
+    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_ParkingSensor
+    override fun equals(other: Any?): Boolean = other is ApplicationFactory_ParkingSensorFeature
 }

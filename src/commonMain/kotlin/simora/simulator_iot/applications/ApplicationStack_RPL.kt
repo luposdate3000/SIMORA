@@ -39,10 +39,8 @@ public class ApplicationStack_RPL(
     private val notInitializedAddress = -1
     internal var isRoot: Boolean = false
     internal var rank: Int = INFINITE_RANK
-    internal var preferredParent: Parent = Parent()
+    internal var preferredParent:ApplicationStack_RPL_Parent = ApplicationStack_RPL_Parent(notInitializedAddress,INFINITE_RANK)
     private var isDelayPackage_ApplicationStack_RPL_DAOTimerRunning = false
-
-    internal inner class Parent(internal var address: Int = notInitializedAddress, internal var rank: Int = INFINITE_RANK)
 
     override fun setDevice(device: Device) {
         parent = device
@@ -86,7 +84,7 @@ public class ApplicationStack_RPL(
         sendUnRoutedPackage(destinationAddress, dao)
     }
 
-    private fun updateParent(newParent: Parent) {
+    private fun updateParent(newParent:ApplicationStack_RPL_Parent) {
         if (hasParent()) {
             if (newParent.address == preferredParent.address) {
                 return
@@ -139,7 +137,7 @@ public class ApplicationStack_RPL(
                 is Package_ApplicationStack_RPL_DIO -> {
                     if (objectiveFunction(pck) < rank) {
                         rank = objectiveFunction(pck)
-                        updateParent(Parent(pck.sourceAddress, payload.rank))
+                        updateParent(ApplicationStack_RPL_Parent(pck.sourceAddress, payload.rank))
                         broadcastPackage_ApplicationStack_RPL_DIO()
                     }
                 }

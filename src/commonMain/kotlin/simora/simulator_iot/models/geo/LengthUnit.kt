@@ -20,12 +20,6 @@
 
 package simora.simulator_iot.models.geo
 
-/**
- * A utility class for handling units and unit conversions
- * within this library.
- *
- * @author Tyler Coles
- */
 internal enum class LengthUnit(
     /**
      * Retrieve the scale factor between this unit and the primary
