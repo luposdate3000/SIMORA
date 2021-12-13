@@ -19,7 +19,7 @@ package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 
-public class ApplicationStack_MultipleChilds(
+internal class ApplicationStack_MultipleChilds(
     private var childs: Array<IApplicationStack_Actuator>,
 ) : IApplicationStack_BothDirections {
     private var hadStartUp = false

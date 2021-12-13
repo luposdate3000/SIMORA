@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public class JsonParserArray(private val array: MutableList<IJsonParserValue>) : Iterable<IJsonParserValue>, IJsonParserValue {
+internal class JsonParserArray(private val array: MutableList<IJsonParserValue>) : Iterable<IJsonParserValue>, IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true
@@ -32,7 +32,7 @@ public class JsonParserArray(private val array: MutableList<IJsonParserValue>) :
     }
 
     override fun isAccessed(): Boolean = accessed0
-    public fun mergeWith(other: JsonParserArray) {
+    internal fun mergeWith(other: JsonParserArray) {
         var k = 0
         while (k < array.size && k < other.array.size) {
             val other_v = other.array[k]
@@ -51,12 +51,12 @@ public class JsonParserArray(private val array: MutableList<IJsonParserValue>) :
         }
     }
 
-    public fun isEmpty(): Boolean = array.isEmpty()
-    public fun <T> map(action: (IJsonParserValue) -> T): MutableList<T> {
+    internal fun isEmpty(): Boolean = array.isEmpty()
+    internal fun <T> map(action: (IJsonParserValue) -> T): MutableList<T> {
         val res: List<T> = array.map { action(it) }
         return res.toMutableList()
     }
-    public fun firstOrEmptyObject(): JsonParserObject {
+    internal fun firstOrEmptyObject(): JsonParserObject {
         setAccessed()
         val res =
             if (array.size > 0) {
@@ -70,7 +70,7 @@ public class JsonParserArray(private val array: MutableList<IJsonParserValue>) :
         return res
     }
 
-    public operator fun get(i: Int): IJsonParserValue {
+    internal operator fun get(i: Int): IJsonParserValue {
         setAccessed()
         val res = array[i]
         res.setAccessed()
@@ -85,7 +85,7 @@ public class JsonParserArray(private val array: MutableList<IJsonParserValue>) :
         return array.iterator()
     }
 
-    public fun add(v: IJsonParserValue) {
+    internal fun add(v: IJsonParserValue) {
         setAccessed()
         v.setAccessed()
         array.add(v)

@@ -28,7 +28,7 @@ import simora.simulator_iot.RandomGenerator
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-public class Application_ParkingSensor(
+internal class Application_ParkingSensor(
     internal val startClockInSec: Int,
     internal val sendRateInSec: Int,
     internal val maxNumber: Int,

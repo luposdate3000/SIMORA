@@ -17,6 +17,6 @@
 
 package simora.simulator_iot
 
-public interface IPayloadBinary : IPayload {
+internal interface IPayloadBinary : IPayload {
     public fun getBytes(): ByteArray
 }

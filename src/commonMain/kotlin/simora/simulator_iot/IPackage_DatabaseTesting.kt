@@ -17,7 +17,7 @@
 
 package simora.simulator_iot
 
-public interface IPackage_DatabaseTesting : IPackage_Database {
+internal interface IPackage_DatabaseTesting : IPackage_Database {
     public fun setOnFinish(pck: IPackage_DatabaseTesting)
     public fun getOnFinish(): IPackage_DatabaseTesting?
 }

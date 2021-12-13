@@ -21,7 +21,7 @@ import kotlin.contracts.contract
 
 @OptIn(kotlin.contracts.ExperimentalContracts::class)
 internal object SanityCheckOn {
-    public val enabled = true
+    internal val enabled = true
     internal const val SANITYCHECK_PRINTING = false
     internal const val SANITYCHECK_PRINTING_NODEMANAGER = false
     internal const val SANITYCHECK_PRINTING_BUFFERMANAGER = false

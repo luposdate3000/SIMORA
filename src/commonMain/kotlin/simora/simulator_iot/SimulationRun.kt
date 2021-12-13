@@ -24,38 +24,38 @@ import simora.shared.inline.File
 import simora.simulator_core.Simulation
 import simora.simulator_iot.config.Configuration
 
-public class SimulationRun {
+internal class SimulationRun {
 
-    public lateinit var sim: Simulation
+    internal lateinit var sim: Simulation
 
     internal val randGenerator = RandomGenerator()
-    public val config: Configuration = Configuration(this)
+    internal val config: Configuration = Configuration(this)
 
-    public val logger: Loggers = Loggers(mutableListOf())
+    internal val logger: Loggers = Loggers(mutableListOf())
 
-    public var notInitializedClock: Long = -1
+    internal var notInitializedClock: Long = -1
 
-    public var simSteadyClock: Long = notInitializedClock
+    internal var simSteadyClock: Long = notInitializedClock
 
-    public var simMaxClock: Long = notInitializedClock
+    internal var simMaxClock: Long = notInitializedClock
 
-    public fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
+    internal fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
         return parseConfig(json as JsonParserObject, fileName, autocorrect)
     }
 
-    public fun parseConfig(json: JsonParserObject, fileName: String, autocorrect: Boolean = true): Configuration {
+    internal fun parseConfig(json: JsonParserObject, fileName: String, autocorrect: Boolean = true): Configuration {
         config.parse(json, fileName, autocorrect)
         return config
     }
 
-    public fun parseConfig(fileName: String, autocorrect: Boolean = true, modifyJson: (JsonParserObject) -> Unit = {}): Configuration {
+    internal fun parseConfig(fileName: String, autocorrect: Boolean = true, modifyJson: (JsonParserObject) -> Unit = {}): Configuration {
         val fileStr = File(fileName).readAsString()
         val json = JsonParser().stringToJson(fileStr) as JsonParserObject
         modifyJson(json)
         return parseConfig(json, fileName, autocorrect)
     }
 
-    public fun startSimulation(configuration: Configuration) {
+    internal fun startSimulation(configuration: Configuration) {
         sim = Simulation(configuration.getEntities())
         sim.logger = logger
         sim.maxClock = if (simMaxClock == notInitializedClock) sim.maxClock else simMaxClock

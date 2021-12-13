@@ -19,7 +19,7 @@ package simora.simulator_iot
 
 import simora.simulator_core.ILoggerCore
 
-public interface ILogger : ILoggerCore {
+internal interface ILogger : ILoggerCore {
     public fun initialize(simRun: SimulationRun)
     public fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
     public fun onReceiveNetworkPackage(address: Int, pck: IPayload)

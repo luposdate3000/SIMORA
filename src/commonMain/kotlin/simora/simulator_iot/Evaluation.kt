@@ -22,16 +22,15 @@ import simora.parser.JsonParserObject
 import simora.shared.inline.File
 import simora.simulator_iot.config.Configuration
 
-public class Evaluation {
-    public constructor() {}
+internal class Evaluation {
 
-    public fun simulate(configFileName: String) {
+    private fun simulate(configFileName: String) {
         val simRun = SimulationRun()
         val config = simRun.parseConfig(configFileName)
         simRun.startSimulation(config)
     }
 
-    public fun evalConfigFile(configFileName: String) {
+    private fun evalConfigFile(configFileName: String) {
         val json = JsonParser().fileToJson(configFileName) as JsonParserObject
         json.getOrDefault("outputDirectory", Configuration.defaultOutputDirectory + "/" + configFileName.substring(configFileName.lastIndexOf("/") + 1, configFileName.lastIndexOf(".")))
         val runs = MultipleSimulationRuns(json)
@@ -41,7 +40,7 @@ public class Evaluation {
         }
     }
 
-    public fun evalConfigFileMerge(configFileNames: List<String>) {
+    internal fun evalConfigFileMerge(configFileNames: List<String>) {
         val json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Configuration.defaultOutputDirectory + "/"
         for (n in configFileNames) {
@@ -79,14 +78,14 @@ public class Evaluation {
         }
     }
 
-    public fun evalConfigFiles(configFileNames: Set<String>) {
+    private fun evalConfigFiles(configFileNames: Set<String>) {
         for ((index, configFileName) in configFileNames.withIndex()) {
             evalConfigFile(configFileName)
             println("evalQueryProcessingCentralizedCase: Run ${index + 1} finished. ${configFileNames.size - index - 1} runs left..")
         }
     }
 
-    public fun evalConfigFilesMerge(configFileNames: Set<List<String>>) {
+    private fun evalConfigFilesMerge(configFileNames: Set<List<String>>) {
         for ((index, configFileName) in configFileNames.withIndex()) {
             evalConfigFileMerge(configFileName)
             println("evalQueryProcessingCentralizedCase: Run ${index + 1} finished. ${configFileNames.size - index - 1} runs left..")

@@ -19,7 +19,7 @@ package simora
 
 import simora.simulator_iot.Evaluation
 
-public fun mainfunc(args: List<String>) {
+internal fun mainfunc(args: List<String>) {
     try {
         println("args $args")
         Evaluation().evalConfigFileMerge(args)

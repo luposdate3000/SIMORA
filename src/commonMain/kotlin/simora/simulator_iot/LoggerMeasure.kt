@@ -25,28 +25,28 @@ import kotlinx.datetime.plus
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
-public class LoggerMeasure : ILogger {
+internal class LoggerMeasure : ILogger {
     private lateinit var simRun: SimulationRun
     override fun initialize(simRun: SimulationRun) {
         this.simRun = simRun
     }
 
-    public companion object {
-        public var StatCounter: Int = 0
-        public val StatNumberOfDevices: Int = StatCounter++
-        public val StatNetworkLinkCounter: Int = StatCounter++
+    internal companion object {
+        internal var StatCounter: Int = 0
+        internal val StatNumberOfDevices: Int = StatCounter++
+        internal val StatNetworkLinkCounter: Int = StatCounter++
 
-        public val StatSimulationStartupDurationReal: Int = StatCounter++
-        public val StatSimulationShutdownDurationReal: Int = StatCounter++
-        public val StatSimulationDurationReal: Int = StatCounter++
-        public val StatSimulationDurationVirtual: Int = StatCounter++
+        internal val StatSimulationStartupDurationReal: Int = StatCounter++
+        internal val StatSimulationShutdownDurationReal: Int = StatCounter++
+        internal val StatSimulationDurationReal: Int = StatCounter++
+        internal val StatSimulationDurationVirtual: Int = StatCounter++
 
-        public val StatNetworkCounterForwarded: Int = StatCounter++
-        public val StatNetworkCounter: Int = StatCounter++
+        internal val StatNetworkCounterForwarded: Int = StatCounter++
+        internal val StatNetworkCounter: Int = StatCounter++
 
-        public val StatNetworkTrafficForwarded: Int = StatCounter++
-        public val StatNetworkTraffic: Int = StatCounter++
-        public val StatNetworkTrafficIncludingLocalMessages: Int = StatCounter++
+        internal val StatNetworkTrafficForwarded: Int = StatCounter++
+        internal val StatNetworkTraffic: Int = StatCounter++
+        internal val StatNetworkTrafficIncludingLocalMessages: Int = StatCounter++
     }
 
     private val data: DoubleArray = DoubleArray(StatCounter)
@@ -77,7 +77,7 @@ public class LoggerMeasure : ILogger {
     private val packageSize = mutableListOf<Double>()
     private val packageSizeAggregated = mutableListOf<Double>()
     private val packageSizeSelfMessage = mutableListOf<Double>()
-    public fun getDataAggregated(): DoubleArray {
+    internal fun getDataAggregated(): DoubleArray {
         val res = mutableListOf<Double>()
         for (d in data) {
             res.add(d)
@@ -100,7 +100,7 @@ public class LoggerMeasure : ILogger {
         return res.toDoubleArray()
     }
 
-    public fun getHeadersAggregated(): Array<String> {
+    internal fun getHeadersAggregated(): Array<String> {
         val res = mutableListOf<String>()
         for (h in headers) {
             res.add(h)

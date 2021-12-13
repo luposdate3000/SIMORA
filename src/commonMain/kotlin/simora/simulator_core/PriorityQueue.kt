@@ -17,11 +17,11 @@
 
 package simora.simulator_core
 
-public class PriorityQueue<E>(private val comparator: Comparator<E>) {
+internal class PriorityQueue<E>(private val comparator: Comparator<E>) {
 
     private val queue = mutableListOf<E>()
 
-    public fun enqueue(newElement: E) {
+    internal fun enqueue(newElement: E) {
         var insertionIndex = queue.binarySearch(newElement, comparator)
         if (insertionIndex < 0) {
             insertionIndex = insertionIndex.inv()
@@ -29,11 +29,11 @@ public class PriorityQueue<E>(private val comparator: Comparator<E>) {
         queue.add(insertionIndex, newElement)
     }
 
-    public fun dequeue(): E =
+    internal fun dequeue(): E =
         queue.removeAt(0)
 
-    public fun peek(): E =
+    internal fun peek(): E =
         queue[0]
 
-    public fun hasNext(): Boolean = queue.isNotEmpty()
+    internal fun hasNext(): Boolean = queue.isNotEmpty()
 }

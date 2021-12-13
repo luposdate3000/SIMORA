@@ -20,7 +20,7 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.IPayloadBinary
 
-public class ApplicationStack_MulticastRouting(
+internal class ApplicationStack_MulticastRouting(
     private val enableApplciationSideMulticast: Boolean,
     private val featureFlag: Int,
     private val ownAddress: Int,

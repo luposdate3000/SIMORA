@@ -23,7 +23,7 @@ import simora.simulator_iot.Package_QueryResponse
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-public class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int) : IApplicationStack_Actuator {
+internal class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int) : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware
     private val idCacheRequested = mutableMapOf<Int, Int>() // queryID -> sensorID
     private val pendingPackages = mutableListOf<Package_Application_ParkingSample>()

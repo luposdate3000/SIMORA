@@ -20,7 +20,7 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.ILogger
 import simora.simulator_iot.IPayload
 
-public class ApplicationStack_Logger(
+internal class ApplicationStack_Logger(
     private val ownAddress: Int,
     private val logger: ILogger,
     private val child: IApplicationStack_Actuator,

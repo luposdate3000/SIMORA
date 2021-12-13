@@ -20,7 +20,7 @@ package simora.simulator_iot.models.net
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.utils.TimeUtils
 
-public class LinkManager(
+internal class LinkManager(
     internal val supportedLinkTypes: IntArray
 ) {
 
@@ -37,5 +37,5 @@ public class LinkManager(
 
     internal fun hasLink(otherDevice: Device): Boolean = getLink(otherDevice) != null
 
-    public fun getNeighbours(): MutableSet<Int> = links.keys
+    internal fun getNeighbours(): MutableSet<Int> = links.keys
 }

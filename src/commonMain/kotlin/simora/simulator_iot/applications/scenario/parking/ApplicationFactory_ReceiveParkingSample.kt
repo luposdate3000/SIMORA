@@ -24,7 +24,7 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
-public class ApplicationFactory_ReceiveParkingSample : IApplication_Factory {
+internal class ApplicationFactory_ReceiveParkingSample : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {}
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserObject

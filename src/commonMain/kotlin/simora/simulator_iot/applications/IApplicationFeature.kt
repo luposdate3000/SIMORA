@@ -17,7 +17,7 @@
 
 package simora.simulator_iot.applications
 
-public interface IApplicationFeature {
+internal interface IApplicationFeature {
     public fun getName(): String
     public fun hasFeature(application: IApplicationStack_Actuator): Boolean
 }

@@ -19,12 +19,12 @@ package simora.simulator_iot
 
 import simora.shared.UUID_Counter
 
-public class Package_Query(
-    public val sourceAddress: Int,
-    public val query: ByteArray,
+internal class Package_Query(
+    internal val sourceAddress: Int,
+    internal val query: ByteArray,
 ) : IPackage_Database {
-    public val queryID: Int = idCounter++
-    public val pckID: Long = UUID_Counter.getNextUUID()
+    internal val queryID: Int = idCounter++
+    internal val pckID: Long = UUID_Counter.getNextUUID()
     override fun getPackageID(): Long = pckID
 
     private companion object {

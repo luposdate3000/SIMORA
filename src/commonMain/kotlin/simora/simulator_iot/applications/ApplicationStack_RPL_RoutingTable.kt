@@ -17,7 +17,7 @@
 
 package simora.simulator_iot.applications
 
-public class ApplicationStack_RPL_RoutingTable(
+internal class ApplicationStack_RPL_RoutingTable(
     private val ownAddress: Int,
     private val addressSpace: Int,
     private val hasDatabase: Boolean
@@ -29,7 +29,7 @@ public class ApplicationStack_RPL_RoutingTable(
 
     internal var destinationCounter: Int = 0
 
-    public var fallbackHop: Int = ownAddress
+    internal var fallbackHop: Int = ownAddress
 
     private fun updateHop(destinationAddress: Int, nextHopAddress: Int, nextDatabaseHopAddress: Int): Boolean {
         var updated = false
@@ -60,7 +60,7 @@ public class ApplicationStack_RPL_RoutingTable(
         }
     }
 
-    public fun getNextHop(destinationAddress: Int): Int {
+    internal fun getNextHop(destinationAddress: Int): Int {
         if (destinationAddress < nextHops.size) {
             val res = nextHops[destinationAddress]
             if (res != -1) {
@@ -113,7 +113,7 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    public fun getDestinations(): IntArray {
+    internal fun getDestinations(): IntArray {
         val destinations = IntArray(destinationCounter)
         var destIndex = 0
         for ((index, value) in nextHops.withIndex())

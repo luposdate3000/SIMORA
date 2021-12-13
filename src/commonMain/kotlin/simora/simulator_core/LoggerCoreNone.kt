@@ -17,7 +17,7 @@
 
 package simora.simulator_core
 
-public class LoggerCoreNone : ILoggerCore {
+internal class LoggerCoreNone : ILoggerCore {
     override fun onStartUp() {}
     override fun onShutDown() {}
     override fun onSteadyState() {}

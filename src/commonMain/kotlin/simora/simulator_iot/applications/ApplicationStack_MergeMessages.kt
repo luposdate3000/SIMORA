@@ -19,7 +19,7 @@ package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 
-public class ApplicationStack_MergeMessages(private val child: IApplicationStack_Actuator) : IApplicationStack_BothDirections {
+internal class ApplicationStack_MergeMessages(private val child: IApplicationStack_Actuator) : IApplicationStack_BothDirections {
     private var cache = mutableMapOf<Int, MutableList<IPayload>>()
     private lateinit var parent: IApplicationStack_Middleware
 

@@ -19,15 +19,15 @@ package simora.simulator_core
 
 import simora.shared.SanityCheck
 
-public abstract class Entity {
+internal abstract class Entity {
     internal lateinit var simulation: Simulation
 
     private var isTerminated = false
 
-    public abstract fun onStartUp()
-    public abstract fun onSteadyState()
-    public abstract fun onShutDown()
-    public abstract fun onEvent(source: Entity, data: Any)
+    internal abstract fun onStartUp()
+    internal abstract fun onSteadyState()
+    internal abstract fun onShutDown()
+    internal abstract fun onEvent(source: Entity, data: Any)
 
     internal fun processIncomingEvent(event: Event) {
         if (isTerminated) {
@@ -49,7 +49,7 @@ public abstract class Entity {
         simulation.addEvent(delay, this, destination, data)
     }
 
-    public fun setTimer(time: Long, callback: ITimer) {
+    internal fun setTimer(time: Long, callback: ITimer) {
         scheduleEvent(this, callback, time)
     }
 

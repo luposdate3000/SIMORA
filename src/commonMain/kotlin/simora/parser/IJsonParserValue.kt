@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public interface IJsonParserValue {
+internal interface IJsonParserValue {
     public fun setAccessed()
     public fun isAccessed(): Boolean
     public fun cloneJson(): IJsonParserValue

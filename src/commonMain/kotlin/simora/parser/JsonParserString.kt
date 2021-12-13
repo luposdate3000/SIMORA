@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public class JsonParserString(public var value: String) : IJsonParserValue {
+internal class JsonParserString(internal var value: String) : IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true

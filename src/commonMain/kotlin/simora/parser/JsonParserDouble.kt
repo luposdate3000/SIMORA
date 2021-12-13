@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public class JsonParserDouble(public var value: Double) : IJsonParserValue {
+internal class JsonParserDouble(internal var value: Double) : IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true

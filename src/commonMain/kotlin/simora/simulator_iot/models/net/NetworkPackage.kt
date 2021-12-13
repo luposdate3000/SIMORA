@@ -19,7 +19,7 @@ package simora.simulator_iot.models.net
 
 import simora.simulator_iot.IPayload
 
-public class NetworkPackage(
+internal class NetworkPackage(
     internal val sourceAddress: Int,
     internal val destinationAddress: Int,
     internal val payload: IPayload

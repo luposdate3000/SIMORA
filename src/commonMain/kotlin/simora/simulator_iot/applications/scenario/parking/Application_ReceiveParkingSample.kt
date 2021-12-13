@@ -21,7 +21,7 @@ import simora.simulator_iot.Package_Query
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-public class Application_ReceiveParkingSample(private val ownAddress: Int) : IApplicationStack_Actuator {
+internal class Application_ReceiveParkingSample(private val ownAddress: Int) : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router

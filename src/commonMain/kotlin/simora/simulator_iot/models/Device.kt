@@ -28,14 +28,14 @@ import simora.simulator_iot.models.net.LinkManager
 import simora.simulator_iot.models.net.NetworkPackage
 import simora.simulator_iot.utils.TimeUtils
 
-public class Device(
+internal class Device(
     internal val simRun: SimulationRun,
     internal var location: GeoLocation,
-    public val address: Int,
+    internal val address: Int,
     internal val performance: Double,
-    public val linkManager: LinkManager,
+    internal val linkManager: LinkManager,
     internal val isDeterministic: Boolean,
-    public val applicationStack: IApplicationStack_Rooter,
+    internal val applicationStack: IApplicationStack_Rooter,
     internal val hostNameLookUpTable: MutableMap<String, Int>,
 ) : Entity() {
     internal var isStarNetworkChild: Boolean = false
@@ -84,7 +84,7 @@ public class Device(
         applicationStack.shutDown()
     }
 
-    public fun closestDeviceWithFeature(name: String): Int {
+    internal fun closestDeviceWithFeature(name: String): Int {
         val devicesWithFeature = simRun.config.getAllDevicesForFeature(simRun.config.featureIdForName2(name)).toMutableList()
         if (devicesWithFeature.size == 0) {
             return -1
@@ -118,5 +118,5 @@ public class Device(
     override fun toString(): String = "Device(addr $address)"
     internal fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
     internal fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
-    public fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
+    internal fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
 }

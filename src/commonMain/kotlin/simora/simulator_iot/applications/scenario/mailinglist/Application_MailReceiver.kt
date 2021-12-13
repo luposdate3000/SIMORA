@@ -20,7 +20,7 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-public class Application_MailReceiver() : IApplicationStack_Actuator {
+internal class Application_MailReceiver() : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router

@@ -19,7 +19,7 @@ package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 
-public class ApplicationStack_Sequence(
+internal class ApplicationStack_Sequence(
     private val ownAddress: Int,
     private val child: IApplicationStack_Actuator,
 ) : IApplicationStack_BothDirections {

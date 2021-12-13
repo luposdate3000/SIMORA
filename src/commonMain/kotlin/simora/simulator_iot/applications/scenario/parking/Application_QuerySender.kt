@@ -25,7 +25,7 @@ import simora.simulator_iot.Package_QueryResponse
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-public class Application_QuerySender(
+internal class Application_QuerySender(
     internal val startClockInSec: Int,
     internal val sendRateInSec: Int,
     internal val maxNumber: Int,
@@ -33,7 +33,7 @@ public class Application_QuerySender(
     internal val receiver: Int,
     private val outputdirectory: String,
 ) : IApplicationStack_Actuator, ITimer {
-    public constructor(
+    internal constructor(
         startClockInSec: Int,
         sendRateInSec: Int,
         maxNumber: Int,

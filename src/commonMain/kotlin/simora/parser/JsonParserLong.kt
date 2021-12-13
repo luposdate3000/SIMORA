@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public class JsonParserLong(public var value: Long) : IJsonParserValue {
+internal class JsonParserLong(internal var value: Long) : IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true
