@@ -24,16 +24,6 @@ import simora.simulator_iot.config.Configuration
 
 public class Evaluation {
 
-    private fun evalConfigFile(configFileName: String) {
-        val json = JsonParser().fileToJson(configFileName) as JsonParserObject
-        json.getOrDefault("outputDirectory", Configuration.defaultOutputDirectory + "/" + configFileName.substring(configFileName.lastIndexOf("/") + 1, configFileName.lastIndexOf(".")))
-        val runs = MultipleSimulationRuns(json)
-        runs.startSimulationRuns()
-        File(configFileName).withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
-            out.println(JsonParser().jsonToString(json, true))
-        }
-    }
-
     public fun evalConfigFileMerge(configFileNames: List<String>) {
         val json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Configuration.defaultOutputDirectory + "/"

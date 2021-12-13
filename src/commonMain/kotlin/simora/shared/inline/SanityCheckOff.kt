@@ -22,28 +22,12 @@ import kotlin.contracts.contract
 @OptIn(kotlin.contracts.ExperimentalContracts::class)
 internal object SanityCheckOff {
     private const val enabled = false
-    internal inline fun println_buffermanager(@Suppress("UNUSED_PARAMETER") crossinline s: () -> Any?) {
-        contract { callsInPlace(s, AT_MOST_ONCE) }
-    }
-
-    internal inline fun println_nodemanager(@Suppress("UNUSED_PARAMETER") crossinline s: () -> Any?) {
-        contract { callsInPlace(s, AT_MOST_ONCE) }
-    }
 
     internal inline fun println(@Suppress("UNUSED_PARAMETER") crossinline s: () -> Any?) {
         contract { callsInPlace(s, AT_MOST_ONCE) }
     }
 
     internal inline operator fun invoke(@Suppress("UNUSED_PARAMETER") crossinline filename: () -> String, @Suppress("UNUSED_PARAMETER") crossinline action: () -> Unit) {
-    }
-
-    /*suspend*/ internal inline fun suspended(@Suppress("UNUSED_PARAMETER") crossinline action: /*suspend*/ () -> Unit) {
-        contract { callsInPlace(action, AT_MOST_ONCE) }
-    }
-
-    internal inline fun <T> helper(@Suppress("UNUSED_PARAMETER") crossinline action: () -> Unit): T? {
-        contract { callsInPlace(action, AT_MOST_ONCE) }
-        return null
     }
 
     internal inline fun check(@Suppress("UNUSED_PARAMETER") crossinline filename: () -> String, @Suppress("UNUSED_PARAMETER") crossinline value: () -> Boolean, @Suppress("UNUSED_PARAMETER") crossinline msg: () -> String) {
@@ -54,6 +38,4 @@ internal object SanityCheckOff {
         contract { callsInPlace(value, AT_MOST_ONCE) }
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal inline fun checkUnreachable(): Nothing = TODO()
 }

@@ -40,9 +40,6 @@ public class RandomGenerator {
         return random.nextDouble(minInclusive, maxExclusive)
     }
 
-    internal fun getInt(minInclusive: Int, maxInclusive: Int): Int =
-        getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toInt()
-
     internal fun getLong(minInclusive: Long, maxInclusive: Long): Long =
         getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toLong()
 

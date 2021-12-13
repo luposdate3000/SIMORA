@@ -194,10 +194,4 @@ internal object LatLngTool {
         return longitudeResult
     }
 
-    /** Convenient static values for bearings.  */
-    internal object Bearing {
-        const val NORTH = 0.0
-        const val EAST = 90.0
-        const val SOUTH = 180.0
-    }
 }

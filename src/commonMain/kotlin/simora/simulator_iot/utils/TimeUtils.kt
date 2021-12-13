@@ -28,21 +28,10 @@ import kotlin.time.ExperimentalTime
 
 internal object TimeUtils {
 
-    private fun addNanoSeconds(instant: Instant, nanos: Long): Instant {
-        return instant.plus(nanos, DateTimeUnit.NANOSECOND, TimeZone.UTC)
-    }
-
-    private fun toISOString(instant: Instant): String = instant.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
-
     @OptIn(ExperimentalTime::class)
     private fun differenceInMillis(startInstant: Instant, endInstant: Instant): Long {
         val duration = endInstant - startInstant
         return duration.inWholeMilliseconds
-    }
-
-    private fun differenceInSeconds(startInstant: Instant, endInstant: Instant): Double {
-        val duration = differenceInMillis(startInstant, endInstant).toDouble()
-        return duration / 1000
     }
 
     @OptIn(ExperimentalTime::class)

@@ -21,15 +21,6 @@ public class GeoLocation(internal var latitude: Double, internal var longitude: 
 
     internal companion object {
 
-        private fun travel(start: GeoLocation, distanceInMeters: Int, direction: Double): GeoLocation {
-            val loc = LatLngTool.travel(
-                LatLng(start.latitude, start.longitude),
-                direction,
-                distanceInMeters.toDouble(),
-                LengthUnit.METER
-            )
-            return GeoLocation(loc.getLatitude(), loc.getLongitude())
-        }
     }
 
     internal fun getDistanceInMeters(other: GeoLocation): Double {

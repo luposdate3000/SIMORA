@@ -31,7 +31,7 @@ internal constructor(it: OutputStream) : IMyOutputStream {
 
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:37"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:33"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

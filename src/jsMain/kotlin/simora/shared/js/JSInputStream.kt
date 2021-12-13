@@ -23,11 +23,6 @@ internal class JSInputStream {
         buffer = ExternalModule_fs.inmemoryFs[filename]!!
     }
 
-    internal constructor(fd: Int) {
-        buffer = ByteArray(0)
-        TODO()
-    }
-
     internal fun readByte(): Byte {
         return buffer[pos++]
     }

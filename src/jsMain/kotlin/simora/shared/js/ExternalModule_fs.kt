@@ -18,7 +18,6 @@ package simora.shared.js
 
 internal object ExternalModule_fs {
     internal val inmemoryFs = mutableMapOf<String, ByteArray>()
-    private var tmpCounter = 0
 
     internal fun exists(filename: String): Boolean {
         return inmemoryFs[filename] != null
@@ -26,11 +25,6 @@ internal object ExternalModule_fs {
 
     internal fun mkdirs(filename: String): Boolean {
         return true
-    }
-
-    internal fun length(filename: String): Long {
-        val f = inmemoryFs[filename]
-        return f?.size?.toLong() ?: 0
     }
 
     internal fun openOutputStream(filename: String, append: Boolean): JSOutputStream {
