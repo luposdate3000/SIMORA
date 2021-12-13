@@ -17,7 +17,7 @@
 
 package simora.simulator_iot
 
-public interface IPayload {
-    public fun getSizeInBytes(): Int
-    public fun getTopic(): String
+internal interface IPayload {
+    internal fun getSizeInBytes(): Int
+    internal fun getTopic(): String
 }

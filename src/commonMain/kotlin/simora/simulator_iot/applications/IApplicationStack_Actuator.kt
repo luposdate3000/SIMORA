@@ -19,9 +19,9 @@ package simora.simulator_iot.applications
 
 import simora.simulator_iot.IPayload
 
-public interface IApplicationStack_Actuator {
-    public fun receive(pck: IPayload): IPayload? // return null on success, or the errored package on failure
-    public fun startUp()
-    public fun shutDown()
-    public fun setRouter(router: IApplicationStack_Middleware)
+internal interface IApplicationStack_Actuator {
+    internal fun receive(pck: IPayload): IPayload? // return null on success, or the errored package on failure
+    internal fun startUp()
+    internal fun shutDown()
+    internal fun setRouter(router: IApplicationStack_Middleware)
 }

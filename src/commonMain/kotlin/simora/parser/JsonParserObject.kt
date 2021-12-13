@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public class JsonParserObject(private val map: MutableMap<String, IJsonParserValue>) : Iterable<Pair<String, IJsonParserValue>>, IJsonParserValue {
+internal class JsonParserObject(private val map: MutableMap<String, IJsonParserValue>) : Iterable<Pair<String, IJsonParserValue>>, IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true

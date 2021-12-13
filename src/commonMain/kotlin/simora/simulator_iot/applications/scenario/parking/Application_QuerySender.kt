@@ -33,7 +33,7 @@ internal class Application_QuerySender(
     internal val receiver: Int,
     private val outputdirectory: String,
 ) : IApplicationStack_Actuator, ITimer {
-    internal constructor(
+    public constructor(
         startClockInSec: Int,
         sendRateInSec: Int,
         maxNumber: Int,

@@ -19,14 +19,14 @@ package simora.simulator_iot
 
 import simora.simulator_core.ILoggerCore
 
-public interface ILogger : ILoggerCore {
-    public fun initialize(simRun: SimulationRun)
-    public fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
-    public fun onReceiveNetworkPackage(address: Int, pck: IPayload)
-    public fun onSendPackage(src: Int, dest: Int, pck: IPayload)
-    public fun onReceivePackage(address: Int, pck: IPayload)
-    public fun onStartSimulation()
-    public fun onStopSimulation()
-    public fun addConnectionTable(src: Int, dest: Int, hop: Int)
-    public fun addDevice(address: Int, x: Double, y: Double)
+internal interface ILogger : ILoggerCore {
+    internal fun initialize(simRun: SimulationRun)
+    internal fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
+    internal fun onReceiveNetworkPackage(address: Int, pck: IPayload)
+    internal fun onSendPackage(src: Int, dest: Int, pck: IPayload)
+    internal fun onReceivePackage(address: Int, pck: IPayload)
+    internal fun onStartSimulation()
+    internal fun onStopSimulation()
+    internal fun addConnectionTable(src: Int, dest: Int, hop: Int)
+    internal fun addDevice(address: Int, x: Double, y: Double)
 }

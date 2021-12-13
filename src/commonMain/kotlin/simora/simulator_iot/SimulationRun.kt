@@ -24,7 +24,7 @@ import simora.shared.inline.File
 import simora.simulator_core.Simulation
 import simora.simulator_iot.config.Configuration
 
-public class SimulationRun {
+internal class SimulationRun {
 
     internal lateinit var sim: Simulation
 

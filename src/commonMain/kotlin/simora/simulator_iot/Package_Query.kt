@@ -19,7 +19,7 @@ package simora.simulator_iot
 
 import simora.shared.UUID_Counter
 
-public class Package_Query(
+internal class Package_Query(
     internal val sourceAddress: Int,
     internal val query: ByteArray,
 ) : IPackage_Database {

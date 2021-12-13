@@ -17,6 +17,6 @@
 
 package simora.simulator_iot
 
-public interface IPackage_Database : IPayload {
-    public fun getPackageID(): Long // for message tracing only, this does not affect the simulated data volume
+internal interface IPackage_Database : IPayload {
+    internal fun getPackageID(): Long // for message tracing only, this does not affect the simulated data volume
 }
