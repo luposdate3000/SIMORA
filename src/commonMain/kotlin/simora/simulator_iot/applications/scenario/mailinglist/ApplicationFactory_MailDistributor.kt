@@ -25,12 +25,6 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
-public class ApplicationFactory_MailDistributorFeature : IApplicationFeature {
-    override fun getName(): String = "MailDistributor"
-    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_MailDistributor
-    override fun equals(other: Any?): Boolean = other is ApplicationFactory_MailDistributorFeature
-}
-
 public class ApplicationFactory_MailDistributor : IApplication_Factory {
     internal var applicationFactory_MailDistributorFeature = ApplicationFactory_MailDistributorFeature()
     internal var featureID = -1

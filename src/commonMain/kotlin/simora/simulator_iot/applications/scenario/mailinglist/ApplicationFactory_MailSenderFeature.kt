@@ -25,21 +25,8 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
-
-public class ApplicationFactory_MailReceiver : IApplication_Factory {
-    public var allReceivers: MutableList<Int> = mutableListOf()
-    override fun registerFeatures(features: MutableList<IApplicationFeature>) {
-        features.add(ApplicationFactory_MailReceiverFeature())
-    }
-
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
-        json as JsonParserObject
-        if (json.getOrDefault("enabled", true)) {
-            allReceivers.add(ownAddress)
-            return listOf(
-                Application_MailReceiver()
-            )
-        }
-        return listOf()
-    }
+public class ApplicationFactory_MailSenderFeature : IApplicationFeature {
+    override fun getName(): String = "MailSender"
+    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_MailSender
+    override fun equals(other: Any?): Boolean = other is ApplicationFactory_MailSenderFeature
 }
