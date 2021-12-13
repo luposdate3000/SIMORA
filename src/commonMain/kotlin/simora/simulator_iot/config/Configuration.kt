@@ -325,7 +325,7 @@ public class Configuration(private val simRun: SimulationRun) {
                     val count = rand.getOrDefault("count", 1)
                     val deviceTypeName = rand.getOrDefault("deviceType", "")
                     var firstDevice: Device? = parent
-                    lateinit var lastDevice: Device
+                    var lastDevice: Device?=parent
                     for (i in 0 until count) {
                         val alpha = 2 * PI * i.toDouble() / count.toDouble()
                         rand["latitude"] = posLat + sin(alpha) * radius
@@ -339,11 +339,11 @@ public class Configuration(private val simRun: SimulationRun) {
                         if (firstDevice == null) {
                             firstDevice = d
                         } else {
-                            linker.link(d, lastDevice, rand.getOrDefault("dataRateInKbps", 1000))
+                            linker.link(d, lastDevice!!, rand.getOrDefault("dataRateInKbps", 1000))
                         }
                         lastDevice = d
                     }
-                    linker.link(firstDevice!!, lastDevice, rand.getOrDefault("dataRateInKbps", 1000))
+                    linker.link(firstDevice!!, lastDevice!!, rand.getOrDefault("dataRateInKbps", 1000))
                 }
                 "full" -> {
                     val radius = rand.getOrDefault("radius", 0.1)
