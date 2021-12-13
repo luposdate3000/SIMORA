@@ -16,6 +16,6 @@
  */
 package simora.simulator_core
 
-internal interface ITimer {
+public interface ITimer {
     public fun onTimerExpired(clock: Long)
 }

@@ -1,10 +1,10 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-val compileLinux: Boolean = true
+val compileLinux: Boolean = false
 val compileOSX: Boolean = false
 val compileWindows: Boolean = false
-val compileJS: Boolean = true
+val compileJS: Boolean = false
 val compileJVM: Boolean = true
 
 buildscript {
