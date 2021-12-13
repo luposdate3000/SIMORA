@@ -6,44 +6,44 @@
     "deterministic": true,
     "deviceType": {
         "CentralTower": {
-            "performance": 100.0,
-            "supportedLinkTypes": [
- "WPAN",
-                "WLAN",
-            ],
             "applications": {
                 "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender": {
                     "maxSamples": 1,
                     "rateInSec": 2,
+                    "receiverCount": 10,
                     "sendStartClockInSec": 1000,
                     "text_length_dynamic": 10,
                     "text_length_fixed": 100,
-"receiverCount":10,
-"useApplicationSideMulticast":true,
+                    "useApplicationSideMulticast": true,
                 },
             },
-        },
-        "MeshHop": {
             "performance": 100.0,
             "supportedLinkTypes": [
- "WLAN",
+                "WPAN",
+                "WLAN",
             ],
         },
         "EdgeDevice": {
             "performance": 100.0,
             "supportedLinkTypes": [
-"WPAN",
+                "WPAN",
+                "WLAN",
+            ],
+        },
+        "MeshHop": {
+            "performance": 100.0,
+            "supportedLinkTypes": [
                 "WLAN",
             ],
         },
         "SensorDevice": {
             "performance": 100.0,
             "supportedLinkTypes": [
- "WPAN",
+                "WPAN",
             ],
         },
     },
-"linkType": {
+    "linkType": {
         "WLAN": {
             "dataRateInKbps": 25000,
             "rangeInMeters": 150,

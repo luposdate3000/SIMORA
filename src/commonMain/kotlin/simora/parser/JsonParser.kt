@@ -680,8 +680,11 @@ public class JsonParser {
     public fun fileMergeToJson(fileNames: List<String>, autoformat: Boolean = true): JsonParserObject {
         var res = JsonParserObject(mutableMapOf())
         for (fileName in fileNames) {
+try{
             val json = fileToJson(fileName, autoformat) as JsonParserObject
             res.mergeWith(json)
+}catch(e:Throwable){
+}
         }
         return res
     }

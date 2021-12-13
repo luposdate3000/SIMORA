@@ -1,6 +1,6 @@
 {
     "fixedDevice": {
-        "Fog": {
+        "CentralTower": {
             "applications": {},
             "deviceType": "CentralTower",
             "latitude": 53.83759450606049,
