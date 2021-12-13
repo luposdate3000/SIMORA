@@ -17,7 +17,7 @@
 package simora.shared
 
 internal interface IMyOutputStream {
-    fun write(buf: ByteArray): Unit
+    fun write(buf: ByteArray)
     fun write(buf: ByteArray, len: Int): Unit
     fun close(): Unit
     fun flush(): Unit

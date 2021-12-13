@@ -21,6 +21,6 @@ internal interface IMyInputStream {
     fun read(buf: ByteArray, len: Int): Int
     fun read(buf: ByteArray, off: Int, len: Int): Int
     fun readByte(): Byte
-    fun close(): Unit
+    fun close()
     fun readLine(): String?
 }
