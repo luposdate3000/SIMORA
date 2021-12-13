@@ -20,10 +20,10 @@ import simora.shared.IMyOutputStream
 
 internal expect class MyOutputStream internal constructor() : IMyOutputStream {
 
-    override fun close(): Unit
-    override fun flush(): Unit
-    override fun write(buf: ByteArray): Unit
-    override fun write(buf: ByteArray, len: Int): Unit
+    override fun close()
+    override fun flush()
+    override fun write(buf: ByteArray)
+    override fun write(buf: ByteArray, len: Int)
     override fun println(x: String)
     override fun print(x: String)
     override fun print(x: Boolean)

@@ -23,6 +23,6 @@ internal expect class MyInputStream : IMyInputStream {
     override fun read(buf: ByteArray): Int
     override fun read(buf: ByteArray, len: Int): Int
     override fun read(buf: ByteArray, off: Int, len: Int): Int
-    override fun close(): Unit
+    override fun close()
     override fun readLine(): String?
 }
