@@ -51,23 +51,6 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
     }
 
     internal fun isEmpty(): Boolean = array.isEmpty()
-    private fun <T> map(action: (IJsonParserValue) -> T): MutableList<T> {
-        val res: List<T> = array.map { action(it) }
-        return res.toMutableList()
-    }
-    private fun firstOrEmptyObject(): JsonParserObject {
-        setAccessed()
-        val res =
-            if (array.size > 0) {
-                array[0] as JsonParserObject
-            } else {
-                val tmp = JsonParserObject(mutableMapOf())
-                array.add(tmp)
-                tmp
-            }
-        res.setAccessed()
-        return res
-    }
 
     internal operator fun get(i: Int): IJsonParserValue {
         setAccessed()
@@ -84,9 +67,4 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         return array.iterator()
     }
 
-    private fun add(v: IJsonParserValue) {
-        setAccessed()
-        v.setAccessed()
-        array.add(v)
-    }
 }

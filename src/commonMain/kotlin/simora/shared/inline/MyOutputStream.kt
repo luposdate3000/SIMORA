@@ -18,7 +18,7 @@ package simora.shared.inline
 
 import simora.shared.IMyOutputStream
 
-internal expect class MyOutputStream internal constructor() : IMyOutputStream {
+internal expect class MyOutputStream : IMyOutputStream {
 
     override fun close()
     override fun flush()

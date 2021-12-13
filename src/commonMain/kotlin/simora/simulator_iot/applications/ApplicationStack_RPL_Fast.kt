@@ -29,7 +29,6 @@ internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val logger: ILogger,
     private val config: Configuration,
-    private val compatibilityMode: Boolean,
 ) : IApplicationStack_Rooter {
     init {
         child.setRouter(this)
@@ -103,7 +102,7 @@ internal class ApplicationStack_RPL_Fast(
         for (i in 0 until config.devices.size) {
             if (routingTable[i] == -1) {
                 SanityCheck.check(
-                    { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/ApplicationStack_RPL_Fast.kt:105"/*SOURCE_FILE_END*/ },
+                    { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/ApplicationStack_RPL_Fast.kt:104"/*SOURCE_FILE_END*/ },
                     { !isRoot }, // no route possible
                 )
                 routingTable[i] = globalParentTable[parent.address] // everything else goes to my own parent

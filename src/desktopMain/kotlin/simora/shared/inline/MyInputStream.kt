@@ -25,7 +25,6 @@ internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
     private var stream: CPointer<FILE>? = file
     private val buf8: ByteArray = ByteArray(8)
     private var buffer = ByteArray(1)
-    private val uuid = UUID_Counter.getNextUUID()
 
     actual override fun read(buf: ByteArray): Int {
         return read(buf, buf.size)

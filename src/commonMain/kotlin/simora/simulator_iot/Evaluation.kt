@@ -24,12 +24,6 @@ import simora.simulator_iot.config.Configuration
 
 public class Evaluation {
 
-    private fun simulate(configFileName: String) {
-        val simRun = SimulationRun()
-        val config = simRun.parseConfig(configFileName)
-        simRun.startSimulation(config)
-    }
-
     private fun evalConfigFile(configFileName: String) {
         val json = JsonParser().fileToJson(configFileName) as JsonParserObject
         json.getOrDefault("outputDirectory", Configuration.defaultOutputDirectory + "/" + configFileName.substring(configFileName.lastIndexOf("/") + 1, configFileName.lastIndexOf(".")))
@@ -78,17 +72,4 @@ public class Evaluation {
         }
     }
 
-    private fun evalConfigFiles(configFileNames: Set<String>) {
-        for ((index, configFileName) in configFileNames.withIndex()) {
-            evalConfigFile(configFileName)
-            println("evalQueryProcessingCentralizedCase: Run ${index + 1} finished. ${configFileNames.size - index - 1} runs left..")
-        }
-    }
-
-    private fun evalConfigFilesMerge(configFileNames: Set<List<String>>) {
-        for ((index, configFileName) in configFileNames.withIndex()) {
-            evalConfigFileMerge(configFileName)
-            println("evalQueryProcessingCentralizedCase: Run ${index + 1} finished. ${configFileNames.size - index - 1} runs left..")
-        }
-    }
 }

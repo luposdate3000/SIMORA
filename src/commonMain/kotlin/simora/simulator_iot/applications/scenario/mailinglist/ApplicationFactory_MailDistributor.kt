@@ -37,7 +37,6 @@ internal class ApplicationFactory_MailDistributor : IApplication_Factory {
         if (json.getOrDefault("enabled", true)) {
             return listOf(
                 Application_MailDistributor(
-                    ownAddress,
                     featureID
                 )
             )

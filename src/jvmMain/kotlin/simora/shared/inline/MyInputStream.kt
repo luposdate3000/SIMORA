@@ -24,8 +24,6 @@ internal actual class MyInputStream( private val stream: InputStream) : IMyInput
 
     private val buf8: ByteArray = ByteArray(8)
 
-    private val uuid = UUID_Counter.getNextUUID()
-
     actual override fun read(buf: ByteArray): Int {
         return read(buf, buf.size)
     }

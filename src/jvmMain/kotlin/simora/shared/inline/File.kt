@@ -39,9 +39,6 @@ internal actual class File actual constructor(filename: String) {
     internal actual inline fun mkdirs() = java.io.File(filename).mkdirs()
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun length() = java.io.File(filename).length()
-
-    @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString() = java.io.File(filename).readText()
 
     @Suppress("NOTHING_TO_INLINE")
@@ -56,12 +53,4 @@ internal actual class File actual constructor(filename: String) {
         }
     }
 
-    internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit) {
-        val printer = MyInputStream(BufferedInputStream(FileInputStream(java.io.File(filename))))
-        try {
-            action(printer)
-        } finally {
-            printer.close()
-        }
-    }
 }

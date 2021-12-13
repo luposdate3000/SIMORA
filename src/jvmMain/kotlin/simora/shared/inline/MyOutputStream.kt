@@ -34,14 +34,9 @@ private    var bufferPos = 0
         buffer = ByteArray(8192)
     }
 
-    internal actual constructor() {
-        stream = null
-        buffer = ByteArray(8192)
-    }
-
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:43"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:38"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

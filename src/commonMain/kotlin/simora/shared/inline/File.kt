@@ -22,9 +22,7 @@ import simora.shared.IMyOutputStream
 internal expect class File(filename: String) {
     internal inline fun exists(): Boolean
     internal inline fun mkdirs(): Boolean
-    internal inline fun length(): Long
     internal inline fun readAsString(): String
     internal inline fun openOutputStream(append: Boolean): IMyOutputStream
     internal inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit)
-    internal inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit)
 }

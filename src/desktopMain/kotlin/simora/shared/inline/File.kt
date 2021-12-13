@@ -35,15 +35,6 @@ internal actual class File actual constructor(filename: String) {
     internal actual inline fun mkdirs() = mkdir(filename, S_IRWXU) == 0
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun length(): Long {
-        val stream = myOpen(filename, "rb")
-        fseek(stream, 0, SEEK_END)
-        val size = ftell(stream)
-        fclose(stream)
-        return size
-    }
-
-    @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
         val stream = myOpen(filename, "rb")
         fseek(stream, 0, SEEK_END)
@@ -82,14 +73,6 @@ internal actual class File actual constructor(filename: String) {
         }
     }
 
-    internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit) {
-        val printer = MyInputStream(myOpen(filename, "rb"))
-        try {
-            action(printer)
-        } finally {
-            printer.close()
-        }
-    }
     private inline fun myOpen(name: String, mode: String): CPointer<FILE> {
         return fopen(name, mode) ?: throw Exception("File '$name' error for mode '$mode'")
     }

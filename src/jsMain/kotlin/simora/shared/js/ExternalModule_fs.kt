@@ -19,9 +19,6 @@ package simora.shared.js
 internal object ExternalModule_fs {
     internal val inmemoryFs = mutableMapOf<String, ByteArray>()
     private var tmpCounter = 0
-    private fun createTempDirectory(): String {
-        return "tmp${tmpCounter++}"
-    }
 
     internal fun exists(filename: String): Boolean {
         return inmemoryFs[filename] != null

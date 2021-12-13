@@ -29,9 +29,6 @@ internal actual class File actual constructor(internal val filename: String) {
     internal actual inline fun mkdirs(): Boolean = ExternalModule_fs.mkdirs(filename)
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun length(): Long = ExternalModule_fs.length(filename)
-
-    @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
         val res = StringBuilder()
         val stream = MyInputStream(filename)
@@ -66,12 +63,6 @@ internal actual class File actual constructor(internal val filename: String) {
         } finally {
             stream.close()
         }
-    }
-
-    internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit) {
-        val stream = MyInputStream(filename)
-        action(stream)
-        stream.close()
     }
 
     @Suppress("NOTHING_TO_INLINE")

@@ -26,10 +26,6 @@ internal actual class MyInputStream : IMyInputStream {
         tmp = JSInputStream(filename)
     }
 
-    internal constructor(fd: Int) {
-        tmp = JSInputStream(fd)
-    }
-
     actual override fun readByte(): Byte {
         return tmp.readByte()
     }

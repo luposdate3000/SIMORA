@@ -21,23 +21,9 @@ import kotlin.contracts.contract
 
 @OptIn(kotlin.contracts.ExperimentalContracts::class)
 internal object SanityCheckOn {
-    private const val enabled = true
     internal const val SANITYCHECK_PRINTING = false
     internal const val SANITYCHECK_PRINTING_NODEMANAGER = false
     internal const val SANITYCHECK_PRINTING_BUFFERMANAGER = false
-    internal inline fun println_buffermanager(crossinline s: () -> Any?) {
-        contract { callsInPlace(s, AT_MOST_ONCE) }
-        if (SANITYCHECK_PRINTING_BUFFERMANAGER) {
-            println(s())
-        }
-    }
-
-    internal inline fun println_nodemanager(crossinline s: () -> Any?) {
-        contract { callsInPlace(s, AT_MOST_ONCE) }
-        if (SANITYCHECK_PRINTING_NODEMANAGER) {
-            println(s())
-        }
-    }
 
     internal inline fun println(crossinline s: () -> Any?) {
         contract { callsInPlace(s, AT_MOST_ONCE) }
@@ -56,24 +42,6 @@ internal object SanityCheckOn {
             }
             throw e
         }
-    }
-
-    /*suspend*/ internal inline fun suspended(crossinline action: /*suspend*/ () -> Unit) {
-        contract { callsInPlace(action, AT_MOST_ONCE) }
-        try {
-            action()
-        } catch (e: Throwable) {
-            if (SANITYCHECK_PRINTING) {
-                println("Exception during SanityCheck.suspended")
-                e.printStackTrace()
-            }
-            throw e
-        }
-    }
-
-    internal inline fun <T> helper(crossinline action: () -> T): T? {
-        contract { callsInPlace(action, AT_MOST_ONCE) }
-        return action()
     }
 
     internal inline fun check(crossinline filename: () -> String, crossinline value: () -> Boolean, crossinline msg: () -> String) {
@@ -106,6 +74,4 @@ internal object SanityCheckOn {
         }
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal inline fun checkUnreachable(): Nothing = TODO()
 }

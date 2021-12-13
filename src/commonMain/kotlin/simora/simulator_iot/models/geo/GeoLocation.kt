@@ -37,40 +37,6 @@ public class GeoLocation(internal var latitude: Double, internal var longitude: 
             return GeoLocation(loc.getLatitude(), loc.getLongitude())
         }
 
-        private fun createNorthernLocation(start: GeoLocation, distanceInMeters: Int): GeoLocation =
-            travel(start, distanceInMeters, LatLngTool.Bearing.NORTH)
-
-        private fun createSouthernLocation(start: GeoLocation, distanceInMeters: Int): GeoLocation =
-            travel(start, distanceInMeters, LatLngTool.Bearing.SOUTH)
-
-        private fun createEasternLocation(start: GeoLocation, distanceInMeters: Int): GeoLocation =
-            travel(start, distanceInMeters, LatLngTool.Bearing.EAST)
-
-        // Adapted From: https://gis.stackexchange.com/questions/25877/generating-random-locations-nearby
-        private fun getRandomLocationInRadius(center: GeoLocation, radiusInMeters: Int, random: Random): GeoLocation {
-            val x0 = center.longitude
-            val y0 = center.latitude
-
-            // Convert radius from meters to degrees
-            val radiusInDegrees = (radiusInMeters / 111000f).toDouble()
-            val u = random.nextDouble()
-            val v = random.nextDouble()
-            val w = radiusInDegrees * sqrt(u)
-            val t = 2 * PI * v
-            val x = w * cos(t)
-            val y = w * sin(t)
-
-            val newX = x / cos(y0 / 180.0 * PI)
-            val foundLongitude = newX + x0
-            val foundLatitude = y + y0
-
-            return GeoLocation(foundLatitude, foundLongitude)
-        }
-
-        private fun getRandom(random: Random): GeoLocation {
-            val loc = LatLng.random(random)
-            return GeoLocation(loc.getLatitude(), loc.getLongitude())
-        }
     }
 
     internal fun getDistanceInMeters(other: GeoLocation): Double {

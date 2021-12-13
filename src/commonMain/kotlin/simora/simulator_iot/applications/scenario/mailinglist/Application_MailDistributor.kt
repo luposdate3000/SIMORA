@@ -21,7 +21,6 @@ import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
 internal class Application_MailDistributor(
-    private val ownAddress: Int,
     private val mailDistributorFlag: Int,
 ) : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware

@@ -188,12 +188,6 @@ public class Configuration(private val simRun: SimulationRun) {
         return entities
     }
 
-    private fun getRandomDistance(maxDistance: Int): Int {
-        val density = 0.7
-        val percentage = round(maxDistance * density).toInt()
-        return simRun.randGenerator.getInt(percentage, maxDistance)
-    }
-
     public fun getDeviceByName(name: String): Device {
         val index = namedAddresses[name]!!
         return devices[index]
@@ -268,7 +262,6 @@ public class Configuration(private val simRun: SimulationRun) {
                 multicastLayer,
                 simRun.logger,
                 simRun.config,
-                jsonRouting.getOrDefault("compatibilityMode", false),
             )
             "RPL" -> ApplicationStack_RPL(
                 multicastLayer,
@@ -279,7 +272,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:281"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:274"/*SOURCE_FILE_END*/ },
             { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
             { "The performance level of a device can not be 0.0 %" },
         )

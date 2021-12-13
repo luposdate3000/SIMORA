@@ -53,8 +53,4 @@ public abstract class Entity {
         scheduleEvent(this, callback, time)
     }
 
-    protected fun terminate() {
-        onShutDown()
-        isTerminated = true
-    }
 }

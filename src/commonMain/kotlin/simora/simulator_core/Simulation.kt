@@ -40,10 +40,6 @@ public class Simulation(
         shutDown()
     }
 
-    private fun endSimulation() {
-        maxClock = clock
-    }
-
     private fun startUpAllEntities() {
         for (entity: Entity in entities) {
             entity.simulation = this
@@ -101,7 +97,7 @@ public class Simulation(
 
     internal fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_core/Simulation.kt:103"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_core/Simulation.kt:99"/*SOURCE_FILE_END*/ },
             { delay >= 0 },
             { "Clock cannot go backwards." }
         )
@@ -123,5 +119,4 @@ public class Simulation(
         }
     }
 
-    private fun numberOfEntities(): Int = entities.size
 }
