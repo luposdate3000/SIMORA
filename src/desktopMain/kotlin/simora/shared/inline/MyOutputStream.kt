@@ -21,16 +21,12 @@ import platform.posix.*
 import simora.shared.IMyOutputStream
 import simora.shared.SanityCheck
 
-internal actual class MyOutputStream : IMyOutputStream {
+internal actual class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOutputStream {
     val buffer: ByteArray = ByteArray(8192)
     var bufferPos = 0
-    private var stream: CPointer<FILE>?
+    private var stream: CPointer<FILE>? = file
 
     private var closedBy: MutableList<Throwable>? = null
-
-    internal constructor(file: CPointer<FILE>) {
-        stream = file
-    }
 
     actual override fun close() {
         SanityCheck(

@@ -36,8 +36,8 @@ internal class ApplicationStack_AllShortestPath(
 
     private lateinit var parent: Device
     private var isRoot = false
-    var routingTable = intArrayOf()
-    var routingTableDatabaseHops = Array(config.features.size) { intArrayOf() }
+    private var routingTable = intArrayOf()
+    private var routingTableDatabaseHops = Array(config.features.size) { intArrayOf() }
     override fun setDevice(device: Device) {
         parent = device
     }

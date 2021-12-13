@@ -20,17 +20,16 @@ import simora.shared.IMyOutputStream
 import simora.shared.SanityCheck
 import java.io.OutputStream
 
-internal actual class MyOutputStream : IMyOutputStream {
+internal actual class MyOutputStream// kotlin.io.println("MyOutputStream.constructor $this")
+internal constructor(it: OutputStream) : IMyOutputStream {
 private    val buffer: ByteArray
 private    var bufferPos = 0
 
-    private var stream: OutputStream?
+    private var stream: OutputStream? = it
 
     private var closedBy: MutableList<Throwable>? = null
 
-    internal constructor(it: OutputStream) {
-        // kotlin.io.println("MyOutputStream.constructor $this")
-        stream = it
+    init {
         buffer = ByteArray(8192)
     }
 

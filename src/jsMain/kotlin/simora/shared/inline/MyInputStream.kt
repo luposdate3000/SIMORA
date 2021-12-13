@@ -19,10 +19,10 @@ package simora.shared.inline
 import simora.shared.IMyInputStream
 import simora.shared.js.JSInputStream
 
-internal actual class MyInputStream : IMyInputStream {
+internal actual class MyInputStream internal constructor(filename: String) : IMyInputStream {
     private val tmp: JSInputStream
 
-    internal constructor(filename: String) {
+    init {
         tmp = JSInputStream(filename)
     }
 
