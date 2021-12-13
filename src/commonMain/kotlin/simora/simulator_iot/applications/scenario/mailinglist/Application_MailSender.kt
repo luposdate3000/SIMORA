@@ -60,11 +60,11 @@ public class Application_MailSender(
     override fun onTimerExpired(clock: Long) {
         if (eventCounter < maxNumber || maxNumber == -1) {
             eventCounter++
-            val startIndex = eventCounter % allReveivers.length
-            val count = if (receiverCount <allReveivers.length) {
+            val startIndex = eventCounter % allReveivers.size
+            val count = if (receiverCount <allReveivers.size) {
                 receiverCount
             } else {
-                allReveivers.length
+                allReveivers.size
             }
             val reveiverList = (allReveivers + allReveivers).subList(startIndex, startIndex + count)
             val text = "${getRandomString(text_length_fixed)}"
