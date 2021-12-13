@@ -17,8 +17,8 @@
 
 package simora.simulator_core
 
-internal interface ILoggerCore {
-    internal fun onStartUp()
-    internal fun onShutDown()
-    internal fun onSteadyState()
+public interface ILoggerCore {
+    public fun onStartUp()
+    public fun onShutDown()
+    public fun onSteadyState()
 }

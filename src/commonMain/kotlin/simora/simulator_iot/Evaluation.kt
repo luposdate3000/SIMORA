@@ -22,7 +22,7 @@ import simora.parser.JsonParserObject
 import simora.shared.inline.File
 import simora.simulator_iot.config.Configuration
 
-internal class Evaluation {
+public class Evaluation {
 
     private fun simulate(configFileName: String) {
         val simRun = SimulationRun()
@@ -40,7 +40,7 @@ internal class Evaluation {
         }
     }
 
-    internal fun evalConfigFileMerge(configFileNames: List<String>) {
+    public fun evalConfigFileMerge(configFileNames: List<String>) {
         val json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Configuration.defaultOutputDirectory + "/"
         for (n in configFileNames) {

@@ -17,7 +17,7 @@
 
 package simora.parser
 
-internal class JsonParserObject(private val map: MutableMap<String, IJsonParserValue>) : Iterable<Pair<String, IJsonParserValue>>, IJsonParserValue {
+public class JsonParserObject(private val map: MutableMap<String, IJsonParserValue>) : Iterable<Pair<String, IJsonParserValue>>, IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true
@@ -62,7 +62,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         }
     }
 
-    internal fun putAll(d: Map<String, Any>) {
+    public fun putAll(d: Map<String, Any>) {
         for ((k, v) in d) {
             map[k] = when (v) {
                 is Int -> JsonParserInt(v)
@@ -123,7 +123,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         return tmp
     }
 
-    internal fun getOrDefault(k: String, v: IJsonParserValue): IJsonParserValue {
+    public fun getOrDefault(k: String, v: IJsonParserValue): IJsonParserValue {
         setAccessed()
         val res = map[k]
         val r = if (res == null) {
@@ -147,7 +147,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         return r
     }
 
-    internal fun getOrEmptyObject(k: String): JsonParserObject {
+    public fun getOrEmptyObject(k: String): JsonParserObject {
         setAccessed()
         val res = getOrDefault(k, JsonParserObject(mutableMapOf())) as JsonParserObject
         res.setAccessed()
@@ -160,7 +160,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         res.setAccessed()
         return res
     }
-    internal fun getOrDefault(k: String, v: String): String {
+    public fun getOrDefault(k: String, v: String): String {
         setAccessed()
         val tmp = getOrDefault(k, JsonParserString(v))
         val res = when (tmp) {
@@ -178,7 +178,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         return res
     }
 
-    internal fun getOrDefault(k: String, v: Boolean): Boolean {
+    public fun getOrDefault(k: String, v: Boolean): Boolean {
         setAccessed()
         val tmp = getOrDefault(k, JsonParserBoolean(v))
         val res = when (tmp) {
@@ -196,7 +196,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         return res
     }
 
-    internal fun getOrDefault(k: String, v: Int): Int {
+    public fun getOrDefault(k: String, v: Int): Int {
         setAccessed()
         val tmp = getOrDefault(k, JsonParserInt(v))
         val res = when (tmp) {
@@ -213,7 +213,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         return res
     }
 
-    internal fun getOrDefault(k: String, v: Long): Long {
+    public fun getOrDefault(k: String, v: Long): Long {
         setAccessed()
         val tmp = getOrDefault(k, JsonParserLong(v))
         val res = when (tmp) {
@@ -231,7 +231,7 @@ internal class JsonParserObject(private val map: MutableMap<String, IJsonParserV
         return res
     }
 
-    internal fun getOrDefault(k: String, v: Double): Double {
+    public fun getOrDefault(k: String, v: Double): Double {
         setAccessed()
         val tmp = getOrDefault(k, JsonParserDouble(v))
         val res = when (tmp) {

@@ -19,18 +19,18 @@ package simora.simulator_core
 
 import simora.shared.SanityCheck
 
-internal class Simulation(
+public class Simulation(
     private val entities: List<Entity>,
 ) {
     internal var logger: ILoggerCore = LoggerCoreNone()
 
     private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
 
-    internal var maxClock: Long = Long.MAX_VALUE
+    public var maxClock: Long = Long.MAX_VALUE
 
-    internal var steadyClock: Long = Long.MAX_VALUE
+    public var steadyClock: Long = Long.MAX_VALUE
 
-    internal var clock: Long = 0
+    public var clock: Long = 0
 
     internal var addedEventCounter: Int = 0
 
@@ -51,7 +51,7 @@ internal class Simulation(
         }
     }
 
-    internal fun run() {
+    public fun run() {
         var isFinished = false
         while (!isFinished)
             isFinished = runNextTimeStep()
@@ -111,12 +111,12 @@ internal class Simulation(
         futureEvents.enqueue(ev)
     }
 
-    internal fun startUp() {
+    public fun startUp() {
         startUpAllEntities()
         logger.onStartUp() // call this last due to time measurement
     }
 
-    internal fun shutDown() {
+    public fun shutDown() {
         logger.onShutDown() // call this first due to time measurement
         for (ent: Entity in entities) {
             ent.onShutDown()

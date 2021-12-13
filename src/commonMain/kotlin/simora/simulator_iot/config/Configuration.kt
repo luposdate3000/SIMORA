@@ -52,7 +52,7 @@ import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-internal class Configuration(private val simRun: SimulationRun) {
+public class Configuration(private val simRun: SimulationRun) {
     internal companion object {
         internal val defaultOutputDirectory: String = "simulator_output/"
     }
@@ -61,18 +61,18 @@ internal class Configuration(private val simRun: SimulationRun) {
     internal val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
     private val featureIDRouting = 0
 
-    internal var devices: MutableList<Device> = mutableListOf()
+    public var devices: MutableList<Device> = mutableListOf()
     private var namedAddresses: MutableMap<String, Int> = mutableMapOf()
-    internal var outputDirectory: String = defaultOutputDirectory
+    public var outputDirectory: String = defaultOutputDirectory
     internal var json: JsonParserObject? = null
 
-    internal var rootRouterAddress: Int = -1
+    public var rootRouterAddress: Int = -1
 
     internal var linker = DeviceLinker()
         private set
 
     internal fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
-    internal fun featureIdForName(name: String): Int {
+    public fun featureIdForName(name: String): Int {
         for (i in 0 until features.size) {
             if (features[i].getName() == name) {
                 return i
@@ -81,7 +81,7 @@ internal class Configuration(private val simRun: SimulationRun) {
         TODO()
     }
 
-    internal fun featureIdForName2(name: String): Int {
+    public fun featureIdForName2(name: String): Int {
         for (i in 0 until features.size) {
             if (features[i].getName() == name) {
                 return i
@@ -90,7 +90,7 @@ internal class Configuration(private val simRun: SimulationRun) {
         return -1
     }
 
-    internal fun hasFeature(device: Device, feature: Int): Boolean {
+    public fun hasFeature(device: Device, feature: Int): Boolean {
         if (feature < 0) {
             return false
         }
@@ -183,7 +183,7 @@ internal class Configuration(private val simRun: SimulationRun) {
         parse(json, fileName, autocorrect)
     }
 
-    internal fun getEntities(): MutableList<Entity> {
+    public fun getEntities(): MutableList<Entity> {
         val entities: MutableList<Entity> = mutableListOf()
         entities.addAll(devices)
         return entities
@@ -195,12 +195,12 @@ internal class Configuration(private val simRun: SimulationRun) {
         return simRun.randGenerator.getInt(percentage, maxDistance)
     }
 
-    internal fun getDeviceByName(name: String): Device {
+    public fun getDeviceByName(name: String): Device {
         val index = namedAddresses[name]!!
         return devices[index]
     }
 
-    internal fun getRootDevice(): Device = devices[rootRouterAddress]
+    public fun getRootDevice(): Device = devices[rootRouterAddress]
 
     private fun createDevice(deviceTypeName: String, jsonDeviceParam: JsonParserObject, valuesPassThrough: JsonParserObject): Device {
         val ownAddress = devices.size
@@ -300,11 +300,11 @@ internal class Configuration(private val simRun: SimulationRun) {
         return device
     }
 
-    internal fun getNumberOfDevices(): Int {
+    public fun getNumberOfDevices(): Int {
         return devices.size
     }
 
-    internal fun getDeviceByAddress(address: Int): Device {
+    public fun getDeviceByAddress(address: Int): Device {
         return devices[address]
     }
 

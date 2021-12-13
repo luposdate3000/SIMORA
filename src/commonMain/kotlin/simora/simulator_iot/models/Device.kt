@@ -28,14 +28,14 @@ import simora.simulator_iot.models.net.LinkManager
 import simora.simulator_iot.models.net.NetworkPackage
 import simora.simulator_iot.utils.TimeUtils
 
-internal class Device(
+public class Device(
     internal val simRun: SimulationRun,
     internal var location: GeoLocation,
-    internal val address: Int,
+    public val address: Int,
     internal val performance: Double,
-    internal val linkManager: LinkManager,
+    public val linkManager: LinkManager,
     internal val isDeterministic: Boolean,
-    internal val applicationStack: IApplicationStack_Rooter,
+    public val applicationStack: IApplicationStack_Rooter,
     internal val hostNameLookUpTable: MutableMap<String, Int>,
 ) : Entity() {
     internal var isStarNetworkChild: Boolean = false
@@ -118,5 +118,5 @@ internal class Device(
     override fun toString(): String = "Device(addr $address)"
     internal fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
     internal fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
-    internal fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
+    public fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
 }

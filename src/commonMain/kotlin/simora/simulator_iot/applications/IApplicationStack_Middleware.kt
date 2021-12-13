@@ -20,13 +20,13 @@ package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 
-internal interface IApplicationStack_Middleware {
-    internal fun send(destinationAddress: Int, pck: IPayload)
-    internal fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray
-    internal fun getAllChildApplications(): Set<IApplicationStack_Actuator>
-    internal fun registerTimer(durationInNanoSeconds: Long, entity: ITimer)
-    internal fun resolveHostName(name: String): Int
-    internal fun closestDeviceWithFeature(name: String): Int
-    internal fun flush()
-    internal fun addChildApplication(child: IApplicationStack_Actuator)
+public interface IApplicationStack_Middleware {
+    public fun send(destinationAddress: Int, pck: IPayload)
+    public fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray
+    public fun getAllChildApplications(): Set<IApplicationStack_Actuator>
+    public fun registerTimer(durationInNanoSeconds: Long, entity: ITimer)
+    public fun resolveHostName(name: String): Int
+    public fun closestDeviceWithFeature(name: String): Int
+    public fun flush()
+    public fun addChildApplication(child: IApplicationStack_Actuator)
 }

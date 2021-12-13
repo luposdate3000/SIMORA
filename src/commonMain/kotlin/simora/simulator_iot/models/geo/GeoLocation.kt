@@ -23,7 +23,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-internal class GeoLocation(internal var latitude: Double, internal var longitude: Double) {
+public class GeoLocation(internal var latitude: Double, internal var longitude: Double) {
 
     internal companion object {
 

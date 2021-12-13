@@ -20,7 +20,7 @@ package simora.simulator_iot
 import simora.shared.SanityCheck
 import kotlin.random.Random
 
-internal class RandomGenerator {
+public class RandomGenerator {
     internal var seed: Int = 1
         set(value) {
             field = value

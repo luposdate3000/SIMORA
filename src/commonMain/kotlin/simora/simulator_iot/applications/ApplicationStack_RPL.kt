@@ -25,7 +25,7 @@ import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.NetworkPackage
 import simora.simulator_iot.utils.TimeUtils
 
-internal class ApplicationStack_RPL(
+public class ApplicationStack_RPL(
     private val child: IApplicationStack_Actuator,
     private val logger: ILogger,
     private val config: Configuration,
@@ -35,7 +35,7 @@ internal class ApplicationStack_RPL(
     }
 
     private lateinit var parent: Device
-    internal lateinit var routingTable: ApplicationStack_RPL_RoutingTable
+    public lateinit var routingTable: ApplicationStack_RPL_RoutingTable
     private val notInitializedAddress = -1
     internal var isRoot: Boolean = false
     internal var rank: Int = INFINITE_RANK

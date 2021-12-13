@@ -19,7 +19,7 @@ package simora.simulator_core
 
 import simora.shared.SanityCheck
 
-internal abstract class Entity {
+public abstract class Entity {
     internal lateinit var simulation: Simulation
 
     private var isTerminated = false
