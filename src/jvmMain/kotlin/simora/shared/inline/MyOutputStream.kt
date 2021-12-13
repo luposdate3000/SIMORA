@@ -27,7 +27,7 @@ internal actual class MyOutputStream : IMyOutputStream {
     var bufferPos = 0
 
     @JvmField
-    internal var stream: OutputStream?
+    private var stream: OutputStream?
 
     private var closedBy: MutableList<Throwable>? = null
 

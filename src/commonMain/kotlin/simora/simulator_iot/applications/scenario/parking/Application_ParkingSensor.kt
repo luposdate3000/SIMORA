@@ -28,19 +28,19 @@ import simora.simulator_iot.RandomGenerator
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-internal class Application_ParkingSensor(
-    internal val startClockInSec: Int,
-    internal val sendRateInSec: Int,
-    internal val maxNumber: Int,
-    internal val ownAddress: Int,
-    internal val random: RandomGenerator,
-    internal val area: Int,
-    internal val spotInArea: Int,
+private class Application_ParkingSensor(
+    private val startClockInSec: Int,
+    private val sendRateInSec: Int,
+    private val maxNumber: Int,
+    private val ownAddress: Int,
+    private val random: RandomGenerator,
+    private val area: Int,
+    private val spotInArea: Int,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
     private lateinit var startUpTimeStamp: Instant
     private var sendingVarianceInSec = 10
-    internal var receiver: Int = -1
+    private var receiver: Int = -1
     private var eventCounter = 0
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router

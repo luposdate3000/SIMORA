@@ -19,7 +19,7 @@ package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 
-internal class ApplicationStack_MulticastNone(
+private class ApplicationStack_MulticastNone(
     private val child: IApplicationStack_Actuator,
 ) : IApplicationStack_BothDirections {
     private lateinit var parent: IApplicationStack_Middleware

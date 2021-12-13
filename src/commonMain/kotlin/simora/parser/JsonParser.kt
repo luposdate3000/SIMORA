@@ -19,7 +19,7 @@ package simora.parser
 
 import simora.shared.inline.File
 
-internal class JsonParser {
+private class JsonParser {
     private fun readValueAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         var i = readSpacesAt(data, off)
         while (i < data.length) {
@@ -186,7 +186,7 @@ internal class JsonParser {
         throw Exception("unknown char at F $off '${data[off]}' $data")
     }
 
-    internal fun jsonToString(data: IJsonParserValue, printDefaults: Boolean): String {
+    private fun jsonToString(data: IJsonParserValue, printDefaults: Boolean): String {
         return jsonToString(data, "", printDefaults)
     }
 
@@ -258,12 +258,12 @@ internal class JsonParser {
         }
     }
 
-    internal fun stringToJson(data: String): IJsonParserValue {
+    private fun stringToJson(data: String): IJsonParserValue {
         val res = readValueAt(data, 0).second
         return res
     }
 
-    internal fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
+    private fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
         try {
             val fileStr = File(fileName).readAsString()
             val json = JsonParser().stringToJson(fileStr)
@@ -279,7 +279,7 @@ internal class JsonParser {
         }
     }
 
-    internal fun fileMergeToJson(fileNames: List<String>, autoformat: Boolean = true): JsonParserObject {
+    private fun fileMergeToJson(fileNames: List<String>, autoformat: Boolean = true): JsonParserObject {
         var res = JsonParserObject(mutableMapOf())
         for (fileName in fileNames) {
             try {
@@ -291,7 +291,7 @@ internal class JsonParser {
         return res
     }
 
-    internal fun encodeString(s: String): String {
+    private fun encodeString(s: String): String {
         return s
             .replace("\\", "\\\\")
             .replace("\t", "\\t")
@@ -300,7 +300,7 @@ internal class JsonParser {
             .replace("\"", "\\\"")
     }
 
-    internal fun decodeString(s: String): String {
+    private fun decodeString(s: String): String {
         return s
             .replace("\\\"", "\"")
             .replace("\\n", "\n")

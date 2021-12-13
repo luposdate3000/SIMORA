@@ -20,18 +20,18 @@ package simora.simulator_iot.models.net
 import simora.simulator_iot.config.LinkType
 import simora.simulator_iot.models.Device
 
-internal class DeviceLinker {
-    internal var numberOfLinks = 0
+private class DeviceLinker {
+    private var numberOfLinks = 0
     private var sortedLinkTypes: Array<LinkType> = emptyArray()
 
-    internal fun getLinkByName(name: String): LinkType = sortedLinkTypes.filter { it.name == name }.first()
-    internal fun getSortedLinkTypeIndices(linkTypeNames: List<String>): IntArray = linkTypeNames.map { getLinkByName(it) }.map { sortedLinkTypes.indexOf(it) }.sorted().toIntArray()
+    private fun getLinkByName(name: String): LinkType = sortedLinkTypes.filter { it.name == name }.first()
+    private fun getSortedLinkTypeIndices(linkTypeNames: List<String>): IntArray = linkTypeNames.map { getLinkByName(it) }.map { sortedLinkTypes.indexOf(it) }.sorted().toIntArray()
 
-    internal fun setLinkTypes(types: Array<LinkType>) {
+    private fun setLinkTypes(types: Array<LinkType>) {
         sortedLinkTypes = types.sortedByDescending { it.dataRateInKbps }.toTypedArray()
     }
 
-    internal fun createAvailableLinks(devices: MutableList<Device>) {
+    private fun createAvailableLinks(devices: MutableList<Device>) {
         for (one in devices) {
             for (two in devices) {
                 if (!one.isStarNetworkChild && !two.isStarNetworkChild) {
@@ -41,7 +41,7 @@ internal class DeviceLinker {
         }
     }
 
-    internal fun linkIfPossible(one: Device, two: Device) {
+    private fun linkIfPossible(one: Device, two: Device) {
         if (one != two && !one.linkManager.hasLink(two)) {
             val distance = getDistanceInMeters(one, two)
             val oneIndices = one.linkManager.supportedLinkTypes
@@ -59,14 +59,14 @@ internal class DeviceLinker {
         }
     }
 
-    internal fun getDistanceInMeters(one: Device, two: Device): Double = one.location.getDistanceInMeters(two.location)
+    private fun getDistanceInMeters(one: Device, two: Device): Double = one.location.getDistanceInMeters(two.location)
 
-    internal fun link(one: Device, two: Device, dataRate: Int) {
+    private fun link(one: Device, two: Device, dataRate: Int) {
         val distance = getDistanceInMeters(one, two)
         link(one, two, Link(distance, -1, dataRate))
     }
 
-    internal fun link(one: Device, two: Device, link: Link) {
+    private fun link(one: Device, two: Device, link: Link) {
         one.linkManager.links[two.address] = link
         two.linkManager.links[one.address] = link
         numberOfLinks++

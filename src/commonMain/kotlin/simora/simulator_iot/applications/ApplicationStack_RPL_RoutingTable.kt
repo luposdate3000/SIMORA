@@ -27,7 +27,7 @@ public class ApplicationStack_RPL_RoutingTable(
     private var nextDatabaseHops = IntArray(0)
     private var hops: MutableSet<Int> = mutableSetOf()
 
-    internal var destinationCounter: Int = 0
+    private var destinationCounter: Int = 0
 
     public var fallbackHop: Int = ownAddress
 
@@ -70,17 +70,17 @@ public class ApplicationStack_RPL_RoutingTable(
         return fallbackHop
     }
 
-    internal fun getNextFeatureHop(destinationAddress: Int): Int =
+    private fun getNextFeatureHop(destinationAddress: Int): Int =
         if (destinationAddress < nextDatabaseHops.size) {
             nextDatabaseHops[destinationAddress]
         } else {
             -1 // tell the caller that we dont know it
         }
 
-    internal fun getNextFeatureHops(destinationAddresses: IntArray): IntArray =
+    private fun getNextFeatureHops(destinationAddresses: IntArray): IntArray =
         IntArray(destinationAddresses.size) { getNextFeatureHop(destinationAddresses[it]) }
 
-    internal fun removeDestinationsByHop(hop: Int): Boolean {
+    private fun removeDestinationsByHop(hop: Int): Boolean {
         var updated = false
         if (hop != ownAddress) {
             for ((index, value) in nextHops.withIndex())
@@ -95,7 +95,7 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    internal fun setDestinationsByHop(hop: Int, destinations: IntArray, existingDatabaseHops: IntArray): Boolean {
+    private fun setDestinationsByHop(hop: Int, destinations: IntArray, existingDatabaseHops: IntArray): Boolean {
         var updated = updateHop(hop, hop, -1)
         for ((index, dest) in destinations.withIndex()) {
             val flag = updateHop(dest, hop, existingDatabaseHops[index])
@@ -104,7 +104,7 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    internal fun setDestinationsByDatabaseHop(hop: Int, destinations: IntArray): Boolean {
+    private fun setDestinationsByDatabaseHop(hop: Int, destinations: IntArray): Boolean {
         var updated = updateHop(hop, hop, hop)
         for (dest in destinations) {
             val flag = updateHop(dest, hop, hop)
@@ -124,5 +124,5 @@ public class ApplicationStack_RPL_RoutingTable(
         return destinations
     }
 
-    internal fun getHops(): Set<Int> = hops
+    private fun getHops(): Set<Int> = hops
 }

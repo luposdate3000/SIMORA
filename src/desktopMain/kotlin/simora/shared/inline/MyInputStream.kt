@@ -22,10 +22,10 @@ import simora.shared.IMyInputStream
 import simora.shared.UUID_Counter
 
 internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
-    internal var stream: CPointer<FILE>? = file
-    internal val buf8: ByteArray = ByteArray(8)
-    internal var buffer = ByteArray(1)
-    internal val uuid = UUID_Counter.getNextUUID()
+    private var stream: CPointer<FILE>? = file
+    private val buf8: ByteArray = ByteArray(8)
+    private var buffer = ByteArray(1)
+    private val uuid = UUID_Counter.getNextUUID()
 
     init {
         // kotlin.io.println("MyInputStream.constructor $this")

@@ -17,7 +17,7 @@
 
 package simora.simulator_core
 
-internal class EntityStub : Entity() {
+private class EntityStub : Entity() {
 
     override fun onStartUp() {
     }

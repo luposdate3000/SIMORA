@@ -17,6 +17,6 @@
 
 package simora.simulator_iot
 
-internal interface IPayloadLayer : IPayload {
+private interface IPayloadLayer : IPayload {
     public fun getApplicationPayload(): List<IPayload>
 }

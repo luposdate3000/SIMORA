@@ -54,24 +54,24 @@ import kotlin.math.sqrt
 
 public class Configuration(private val simRun: SimulationRun) {
     internal companion object {
-        internal val defaultOutputDirectory: String = "simulator_output/"
+        private val defaultOutputDirectory: String = "simulator_output/"
     }
 
     private val factories = mutableMapOf<String, IApplication_Factory>()
-    internal val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
+    private val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
     private val featureIDRouting = 0
 
     public var devices: MutableList<Device> = mutableListOf()
     private var namedAddresses: MutableMap<String, Int> = mutableMapOf()
     public var outputDirectory: String = defaultOutputDirectory
-    internal var json: JsonParserObject? = null
+    private var json: JsonParserObject? = null
 
     public var rootRouterAddress: Int = -1
 
-    internal var linker = DeviceLinker()
+    private var linker = DeviceLinker()
         private set
 
-    internal fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
+    private fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
     public fun featureIdForName(name: String): Int {
         for (i in 0 until features.size) {
             if (features[i].getName() == name) {
@@ -103,7 +103,7 @@ public class Configuration(private val simRun: SimulationRun) {
         return false
     }
 
-    internal fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
+    private fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
         this.json = json
         outputDirectory = json.getOrDefault("outputDirectory", defaultOutputDirectory) + "/"
         if (outputDirectory == "") {
@@ -177,7 +177,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
     }
 
-    internal fun parse(fileName: String, autocorrect: Boolean = true) {
+    private fun parse(fileName: String, autocorrect: Boolean = true) {
         val fileStr = File(fileName).readAsString()
         val json = JsonParser().stringToJson(fileStr) as JsonParserObject
         parse(json, fileName, autocorrect)

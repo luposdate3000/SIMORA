@@ -29,23 +29,23 @@ import simora.simulator_iot.models.net.NetworkPackage
 import simora.simulator_iot.utils.TimeUtils
 
 public class Device(
-    internal val simRun: SimulationRun,
-    internal var location: GeoLocation,
+    private val simRun: SimulationRun,
+    private var location: GeoLocation,
     public val address: Int,
-    internal val performance: Double,
+    private val performance: Double,
     public val linkManager: LinkManager,
-    internal val isDeterministic: Boolean,
+    private val isDeterministic: Boolean,
     public val applicationStack: IApplicationStack_Rooter,
-    internal val hostNameLookUpTable: MutableMap<String, Int>,
+    private val hostNameLookUpTable: MutableMap<String, Int>,
 ) : Entity() {
-    internal var isStarNetworkChild: Boolean = false
+    private var isStarNetworkChild: Boolean = false
     private lateinit var deviceStart: Instant
 
     init {
         applicationStack.setDevice(this)
     }
 
-    internal fun getProcessingDelay(): Long {
+    private fun getProcessingDelay(): Long {
         if (isDeterministic) {
             return 1
         }
@@ -55,7 +55,7 @@ public class Device(
         return scaled.toLong()
     }
 
-    internal fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
+    private fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
         val processingDelay = getProcessingDelay()
         return if (destinationAddress == address) {
             processingDelay
@@ -84,7 +84,7 @@ public class Device(
         applicationStack.shutDown()
     }
 
-    internal fun closestDeviceWithFeature(name: String): Int {
+    private fun closestDeviceWithFeature(name: String): Int {
         val devicesWithFeature = simRun.config.getAllDevicesForFeature(simRun.config.featureIdForName2(name)).toMutableList()
         if (devicesWithFeature.size == 0) {
             return -1
@@ -106,7 +106,7 @@ public class Device(
         return closestDevice!!.address
     }
 
-    internal fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
+    private fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
         val entity = simRun.config.getDeviceByAddress(hop)
         scheduleEvent(entity, pck, delay)
         simRun.logger.onSendNetworkPackage(address, dest, hop, pck.payload, delay)
@@ -116,7 +116,7 @@ public class Device(
     override fun hashCode(): Int = address
 
     override fun toString(): String = "Device(addr $address)"
-    internal fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
-    internal fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
+    private fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
+    private fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
     public fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
 }

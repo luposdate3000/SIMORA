@@ -26,12 +26,12 @@ import simora.simulator_iot.models.net.LinkManager
 
 internal object Stubs {
 
-    internal fun createEmptyDevice(address: Int, simRun: SimulationRun = SimulationRun()): Device {
+    private fun createEmptyDevice(address: Int, simRun: SimulationRun = SimulationRun()): Device {
         val loc = GeoLocation.getRandom(simRun.randGenerator.random)
         return Device(simRun, loc, address, 100.0, LinkManager(intArrayOf()), true, createRouter(simRun), mutableMapOf())
     }
 
-    internal fun createEmptyDevice(address: Int, linkTypes: IntArray, simRun: SimulationRun = SimulationRun()): Device {
+    private fun createEmptyDevice(address: Int, linkTypes: IntArray, simRun: SimulationRun = SimulationRun()): Device {
         val loc = GeoLocation.getRandom(simRun.randGenerator.random)
         return Device(simRun, loc, address, 100.0, LinkManager(linkTypes), true, createRouter(simRun), mutableMapOf())
     }

@@ -16,7 +16,7 @@
  */
 package simora.shared
 
-internal interface IMyInputStream {
+private interface IMyInputStream {
     public fun read(buf: ByteArray): Int
     public fun read(buf: ByteArray, len: Int): Int
     public fun read(buf: ByteArray, off: Int, len: Int): Int

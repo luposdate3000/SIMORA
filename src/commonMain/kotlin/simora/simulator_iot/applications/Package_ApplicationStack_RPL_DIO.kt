@@ -19,7 +19,7 @@ package simora.simulator_iot.applications
 
 import simora.simulator_iot.IPayload
 
-internal class Package_ApplicationStack_RPL_DIO(internal val rank: Int) : IPayload {
+private class Package_ApplicationStack_RPL_DIO(private val rank: Int) : IPayload {
     override fun getSizeInBytes(): Int {
         return 2
     }

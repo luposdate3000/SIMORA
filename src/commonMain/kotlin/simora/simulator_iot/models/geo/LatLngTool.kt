@@ -58,7 +58,7 @@ internal object LatLngTool {
      * the unit of measure in which to receive the result.
      * @return the distance in the chosen unit of measure.
      */
-    internal fun distance(point1: LatLng, point2: LatLng, unit: LengthUnit): Double {
+    private fun distance(point1: LatLng, point2: LatLng, unit: LengthUnit): Double {
         return distanceInRadians(point1, point2) * LatLngConfig.getEarthRadius(unit)
     }
 
@@ -140,7 +140,7 @@ internal object LatLngTool {
      * the unit in which distance is measured.
      * @return the end point.
      */
-    internal fun travel(
+    private fun travel(
         start: LatLng,
         initialBearing: Double,
         distance: Double,
@@ -166,7 +166,7 @@ internal object LatLngTool {
      * in degrees.
      * @return the normalized latitude.
      */
-    internal fun normalizeLatitude(latitude: Double): Double {
+    private fun normalizeLatitude(latitude: Double): Double {
         return if (latitude > 0) {
             latitude.coerceAtMost(90.0)
         } else {
@@ -182,7 +182,7 @@ internal object LatLngTool {
      * @return the normalized longitude.
      * Returns positive infinity, or negative infinity.
      */
-    internal fun normalizeLongitude(longitude: Double): Double {
+    private fun normalizeLongitude(longitude: Double): Double {
         var longitudeResult = longitude % 360
         if (longitudeResult > 180) {
             val diff = longitudeResult - 180

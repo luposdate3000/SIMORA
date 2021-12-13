@@ -20,7 +20,7 @@ import kotlin.jvm.JvmField
 
 internal object UUID_Counter {
     @JvmField
-    internal var uuid = 0L
+    private var uuid = 0L
 
-    internal fun getNextUUID(): Long = uuid++
+    private fun getNextUUID(): Long = uuid++
 }

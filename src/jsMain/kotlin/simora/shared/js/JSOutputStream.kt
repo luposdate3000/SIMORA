@@ -16,7 +16,7 @@
  */
 package simora.shared.js
 
-internal class JSOutputStream(private val filename: String, append: Boolean) {
+private class JSOutputStream(private val filename: String, append: Boolean) {
     private var buffer: ByteArray
     private var bufferSize: Int
 
@@ -48,45 +48,45 @@ internal class JSOutputStream(private val filename: String, append: Boolean) {
         }
     }
 
-    internal fun write(buf: ByteArray) {
+    private fun write(buf: ByteArray) {
         write(buf, buf.size)
     }
 
-    internal fun write(buf: ByteArray, len: Int) {
+    private fun write(buf: ByteArray, len: Int) {
         reserveSpace(len)
         buf.copyInto(buffer, bufferSize, 0, len)
         bufferSize += len
     }
 
-    internal fun close() {
+    private fun close() {
         val b = ByteArray(bufferSize)
         buffer.copyInto(b, 0, 0, bufferSize)
         ExternalModule_fs.inmemoryFs[filename] = b
     }
 
-    internal fun flush() {
+    private fun flush() {
     }
 
-    internal fun println(x: String) {
+    private fun println(x: String) {
         print("$x\n")
     }
 
-    internal fun print(x: String) {
+    private fun print(x: String) {
         write(x.encodeToByteArray())
     }
 
-    internal fun print(x: Boolean) {
+    private fun print(x: Boolean) {
         print("$x")
     }
 
-    internal fun print(x: Int) {
+    private fun print(x: Int) {
         print("$x")
     }
-    internal fun print(x: Double) {
+    private fun print(x: Double) {
         print("$x")
     }
 
-    internal fun println() {
+    private fun println() {
         print("\n")
     }
 }

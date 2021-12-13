@@ -17,7 +17,7 @@
 
 package simora.simulator_iot.models.net
 
-internal class Link(
+private class Link(
     var distanceInMeters: Double,
     val linkTypeIndex: Int,
     val dataRateInKbps: Int,

@@ -25,17 +25,17 @@ import simora.simulator_iot.RandomGenerator
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-internal class Application_MailSender(
-    internal val startClockInSec: Int,
-    internal val sendRateInSec: Int,
-    internal val maxNumber: Int,
-    internal val ownAddress: Int,
-    internal val random: RandomGenerator,
-    internal val allReveivers: List<Int>,
-    internal val text_length_fixed: Int,
-    internal val text_length_dynamic: Int,
-    internal val receiverCount: Int,
-    internal val useApplicationSideMulticast: Boolean,
+private class Application_MailSender(
+    private val startClockInSec: Int,
+    private val sendRateInSec: Int,
+    private val maxNumber: Int,
+    private val ownAddress: Int,
+    private val random: RandomGenerator,
+    private val allReveivers: List<Int>,
+    private val text_length_fixed: Int,
+    private val text_length_dynamic: Int,
+    private val receiverCount: Int,
+    private val useApplicationSideMulticast: Boolean,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
     private lateinit var startUpTimeStamp: Instant

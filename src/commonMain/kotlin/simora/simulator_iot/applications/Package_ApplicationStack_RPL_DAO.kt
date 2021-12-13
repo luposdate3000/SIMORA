@@ -19,11 +19,11 @@ package simora.simulator_iot.applications
 
 import simora.simulator_iot.IPayload
 
-internal class Package_ApplicationStack_RPL_DAO(
-    internal val isPath: Boolean,
-    internal val destinations: IntArray,
-    internal val hopHasDatabase: Boolean,
-    internal val existingDatabaseHops: IntArray
+private class Package_ApplicationStack_RPL_DAO(
+    private val isPath: Boolean,
+    private val destinations: IntArray,
+    private val hopHasDatabase: Boolean,
+    private val existingDatabaseHops: IntArray
 ) : IPayload {
     override fun getSizeInBytes(): Int {
         val ipv6InBytes = 16

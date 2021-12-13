@@ -17,4 +17,4 @@
 
 package simora.simulator_iot.applications
 
-internal interface IApplicationStack_BothDirections : IApplicationStack_Actuator, IApplicationStack_Middleware
+private interface IApplicationStack_BothDirections : IApplicationStack_Actuator, IApplicationStack_Middleware

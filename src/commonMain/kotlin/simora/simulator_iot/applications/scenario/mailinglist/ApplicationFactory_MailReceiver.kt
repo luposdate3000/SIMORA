@@ -25,8 +25,8 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
-internal class ApplicationFactory_MailReceiver : IApplication_Factory {
-    internal var allReceivers: MutableList<Int> = mutableListOf()
+private class ApplicationFactory_MailReceiver : IApplication_Factory {
+    private var allReceivers: MutableList<Int> = mutableListOf()
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
         features.add(ApplicationFactory_MailReceiverFeature())
     }

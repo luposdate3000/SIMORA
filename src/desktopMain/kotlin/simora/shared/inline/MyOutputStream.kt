@@ -24,7 +24,7 @@ import simora.shared.SanityCheck
 internal actual class MyOutputStream : IMyOutputStream {
     val buffer: ByteArray = ByteArray(8192)
     var bufferPos = 0
-    internal var stream: CPointer<FILE>?
+    private var stream: CPointer<FILE>?
 
     private var closedBy: MutableList<Throwable>? = null
 

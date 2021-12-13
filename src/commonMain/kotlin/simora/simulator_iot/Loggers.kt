@@ -17,7 +17,7 @@
 
 package simora.simulator_iot
 
-internal class Loggers internal constructor(internal val loggers: MutableList<ILogger>) : ILogger {
+private class Loggers internal constructor(private val loggers: MutableList<ILogger>) : ILogger {
     override fun initialize(simRun: SimulationRun) {
         for (log in loggers) {
             log.initialize(simRun)

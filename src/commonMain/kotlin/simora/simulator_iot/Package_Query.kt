@@ -24,7 +24,7 @@ public class Package_Query(
     public val query: ByteArray,
 ) : IPackage_Database {
     public val queryID: Int = idCounter++
-    internal val pckID: Long = UUID_Counter.getNextUUID()
+    private val pckID: Long = UUID_Counter.getNextUUID()
     override fun getPackageID(): Long = pckID
 
     private companion object {

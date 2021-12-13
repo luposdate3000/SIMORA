@@ -17,7 +17,7 @@
 
 package simora.parser
 
-internal class JsonParserArray(private val array: MutableList<IJsonParserValue>) : Iterable<IJsonParserValue>, IJsonParserValue {
+private class JsonParserArray(private val array: MutableList<IJsonParserValue>) : Iterable<IJsonParserValue>, IJsonParserValue {
     private var accessed0 = false
     override fun setAccessed() {
         accessed0 = true
@@ -32,7 +32,7 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
     }
 
     override fun isAccessed(): Boolean = accessed0
-    internal fun mergeWith(other: JsonParserArray) {
+    private fun mergeWith(other: JsonParserArray) {
         var k = 0
         while (k < array.size && k < other.array.size) {
             val other_v = other.array[k]
@@ -51,12 +51,12 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         }
     }
 
-    internal fun isEmpty(): Boolean = array.isEmpty()
-    internal fun <T> map(action: (IJsonParserValue) -> T): MutableList<T> {
+    private fun isEmpty(): Boolean = array.isEmpty()
+    private fun <T> map(action: (IJsonParserValue) -> T): MutableList<T> {
         val res: List<T> = array.map { action(it) }
         return res.toMutableList()
     }
-    internal fun firstOrEmptyObject(): JsonParserObject {
+    private fun firstOrEmptyObject(): JsonParserObject {
         setAccessed()
         val res =
             if (array.size > 0) {
@@ -85,7 +85,7 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         return array.iterator()
     }
 
-    internal fun add(v: IJsonParserValue) {
+    private fun add(v: IJsonParserValue) {
         setAccessed()
         v.setAccessed()
         array.add(v)

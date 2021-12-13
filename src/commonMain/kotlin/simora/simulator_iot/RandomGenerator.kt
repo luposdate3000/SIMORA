@@ -21,15 +21,15 @@ import simora.shared.SanityCheck
 import kotlin.random.Random
 
 public class RandomGenerator {
-    internal var seed: Int = 1
+    private var seed: Int = 1
         set(value) {
             field = value
             random = Random(value)
         }
-    internal var random: Random = Random(seed)
+    private var random: Random = Random(seed)
         private set
 
-    internal fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
+    private fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
         if (minInclusive == maxInclusive) {
             return minInclusive
         }
@@ -41,12 +41,12 @@ public class RandomGenerator {
         return random.nextDouble(minInclusive, maxExclusive)
     }
 
-    internal fun getInt(minInclusive: Int, maxInclusive: Int): Int =
+    private fun getInt(minInclusive: Int, maxInclusive: Int): Int =
         getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toInt()
 
-    internal fun getLong(minInclusive: Long, maxInclusive: Long): Long =
+    private fun getLong(minInclusive: Long, maxInclusive: Long): Long =
         getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toLong()
 
-    internal fun getBoolean(probabilityOfTrue: Float): Boolean =
+    private fun getBoolean(probabilityOfTrue: Float): Boolean =
         random.nextFloat() < probabilityOfTrue
 }

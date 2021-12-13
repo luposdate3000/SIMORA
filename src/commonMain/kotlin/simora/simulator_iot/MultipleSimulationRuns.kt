@@ -21,11 +21,11 @@ import simora.parser.JsonParserObject
 import simora.shared.inline.File
 import kotlin.math.sqrt
 
-internal class MultipleSimulationRuns(
+private class MultipleSimulationRuns(
     private val json: JsonParserObject,
 ) {
 
-    internal fun startSimulationRuns() {
+    private fun startSimulationRuns() {
         val measurements = mutableListOf<LoggerMeasure>()
         json.getOrEmptyObject("logging").getOrEmptyObject("simora.simulator_iot.LoggerMeasure").set("enabled", true)
         val outputDirectory = json.getOrDefault("outputDirectory", "simulator_output") + "/"

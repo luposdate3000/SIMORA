@@ -26,11 +26,11 @@ import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
 public class Application_QuerySender(
-    internal val startClockInSec: Int,
-    internal val sendRateInSec: Int,
-    internal val maxNumber: Int,
-    internal val queryPck: IPackage_Database,
-    internal val receiver: Int,
+    private val startClockInSec: Int,
+    private val sendRateInSec: Int,
+    private val maxNumber: Int,
+    private val queryPck: IPackage_Database,
+    private val receiver: Int,
     private val outputdirectory: String,
 ) : IApplicationStack_Actuator, ITimer {
     public constructor(

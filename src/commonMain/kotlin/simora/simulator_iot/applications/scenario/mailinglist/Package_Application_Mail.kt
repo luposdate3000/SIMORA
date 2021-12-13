@@ -19,8 +19,8 @@ package simora.simulator_iot.applications.scenario.mailinglist
 
 import simora.simulator_iot.IPayloadBinary
 
-internal class Package_Application_Mail(
-    internal val text: String,
+private class Package_Application_Mail(
+    private val text: String,
 ) : IPayloadBinary {
     override fun getSizeInBytes(): Int = text.length
     override fun getTopic(): String = "Mail"

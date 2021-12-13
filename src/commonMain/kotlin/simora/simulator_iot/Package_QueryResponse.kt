@@ -23,7 +23,7 @@ public class Package_QueryResponse(
     public val result: ByteArray,
     public val queryID: Int
 ) : IPackage_Database {
-    internal val pckID: Long = UUID_Counter.getNextUUID()
+    private val pckID: Long = UUID_Counter.getNextUUID()
     override fun getPackageID(): Long = pckID
 
     override fun getSizeInBytes(): Int {

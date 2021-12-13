@@ -17,7 +17,7 @@
 
 package simora.simulator_core
 
-internal class EventPriorityQueueStub {
+private class EventPriorityQueueStub {
 
     fun getEventPriorityQueue(): PriorityQueue<Event> {
         return PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })

@@ -64,7 +64,7 @@ internal enum class LengthUnit(
      * @param value the value to convert.
      * @return the converted value.
      */
-    internal fun convertTo(toUnit: LengthUnit, value: Double): Double {
+    private fun convertTo(toUnit: LengthUnit, value: Double): Double {
         if (this == toUnit) {
             return value
         }
@@ -85,6 +85,6 @@ internal enum class LengthUnit(
          * unit will first be converted to this unit, then to
          * the desired unit.
          */
-        internal val PRIMARY = KILOMETER
+        private val PRIMARY = KILOMETER
     }
 }

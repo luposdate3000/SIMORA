@@ -37,9 +37,9 @@ public class ApplicationStack_RPL(
     private lateinit var parent: Device
     public lateinit var routingTable: ApplicationStack_RPL_RoutingTable
     private val notInitializedAddress = -1
-    internal var isRoot: Boolean = false
-    internal var rank: Int = INFINITE_RANK
-    internal var preferredParent: ApplicationStack_RPL_Parent = ApplicationStack_RPL_Parent(notInitializedAddress, INFINITE_RANK)
+    private var isRoot: Boolean = false
+    private var rank: Int = INFINITE_RANK
+    private var preferredParent: ApplicationStack_RPL_Parent = ApplicationStack_RPL_Parent(notInitializedAddress, INFINITE_RANK)
     private var isDelayPackage_ApplicationStack_RPL_DAOTimerRunning = false
 
     override fun setDevice(device: Device) {
@@ -50,7 +50,7 @@ public class ApplicationStack_RPL(
         isRoot = true
     }
 
-    internal fun sendUnRoutedPackage(hop: Int, data: IPayload) {
+    private fun sendUnRoutedPackage(hop: Int, data: IPayload) {
         val pck = NetworkPackage(parent.address, hop, data)
         val delay = parent.getNetworkDelay(hop, pck)
         parent.assignToSimulation(hop, hop, pck, delay)
@@ -116,7 +116,7 @@ public class ApplicationStack_RPL(
         return otherRank + MinHopRankIncrease
     }
 
-    internal fun hasParent(): Boolean =
+    private fun hasParent(): Boolean =
         preferredParent.address != notInitializedAddress
 
     override fun startUp() {

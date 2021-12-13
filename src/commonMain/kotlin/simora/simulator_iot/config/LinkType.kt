@@ -19,8 +19,8 @@
 
 package simora.simulator_iot.config
 
-internal class LinkType(
-    internal val name: String = "",
-    internal var rangeInMeters: Int = 0,
-    internal val dataRateInKbps: Int = 0,
+private class LinkType(
+    private val name: String = "",
+    private var rangeInMeters: Int = 0,
+    private val dataRateInKbps: Int = 0,
 )
