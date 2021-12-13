@@ -19,9 +19,7 @@ package simora.simulator_iot.models.geo
 
 public class GeoLocation(internal var latitude: Double, internal var longitude: Double) {
 
-    internal companion object {
-
-    }
+    internal companion object;
 
     internal fun getDistanceInMeters(other: GeoLocation): Double {
         return LatLngTool.distance(

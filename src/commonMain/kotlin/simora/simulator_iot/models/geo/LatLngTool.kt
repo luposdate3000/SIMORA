@@ -21,7 +21,6 @@ package simora.simulator_iot.models.geo
 
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -110,56 +109,6 @@ internal object LatLngTool {
     }
 
     /**
-     * Converts an angle measured in radians to an approximately
-     * equivalent angle measured in degrees.  The conversion from
-     * radians to degrees is generally inexact; users should
-     * *not* expect `cos(toRadians(90.0))` to exactly
-     * equal `0.0`.
-     *
-     * @return the measurement of the angle `angleInRadians`
-     * in degrees.
-     */
-    private fun toDegrees(angleInRadians: Double): Double {
-        return angleInRadians * 180.0 / PI
-    }
-
-    /**
-     *
-     *
-     * Calculate the end point of traveling along a great-circle path from a
-     * given starting point with a given initial bearing for a known distance.
-     *
-     *
-     * @param start
-     * the starting point.
-     * @param initialBearing
-     * the initial bearing.
-     * @param distance
-     * the distance to travel.
-     * @param unit
-     * the unit in which distance is measured.
-     * @return the end point.
-     */
-    internal fun travel(
-        start: LatLng,
-        initialBearing: Double,
-        distance: Double,
-        unit: LengthUnit
-    ): LatLng {
-        val bR = toRadians(initialBearing)
-        val lat1R = toRadians(start.getLatitude())
-        val lon1R = toRadians(start.getLongitude())
-        val dR = distance / LatLngConfig.getEarthRadius(unit)
-        val a = sin(dR) * cos(lat1R)
-        val lat2 = asin(sin(lat1R) * cos(dR) + a * cos(bR))
-        val lon2 = (
-            lon1R +
-                atan2(sin(bR) * a, cos(dR) - sin(lat1R) * sin(lat2))
-            )
-        return LatLng(toDegrees(lat2), toDegrees(lon2))
-    }
-
-    /**
      * Clamp latitude to +/- 90 degrees.
      *
      * @param latitude
@@ -193,5 +142,4 @@ internal object LatLngTool {
         }
         return longitudeResult
     }
-
 }

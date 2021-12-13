@@ -18,21 +18,12 @@
 package simora.simulator_iot.utils
 
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 import kotlin.math.roundToLong
 import kotlin.time.ExperimentalTime
 
 internal object TimeUtils {
-
-    @OptIn(ExperimentalTime::class)
-    private fun differenceInMillis(startInstant: Instant, endInstant: Instant): Long {
-        val duration = endInstant - startInstant
-        return duration.inWholeMilliseconds
-    }
 
     @OptIn(ExperimentalTime::class)
     internal fun differenceInNanoSec(startInstant: Instant, endInstant: Instant): Long {

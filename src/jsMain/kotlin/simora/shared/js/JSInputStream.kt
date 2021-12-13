@@ -15,11 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.shared.js
-internal class JSInputStream {
+internal class JSInputStream internal constructor(filename: String) {
     private var pos = 0
     private lateinit var buffer: ByteArray
 
-    internal constructor(filename: String) {
+    init {
         buffer = ExternalModule_fs.inmemoryFs[filename]!!
     }
 

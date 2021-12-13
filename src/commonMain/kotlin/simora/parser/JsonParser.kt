@@ -262,7 +262,7 @@ internal class JsonParser {
         return readValueAt(data, 0).second
     }
 
-    internal fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
+    private fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
         try {
             val fileStr = File(fileName).readAsString()
             val json = JsonParser().stringToJson(fileStr)

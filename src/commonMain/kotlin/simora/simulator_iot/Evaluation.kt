@@ -18,7 +18,6 @@
 package simora.simulator_iot
 
 import simora.parser.JsonParser
-import simora.parser.JsonParserObject
 import simora.shared.inline.File
 import simora.simulator_iot.config.Configuration
 

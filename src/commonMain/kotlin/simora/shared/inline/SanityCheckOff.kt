@@ -37,5 +37,4 @@ internal object SanityCheckOff {
     internal inline fun check(@Suppress("UNUSED_PARAMETER") crossinline filename: () -> String, @Suppress("UNUSED_PARAMETER") crossinline value: () -> Boolean) {
         contract { callsInPlace(value, AT_MOST_ONCE) }
     }
-
 }
