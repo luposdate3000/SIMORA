@@ -17,4 +17,4 @@
 
 package simora.simulator_iot.applications
 
-internal class ApplicationStack_RPL_Parent(public var address: Int, private var rank: Int)
+internal class ApplicationStack_RPL_Parent(var address: Int, private var rank: Int)

@@ -18,6 +18,6 @@ package simora.simulator_iot
 
 internal actual object ReflectionHelper {
     internal actual fun create(name: String): Any {
-        return Class.forName(name)!!.newInstance()
+        return Class.forName(name).newInstance()
     }
 }

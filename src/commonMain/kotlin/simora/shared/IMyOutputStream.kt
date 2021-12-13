@@ -17,14 +17,14 @@
 package simora.shared
 
 internal interface IMyOutputStream {
-    public fun write(buf: ByteArray): Unit
-    public fun write(buf: ByteArray, len: Int): Unit
-    public fun close(): Unit
-    public fun flush(): Unit
-    public fun println(x: String)
-    public fun print(x: String)
-    public fun print(x: Boolean)
-    public fun print(x: Int)
-    public fun print(x: Double)
-    public fun println()
+    fun write(buf: ByteArray): Unit
+    fun write(buf: ByteArray, len: Int): Unit
+    fun close(): Unit
+    fun flush(): Unit
+    fun println(x: String)
+    fun print(x: String)
+    fun print(x: Boolean)
+    fun print(x: Int)
+    fun print(x: Double)
+    fun println()
 }

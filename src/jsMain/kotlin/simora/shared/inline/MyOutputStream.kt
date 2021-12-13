@@ -19,7 +19,7 @@ package simora.shared.inline
 import simora.shared.IMyOutputStream
 
 internal actual class MyOutputStream : IMyOutputStream {
-    internal actual constructor() {}
+    internal actual constructor()
 
     actual override fun close(): Unit = TODO("MyOutputStream")
     actual override fun flush(): Unit = TODO("MyOutputStream")

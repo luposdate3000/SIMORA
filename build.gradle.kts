@@ -63,9 +63,9 @@ kotlin {
                 }
             }
             binaries {
-                sharedLib() {
+                sharedLib {
                 }
-                executable() {
+                executable {
                 }
             }
         }

@@ -16,6 +16,6 @@
  */
 
 import simora.mainfunc
-private fun main(args: Array<String>) {
+public fun main(args: Array<String>) {
     mainfunc(args.toList())
 }

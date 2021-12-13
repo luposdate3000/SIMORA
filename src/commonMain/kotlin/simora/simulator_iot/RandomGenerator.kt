@@ -27,7 +27,6 @@ public class RandomGenerator {
             random = Random(value)
         }
     private var random: Random = Random(seed)
-        private set
 
     internal fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
         if (minInclusive == maxInclusive) {

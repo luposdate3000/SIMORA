@@ -17,10 +17,10 @@
 package simora.shared
 
 internal interface IMyInputStream {
-    public fun read(buf: ByteArray): Int
-    public fun read(buf: ByteArray, len: Int): Int
-    public fun read(buf: ByteArray, off: Int, len: Int): Int
-    public fun readByte(): Byte
-    public fun close(): Unit
-    public fun readLine(): String?
+    fun read(buf: ByteArray): Int
+    fun read(buf: ByteArray, len: Int): Int
+    fun read(buf: ByteArray, off: Int, len: Int): Int
+    fun readByte(): Byte
+    fun close(): Unit
+    fun readLine(): String?
 }

@@ -69,7 +69,6 @@ public class Configuration(private val simRun: SimulationRun) {
     public var rootRouterAddress: Int = -1
 
     private var linker = DeviceLinker()
-        private set
 
     internal fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
     public fun featureIdForName(name: String): Int {
