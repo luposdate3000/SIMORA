@@ -47,8 +47,10 @@ public class ApplicationFactory_MailSender : IApplication_Factory {
                     ownAddress,
                     random,
                     ApplicationFactory_MailReceiver.allReceivers,
-json.getOrDefault("text_length_fixed",100),
-json.getOrDefault("text_length_dynamic",10),
+                    json.getOrDefault("text_length_fixed", 100),
+                    json.getOrDefault("text_length_dynamic", 10),
+                    json.getOrDefault("receiverCount", 10),
+                    json.getOrDefault("useApplicationSideMulticast", true),
                 )
             )
         }

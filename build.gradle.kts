@@ -14,7 +14,7 @@ buildscript {
 plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("org.jetbrains.kotlin.multiplatform") version "1.6.0"
-`maven-publish`
+    `maven-publish`
 }
 repositories {
     mavenLocal()

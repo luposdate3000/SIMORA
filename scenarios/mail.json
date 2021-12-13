@@ -21,6 +21,8 @@
                     "sendStartClockInSec": 1000,
                     "text_length_dynamic": 10,
                     "text_length_fixed": 100,
+"receiverCount":10,
+"useApplicationSideMulticast":true,
                 },
             },
             "deviceType": "baseDeviceType",
@@ -55,7 +57,7 @@
             "enabled": true,
         },
         "simora.simulator_iot.LoggerStdout": {
-            "enabled": true,
+            "enabled": false,
         },
     },
     "outputDirectory": "simulator_output",

@@ -32,8 +32,10 @@ public class Application_MailSender(
     internal val ownAddress: Int,
     internal val random: RandomGenerator,
     internal val allReveivers: List<Int>,
-internal val text_length_fixed:Int,
-internal val text_length_dynamic:Int,
+    internal val text_length_fixed: Int,
+    internal val text_length_dynamic: Int,
+    internal val receiverCount: Int,
+    internal val useApplicationSideMulticast: Boolean,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
     private lateinit var startUpTimeStamp: Instant
@@ -47,24 +49,33 @@ internal val text_length_dynamic:Int,
         startUpTimeStamp = Clock.System.now()
         parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
     }
-private fun getRandomString(length: Int) : String {
-    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-    return (1..length)
-        .map { allowedChars.random() }
-        .joinToString("")
-}
+    private fun getRandomString(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
     override fun shutDown() {}
     override fun receive(pck: IPayload): IPayload? = pck
     override fun onTimerExpired(clock: Long) {
         if (eventCounter < maxNumber || maxNumber == -1) {
             eventCounter++
-            parent.send(
-                ownAddress,
-                Package_Application_MailGroup(
-                    "§${getRandomString(text_length_fixed)}",
-                    allReveivers.map { it to "${getRandomString(text_length_dynamic)}" }.toMap()
-                )
-            )
+            val startIndex = eventCounter % allReveivers.length
+            val count = if (receiverCount <allReveivers.length) {
+                receiverCount
+            } else {
+                allReveivers.length
+            }
+            val reveiverList = (allReveivers + allReveivers).subList(startIndex, startIndex + count)
+            val text = "${getRandomString(text_length_fixed)}"
+            val names = reveiverList.map { it to "${getRandomString(text_length_dynamic)}" }.toMap()
+            if (useApplicationSideMulticast) {
+                parent.send(ownAddress, Package_Application_MailGroup("§" + text, names))
+            } else {
+                for ((address, name) in names) {
+                    parent.send(address, Package_Application_Mail(name + text))
+                }
+            }
             parent.flush()
             parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         }
