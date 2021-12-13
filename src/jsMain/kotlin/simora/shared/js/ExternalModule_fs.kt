@@ -17,21 +17,21 @@
 package simora.shared.js
 
 internal object ExternalModule_fs {
-    private val inmemoryFs = mutableMapOf<String, ByteArray>()
+    internal val inmemoryFs = mutableMapOf<String, ByteArray>()
     private var tmpCounter = 0
     private fun createTempDirectory(): String {
         return "tmp${tmpCounter++}"
     }
 
-    private fun exists(filename: String): Boolean {
+    internal fun exists(filename: String): Boolean {
         return inmemoryFs[filename] != null
     }
 
-    private fun mkdirs(filename: String): Boolean {
+    internal fun mkdirs(filename: String): Boolean {
         return true
     }
 
-    private fun length(filename: String): Long {
+    internal fun length(filename: String): Long {
         val f = inmemoryFs[filename]
         return if (f == null) {
             0
@@ -40,7 +40,7 @@ internal object ExternalModule_fs {
         }
     }
 
-    private fun openOutputStream(filename: String, append: Boolean): JSOutputStream {
+    internal fun openOutputStream(filename: String, append: Boolean): JSOutputStream {
         return JSOutputStream(filename, append)
     }
 }

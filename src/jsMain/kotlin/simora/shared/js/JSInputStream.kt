@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.shared.js
-private class JSInputStream {
+internal class JSInputStream {
     private var pos = 0
     private lateinit var buffer: ByteArray
 
@@ -28,11 +28,11 @@ private class JSInputStream {
         TODO()
     }
 
-    private fun readByte(): Byte {
+    internal fun readByte(): Byte {
         return buffer[pos++]
     }
 
-    private fun read(buf: ByteArray, off: Int, len: Int): Int {
+    internal fun read(buf: ByteArray, off: Int, len: Int): Int {
         var l = len + off
         if (len + off > buffer.size) {
             l = buffer.size
@@ -43,21 +43,21 @@ private class JSInputStream {
         return l - off
     }
 
-    private fun read(buf: ByteArray, len: Int): Int {
+    internal fun read(buf: ByteArray, len: Int): Int {
         val l = read(buf, pos, len)
         pos += l
         return l
     }
 
-    private fun read(buf: ByteArray): Int {
+    internal fun read(buf: ByteArray): Int {
         val l = read(buf, pos, buf.size)
         pos += l
         return l
     }
 
-    private fun close() {
+    internal fun close() {
     }
-    private fun readLine(): String? {
+    internal fun readLine(): String? {
 // TODO this may break on utf-8
         val buf = mutableListOf<Byte>()
         try {
