@@ -25,8 +25,6 @@ internal actual class MyOutputStream internal constructor(file: CPointer<FILE>) 
     var bufferPos = 0
     private var stream: CPointer<FILE>? = file
 
-    private var closedBy: MutableList<Throwable>? = null
-
     actual override fun close() {
         flush()
         fclose(stream)

@@ -26,8 +26,6 @@ internal constructor(it: OutputStream) : IMyOutputStream {
 
     private var stream: OutputStream? = it
 
-    private var closedBy: MutableList<Throwable>? = null
-
     actual override fun close() {
         flush()
         stream!!.close()
