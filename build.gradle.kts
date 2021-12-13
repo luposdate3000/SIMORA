@@ -52,7 +52,7 @@ kotlin {
                     freeCompilerArgs += "-Xno-call-assertions"
                 }
             }
-        } 
+        }
     }
     if (compileLinux) {
         linuxX64("linuxX64") {
