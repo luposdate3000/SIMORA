@@ -36,8 +36,19 @@ public class ApplicationFactory_MailSender : IApplication_Factory {
         features.add(ApplicationFactory_MailSenderFeature())
     }
 
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
+    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserObject
+        var mailReceiverFactory: ApplicationFactory_MailReceiver? = null
+        for ((n, f) in factories) {
+            if (f is ApplicationFactory_MailReceiver) {
+                mailReceiverFactory = f
+                break
+            }
+        }
+        if (mailReceiverFactory == null) {
+            mailReceiverFactory = ApplicationFactory_MailReceiver()
+            factories["simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailReceiver"] = mailReceiverFactory
+        }
         if (json.getOrDefault("enabled", true)) {
             return listOf(
                 Application_MailSender(
@@ -46,7 +57,7 @@ public class ApplicationFactory_MailSender : IApplication_Factory {
                     json.getOrDefault("maxSamples", -1),
                     ownAddress,
                     random,
-                    ApplicationFactory_MailReceiver.allReceivers,
+                    mailReceiverFactory.allReceivers,
                     json.getOrDefault("text_length_fixed", 100),
                     json.getOrDefault("text_length_dynamic", 10),
                     json.getOrDefault("receiverCount", 10),

@@ -20,6 +20,11 @@ package simora
 import simora.simulator_iot.Evaluation
 
 public fun mainfunc(args: List<String>) {
-println("args $args")
-    Evaluation().evalConfigFileMerge(args)
+    try {
+        println("args $args")
+        Evaluation().evalConfigFileMerge(args)
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        throw e
+    }
 }

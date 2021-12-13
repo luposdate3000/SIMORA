@@ -1,6 +1,12 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
+val compileLinux: Boolean = true
+val compileOSX: Boolean = false
+val compileWindows: Boolean = false
+val compileJS: Boolean = false
+val compileJVM: Boolean = true
+
 buildscript {
     repositories {
         mavenLocal()
@@ -34,55 +40,57 @@ kotlin {
             }
         }
     }
-    jvm {
-        compilations.forEach {
-            it.kotlinOptions {
-                jvmTarget = "1.8"
-                freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-                freeCompilerArgs += "-Xno-param-assertions"
-                freeCompilerArgs += "-Xnew-inference"
-                freeCompilerArgs += "-Xno-receiver-assertions"
-                freeCompilerArgs += "-Xno-call-assertions"
+    if (compileJVM) {
+        jvm {
+            compilations.forEach {
+                it.kotlinOptions {
+                    jvmTarget = "1.8"
+                    freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+                    freeCompilerArgs += "-Xno-param-assertions"
+                    freeCompilerArgs += "-Xnew-inference"
+                    freeCompilerArgs += "-Xno-receiver-assertions"
+                    freeCompilerArgs += "-Xno-call-assertions"
+                }
             }
-        }
+        } 
     }
-    linuxX64("linuxX64") {
-        compilations.forEach {
-            it.kotlinOptions {
-                freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-                freeCompilerArgs += "-Xnew-inference"
-            }
-        }
-        binaries {
-            sharedLib(listOf(RELEASE)) {
-                baseName = "simora_release"
-            }
-            sharedLib(listOf(DEBUG)) {
-                baseName = "simora_debug"
-            }
-            executable(listOf(RELEASE, DEBUG)) {
-            }
-        }
-    }
-    js {
-        moduleName = "simora"
-        browser {
+    if (compileLinux) {
+        linuxX64("linuxX64") {
             compilations.forEach {
                 it.kotlinOptions {
                     freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
                     freeCompilerArgs += "-Xnew-inference"
                 }
             }
-            dceTask {
-//                keep("Luposdate3000_Endpoint.lupos.endpoint.LuposdateEndpoint")
-            }
-            testTask {
-                useKarma {
-                    useFirefox()
+            binaries {
+                sharedLib() {
+                }
+                executable() {
                 }
             }
         }
-        binaries.executable()
+    }
+    if (compileJS) {
+        js {
+            moduleName = "simora"
+            browser {
+                compilations.forEach {
+                    it.kotlinOptions {
+                        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+                        freeCompilerArgs += "-Xnew-inference"
+                    }
+                }
+                dceTask {
+//                keep("Luposdate3000_Endpoint.lupos.endpoint.LuposdateEndpoint")
+                }
+                testTask {
+                    useKarma {
+                        useFirefox()
+                    }
+                }
+            }
+            binaries.executable()
+        }
     }
     sourceSets {
         val commonMain by getting {
@@ -96,30 +104,42 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        val jvmMain by getting {
-            dependencies {
+        if (compileJVM) {
+            val jvmMain by getting {
+                dependencies {
+                }
+            }
+            val jvmTest by getting {
+                dependencies {
+                    implementation(kotlin("test"))
+                    implementation(kotlin("test-junit"))
+                }
             }
         }
-        val desktopMain by creating {
-            dependsOn(commonMain)
-        }
-        val linuxX64Main by getting {
-            dependsOn(desktopMain)
-        }
-//        val mingwX64Main by getting {
-//            dependsOn(desktopMain)
-//        }
-//        val macosX64Main by getting {
-//            dependsOn(desktopMain)
-//        }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
+        if (compileLinux || compileOSX || compileWindows) {
+            val desktopMain by creating {
+                dependsOn(commonMain)
+            }
+            if (compileLinux) {
+                val linuxX64Main by getting {
+                    dependsOn(desktopMain)
+                }
+            }
+            if (compileWindows) {
+                val mingwX64Main by getting {
+                    dependsOn(desktopMain)
+                }
+            }
+            if (compileOSX) {
+                val macosX64Main by getting {
+                    dependsOn(desktopMain)
+                }
             }
         }
-        val jsMain by getting {
-            dependencies {
+        if (compileJS) {
+            val jsMain by getting {
+                dependencies {
+                }
             }
         }
     }
@@ -134,7 +154,6 @@ tasks.register("luposSetup") {
         }
         return res
     }
-
     val regexDisableNoInline = "(^|[^a-zA-Z])noinline ".toRegex()
     val regexDisableInline = "(^|[^a-zA-Z])inline ".toRegex()
     val regexDisableCrossInline = "(^|[^a-zA-Z])crossinline ".toRegex()
@@ -163,27 +182,29 @@ tasks.register("luposSetup") {
 tasks.named("generateProjectStructureMetadata") {
     dependsOn("luposSetup")
 }
-tasks.named("compileKotlinJvm") {
-    dependsOn("luposSetup")
-    doLast {
-        File(buildDir, "external_jvm_dependencies").printWriter().use { out ->
-            for (f in configurations.getByName("jvmRuntimeClasspath").resolve()) {
-                out.println("$f")
+if (compileJVM) {
+    tasks.named("compileKotlinJvm") {
+        dependsOn("luposSetup")
+        doLast {
+            File(buildDir, "external_jvm_dependencies").printWriter().use { out ->
+                for (f in configurations.getByName("jvmRuntimeClasspath").resolve()) {
+                    out.println("$f")
+                }
             }
         }
     }
 }
-tasks.named("compileKotlinJs") {
-    dependsOn("luposSetup")
-    doLast {
-        File(buildDir, "external_js_dependencies").printWriter().use { out ->
-            for (f in configurations.getByName("jsRuntimeClasspath").resolve()) {
-                out.println("$f")
+if (compileJS) {
+    tasks.named("compileKotlinJs") {
+        dependsOn("luposSetup")
+        doLast {
+            File(buildDir, "external_js_dependencies").printWriter().use { out ->
+                for (f in configurations.getByName("jsRuntimeClasspath").resolve()) {
+                    out.println("$f")
+                }
             }
         }
     }
-}
-tasks.named("build") {
 }
 tasks.withType<Test> {
     maxHeapSize = "1g"
@@ -204,22 +225,5 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     ignoreFailures.set(true)
     filter {
         exclude("**/build/**")
-    }
-}
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/luposdate3000/SIMORA")
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-    publications {
-        register<MavenPublication>("gpr") {
-            from(components["kotlin"])
-        }
     }
 }

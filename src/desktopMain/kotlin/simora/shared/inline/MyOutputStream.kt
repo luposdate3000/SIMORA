@@ -22,26 +22,23 @@ import simora.shared.IMyOutputStream
 import simora.shared.SanityCheck
 
 internal actual class MyOutputStream : IMyOutputStream {
-    val buffer: ByteArray
+    val buffer: ByteArray = ByteArray(8192)
     var bufferPos = 0
     internal var stream: CPointer<FILE>?
 
     private var closedBy: MutableList<Throwable>? = null
 
-    internal constructor(it: CPointer<FILE>?) {
-        // kotlin.io.println("MyOutputStream.constructor $this")
-        stream = it
-        buffer = ByteArray(8192)
+    internal constructor(file: CPointer<FILE>) {
+        stream = file
     }
 
     internal actual constructor() {
         stream = null
-        buffer = ByteArray(8192)
     }
 
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/desktopMain/kotlin/simora/shared/inline/MyOutputStream.kt:43"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/desktopMain/kotlin/simora/shared/inline/MyOutputStream.kt:40"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

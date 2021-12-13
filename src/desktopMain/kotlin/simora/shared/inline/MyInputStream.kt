@@ -21,8 +21,8 @@ import platform.posix.*
 import simora.shared.IMyInputStream
 import simora.shared.UUID_Counter
 
-internal actual class MyInputStream(internal var stream: CPointer<FILE>?) : IMyInputStream {
-
+internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
+    internal var stream: CPointer<FILE>? = file
     internal val buf8: ByteArray = ByteArray(8)
     internal var buffer = ByteArray(1)
     internal val uuid = UUID_Counter.getNextUUID()

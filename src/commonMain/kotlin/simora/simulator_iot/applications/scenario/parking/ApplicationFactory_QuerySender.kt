@@ -27,7 +27,7 @@ import simora.simulator_iot.applications.IApplication_Factory
 
 public class ApplicationFactory_QuerySender : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {}
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
+    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserArray
         val res = mutableListOf<IApplicationStack_Actuator>()
         for (it in json) {

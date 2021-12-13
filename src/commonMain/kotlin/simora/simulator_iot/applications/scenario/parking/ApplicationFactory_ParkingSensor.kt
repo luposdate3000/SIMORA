@@ -36,7 +36,7 @@ public class ApplicationFactory_ParkingSensor : IApplication_Factory {
         features.add(ApplicationFactory_ParkingSensorFeature())
     }
 
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
+    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserObject
         if (json.getOrDefault("enabled", true)) {
             return listOf(

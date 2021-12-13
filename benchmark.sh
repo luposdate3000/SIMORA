@@ -37,8 +37,10 @@ for s in ${scenarios[@]}
 do
 for t in ${topologies[@]}
 do
+echo
 echo java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
 java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
+echo
 echo ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
 ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
 exit

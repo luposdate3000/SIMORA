@@ -36,7 +36,7 @@ internal actual class File {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun length(): Long {
-        val stream = fopen(filename, "rb")
+        val stream = myOpen(filename, "rb")
         fseek(stream, 0, SEEK_END)
         val size = ftell(stream).toLong()
         fclose(stream)
@@ -45,7 +45,7 @@ internal actual class File {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
-        val stream = fopen(filename, "rb")
+        val stream = myOpen(filename, "rb")
         fseek(stream, 0, SEEK_END)
         val size = ftell(stream).toInt()
         fseek(stream, 0, SEEK_SET)
@@ -67,14 +67,14 @@ internal actual class File {
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
         if (append) {
-            return MyOutputStream(fopen(filename, "ab"))
+            return MyOutputStream(myOpen(filename, "ab"))
         } else {
-            return MyOutputStream(fopen(filename, "wb"))
+            return MyOutputStream(myOpen(filename, "wb"))
         }
     }
 
     internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit) {
-        val printer = MyOutputStream(fopen(filename, "wb"))
+        val printer = MyOutputStream(myOpen(filename, "wb"))
         try {
             action(printer)
         } finally {
@@ -83,11 +83,18 @@ internal actual class File {
     }
 
     internal actual inline fun withInputStream(crossinline action: (IMyInputStream) -> Unit) {
-        val printer = MyInputStream(fopen(filename, "rb"))
+        val printer = MyInputStream(myOpen(filename, "rb"))
         try {
             action(printer)
         } finally {
             printer.close()
         }
+    }
+    private inline fun myOpen(name: String, mode: String): CPointer<FILE> {
+        val f = fopen(name, mode)
+        if (f == null) {
+            throw Exception("File '$name' error for mode '$mode'")
+        }
+        return f
     }
 }

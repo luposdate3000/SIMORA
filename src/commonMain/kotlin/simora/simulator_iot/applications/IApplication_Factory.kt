@@ -22,6 +22,6 @@ import simora.simulator_iot.ILogger
 import simora.simulator_iot.RandomGenerator
 
 public interface IApplication_Factory {
-    public fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator>
+    public fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator>
     public fun registerFeatures(features: MutableList<IApplicationFeature>)
 }

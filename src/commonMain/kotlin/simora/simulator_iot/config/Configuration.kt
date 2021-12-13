@@ -236,7 +236,8 @@ public class Configuration(private val simRun: SimulationRun) {
                     ownAddress,
                     simRun.logger,
                     outputDirectory,
-                    simRun.randGenerator
+                    simRun.randGenerator,
+                    factories,
                 )
             )
         }
@@ -279,7 +280,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:281"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:282"/*SOURCE_FILE_END*/ },
             { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
             { "The performance level of a device can not be 0.0 %" },
         )

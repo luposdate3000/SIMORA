@@ -56,7 +56,8 @@ public class Application_MailDistributor(
             }
             for ((target, mapping) in packets) {
                 if (mapping.size == 1) {
-                    parent.send(target, Package_Application_Mail(pck.text.replace("§", mapping[target]!!)))
+                    val x = mapping.toList().first()
+                    parent.send(x.first, Package_Application_Mail(pck.text.replace("§", x.second)))
                 } else {
                     parent.send(target, Package_Application_MailGroup(pck.text, mapping))
                 }

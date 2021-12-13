@@ -38,7 +38,7 @@ public class ApplicationFactory_MailDistributor : IApplication_Factory {
         features.add(applicationFactory_MailDistributorFeature)
         featureID = features.indexOf(applicationFactory_MailDistributorFeature)
     }
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator): List<IApplicationStack_Actuator> {
+    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserObject
         if (json.getOrDefault("enabled", true)) {
             return listOf(
