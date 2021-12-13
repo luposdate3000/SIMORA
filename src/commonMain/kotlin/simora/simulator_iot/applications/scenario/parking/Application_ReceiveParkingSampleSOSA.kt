@@ -16,7 +16,6 @@
  */
 package simora.simulator_iot.applications.scenario.parking
 
-import simora.shared.SanityCheck
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.Package_Query
 import simora.simulator_iot.Package_QueryResponse
@@ -38,18 +37,6 @@ internal class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int)
     }
 
     override fun shutDown() {
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:41"/*SOURCE_FILE_END*/ },
-            { idSampleInserted3.size == 0 }
-        )
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:45"/*SOURCE_FILE_END*/ },
-            { idCacheRequested.isEmpty() }
-        )
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:49"/*SOURCE_FILE_END*/ },
-            { pendingPackages.size == 0 }
-        )
     }
 
     private fun sendPackage(pck: Package_Application_ParkingSample) {

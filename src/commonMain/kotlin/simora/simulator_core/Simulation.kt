@@ -17,8 +17,6 @@
 
 package simora.simulator_core
 
-import simora.shared.SanityCheck
-
 public class Simulation(
     private val entities: List<Entity>,
 ) {
@@ -96,11 +94,6 @@ public class Simulation(
     }
 
     internal fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_core/Simulation.kt:99"/*SOURCE_FILE_END*/ },
-            { delay >= 0 },
-            { "Clock cannot go backwards." }
-        )
         addedEventCounter++
         val occurringTime = clock + delay
         val ev = Event(addedEventCounter, occurringTime, src, dest, data)

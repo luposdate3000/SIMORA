@@ -17,7 +17,6 @@
 
 package simora.simulator_iot.applications
 
-import simora.shared.SanityCheck
 import simora.simulator_core.ITimer
 import simora.simulator_iot.ILogger
 import simora.simulator_iot.IPayload
@@ -99,12 +98,6 @@ internal class ApplicationStack_AllShortestPath(
                 }
             }
         }
-        for (i in 0 until config.devices.size) {
-            SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/ApplicationStack_AllShortestPath.kt:103"/*SOURCE_FILE_END*/ },
-                { routingTable[i] != -1 },
-            )
-        }
         routingTableDatabaseHops = Array(config.features.size) { IntArray(config.devices.size) { -1 } }
         for (flag in 0 until config.features.size) {
             val devicesWithDatabase = config.getAllDevicesForFeature(flag).map { it.address }
@@ -171,10 +164,6 @@ internal class ApplicationStack_AllShortestPath(
                 } else {
                     b to a
                 }
-                SanityCheck.check(
-                    { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/ApplicationStack_AllShortestPath.kt:174"/*SOURCE_FILE_END*/ },
-                    { distance > 0 },
-                )
                 if (globalParentCosts[p.second.address] > globalParentCosts[p.first.address] + distance) {
                     globalParentCosts[p.second.address] = globalParentCosts[p.first.address] + distance
                     globalParentTable[p.second.address] = p.first.address

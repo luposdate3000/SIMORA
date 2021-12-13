@@ -22,7 +22,6 @@ import simora.parser.JsonParser
 import simora.parser.JsonParserArray
 import simora.parser.JsonParserObject
 import simora.parser.JsonParserString
-import simora.shared.SanityCheck
 import simora.shared.inline.File
 import simora.simulator_core.Entity
 import simora.simulator_iot.ILogger
@@ -138,11 +137,6 @@ public class Configuration(private val simRun: SimulationRun) {
                 fixedDevice.getOrDefault("deviceType", ""),
                 fixedDevice,
                 JsonParserObject(mutableMapOf()),
-            )
-            SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:142"/*SOURCE_FILE_END*/ },
-                { namedAddresses[name] == null },
-                { "name $name must be unique" }
             )
             namedAddresses[name] = created.address
         }
@@ -271,11 +265,6 @@ public class Configuration(private val simRun: SimulationRun) {
             else -> TODO("unknown routing.protocol '${jsonRouting.getOrDefault("protocol", "RPL")}'")
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:274"/*SOURCE_FILE_END*/ },
-            { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
-            { "The performance level of a device can not be 0.0 %" },
-        )
         val device = Device(
             simRun,
             location,
@@ -336,7 +325,7 @@ public class Configuration(private val simRun: SimulationRun) {
                     val count = rand.getOrDefault("count", 1)
                     val deviceTypeName = rand.getOrDefault("deviceType", "")
                     var firstDevice: Device? = parent
-                    var lastDevice: Device? = parent
+                    lateinit var lastDevice: Device
                     for (i in 0 until count) {
                         val alpha = 2 * PI * i.toDouble() / count.toDouble()
                         rand["latitude"] = posLat + sin(alpha) * radius
@@ -350,11 +339,11 @@ public class Configuration(private val simRun: SimulationRun) {
                         if (firstDevice == null) {
                             firstDevice = d
                         } else {
-                            linker.link(d, lastDevice!!, rand.getOrDefault("dataRateInKbps", 1000))
+                            linker.link(d, lastDevice, rand.getOrDefault("dataRateInKbps", 1000))
                         }
                         lastDevice = d
                     }
-                    linker.link(firstDevice!!, lastDevice!!, rand.getOrDefault("dataRateInKbps", 1000))
+                    linker.link(firstDevice!!, lastDevice, rand.getOrDefault("dataRateInKbps", 1000))
                 }
                 "full" -> {
                     val radius = rand.getOrDefault("radius", 0.1)

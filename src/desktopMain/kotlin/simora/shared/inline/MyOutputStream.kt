@@ -19,7 +19,6 @@ package simora.shared.inline
 import kotlinx.cinterop.*
 import platform.posix.*
 import simora.shared.IMyOutputStream
-import simora.shared.SanityCheck
 
 internal actual class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOutputStream {
     val buffer: ByteArray = ByteArray(8192)
@@ -29,26 +28,6 @@ internal actual class MyOutputStream internal constructor(file: CPointer<FILE>) 
     private var closedBy: MutableList<Throwable>? = null
 
     actual override fun close() {
-        SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/desktopMain/kotlin/simora/shared/inline/MyOutputStream.kt:32"/*SOURCE_FILE_END*/ },
-            {
-                try {
-                    throw Exception()
-                } catch (e: Throwable) {
-                    if (closedBy == null) {
-                        closedBy = mutableListOf(e)
-                    } else {
-                        closedBy!!.add(e)
-                    }
-                }
-                if (stream == null) {
-                    for (e in closedBy!!) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        )
-        // kotlin.io.println("MyOutputStream.close $this")
         flush()
         fclose(stream)
         stream = null

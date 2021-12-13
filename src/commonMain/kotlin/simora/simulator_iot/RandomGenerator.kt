@@ -17,7 +17,6 @@
 
 package simora.simulator_iot
 
-import simora.shared.SanityCheck
 import kotlin.random.Random
 
 public class RandomGenerator {
@@ -32,10 +31,6 @@ public class RandomGenerator {
         if (minInclusive == maxInclusive) {
             return minInclusive
         }
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/RandomGenerator.kt:35"/*SOURCE_FILE_END*/ },
-            { maxInclusive < Double.MAX_VALUE },
-        )
         val maxExclusive = maxInclusive + Double.MIN_VALUE
         return random.nextDouble(minInclusive, maxExclusive)
     }

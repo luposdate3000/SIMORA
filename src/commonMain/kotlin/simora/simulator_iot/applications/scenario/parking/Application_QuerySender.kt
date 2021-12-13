@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.simulator_iot.applications.scenario.parking
-import simora.shared.SanityCheck
 import simora.shared.inline.File
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPackage_Database
@@ -55,10 +54,6 @@ public class Application_QuerySender(
     }
 
     override fun shutDown() {
-        SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_QuerySender.kt:58"/*SOURCE_FILE_END*/ },
-            { awaitingQueries.size == 0 }
-        )
     }
 
     override fun receive(pck: IPayload): IPayload? {
