@@ -37,8 +37,8 @@ internal class ApplicationStack_RPL_Fast(
 
     private lateinit var parent: Device
     private var isRoot = false
-    private var routingTable = intArrayOf()
-    private var routingTableDatabaseHops = Array(config.features.size) { intArrayOf() }
+    public var routingTable = intArrayOf()
+    public var routingTableDatabaseHops = Array(config.features.size) { intArrayOf() }
     override fun setDevice(device: Device) {
         parent = device
     }

@@ -51,13 +51,13 @@ public class Simulation(
         }
     }
 
-    private fun run() {
+    public fun run() {
         var isFinished = false
         while (!isFinished)
             isFinished = runNextTimeStep()
     }
 
-    private fun runNextTimeStep(): Boolean {
+    public fun runNextTimeStep(): Boolean {
         if (!futureEvents.hasNext()) {
             return true
         }

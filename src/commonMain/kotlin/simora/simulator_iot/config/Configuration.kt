@@ -194,7 +194,7 @@ public class Configuration(private val simRun: SimulationRun) {
         return simRun.randGenerator.getInt(percentage, maxDistance)
     }
 
-    private fun getDeviceByName(name: String): Device {
+    public fun getDeviceByName(name: String): Device {
         val index = namedAddresses[name]!!
         return devices[index]
     }
