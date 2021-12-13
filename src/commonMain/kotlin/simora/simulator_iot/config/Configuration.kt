@@ -33,6 +33,7 @@ import simora.simulator_iot.applications.ApplicationStack_CatchSelfMessages
 import simora.simulator_iot.applications.ApplicationStack_Logger
 import simora.simulator_iot.applications.ApplicationStack_MergeMessages
 import simora.simulator_iot.applications.ApplicationStack_MulticastNone
+import simora.simulator_iot.applications.ApplicationStack_MulticastRouting
 import simora.simulator_iot.applications.ApplicationStack_MulticastSimple
 import simora.simulator_iot.applications.ApplicationStack_MultipleChilds
 import simora.simulator_iot.applications.ApplicationStack_RPL
@@ -57,7 +58,7 @@ public class Configuration(private val simRun: SimulationRun) {
     }
 
     private val factories = mutableMapOf<String, IApplication_Factory>()
-    public val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>()
+    public val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
 
     public var devices: MutableList<Device> = mutableListOf()
     private var namedAddresses: MutableMap<String, Int> = mutableMapOf()
@@ -139,7 +140,7 @@ public class Configuration(private val simRun: SimulationRun) {
                 JsonParserObject(mutableMapOf()),
             )
             SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:141"/*SOURCE_FILE_END*/ },
+                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:142"/*SOURCE_FILE_END*/ },
                 { namedAddresses[name] == null },
                 { "name $name must be unique" }
             )
@@ -240,20 +241,22 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val applicationStack = ApplicationStack_Sequence(
             ownAddress,
-            ApplicationStack_MergeMessages(
-                ApplicationStack_CatchSelfMessages(
-                    ownAddress,
-                    ApplicationStack_MultipleChilds(applications.map { it -> ApplicationStack_Logger(ownAddress, simRun.logger, it) }.toTypedArray()),
-                )
+            ApplicationStack_CatchSelfMessages(
+                ownAddress,
+                ApplicationStack_MultipleChilds(applications.map { it -> ApplicationStack_Logger(ownAddress, simRun.logger, it) }.toTypedArray()),
             )
         )
 // applications<<--
         val jsonRouting = json!!.getOrEmptyObject("routing")
-        val multicastLayer = when (jsonRouting.getOrDefault("multicast", "None")) {
-            "None" -> ApplicationStack_MulticastNone(applicationStack)
-            "Simple" -> ApplicationStack_MulticastSimple(applicationStack)
-            else -> TODO("unknown multicast implementation '${jsonRouting.getOrDefault("multicast", "None")}'")
-        }
+        val multicastLayer = ApplicationStack_MergeMessages(
+            when (jsonRouting.getOrDefault("multicast", "None")) {
+                "None" -> ApplicationStack_MulticastNone(applicationStack)
+                "ApplicationSide", "Simple" -> ApplicationStack_MulticastSimple(applicationStack)
+                "StateOfTheArt", "Routing" -> ApplicationStack_MulticastRouting(applicationStack, false, 0)
+                "RoutingAndApplication" -> ApplicationStack_MulticastRouting(applicationStack, true, 0)
+                else -> TODO("unknown multicast implementation '${jsonRouting.getOrDefault("multicast", "None")}'")
+            }
+        )
         val router = when (jsonRouting.getOrDefault("protocol", "RPL")) {
             "AllShortestPath" -> ApplicationStack_AllShortestPath(
                 multicastLayer,
@@ -275,7 +278,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:277"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:280"/*SOURCE_FILE_END*/ },
             { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
             { "The performance level of a device can not be 0.0 %" },
         )

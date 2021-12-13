@@ -15,14 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications.scenario.mailinglist
+package simora.simulator_iot
 
-import simora.simulator_iot.IPayloadBinary
-
-internal class Package_Application_Mail(
-    internal val text: String,
-) : IPayloadBinary {
-    override fun getSizeInBytes(): Int = text.length
-    override fun getTopic(): String = "Mail"
-    override fun getBytes(): ByteArray = text.encodeToByteArray()
+public interface IPayloadBinary : IPayload {
+    public fun getBytes(): ByteArray
 }

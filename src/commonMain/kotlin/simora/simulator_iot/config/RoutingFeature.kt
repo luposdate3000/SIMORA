@@ -15,14 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications.scenario.mailinglist
-
-import simora.simulator_iot.IPayloadBinary
-
-internal class Package_Application_Mail(
-    internal val text: String,
-) : IPayloadBinary {
-    override fun getSizeInBytes(): Int = text.length
-    override fun getTopic(): String = "Mail"
-    override fun getBytes(): ByteArray = text.encodeToByteArray()
+package simora.simulator_iot.config
+import simora.simulator_iot.applications.IApplicationFeature
+import simora.simulator_iot.applications.IApplicationStack_Actuator
+public class RoutingFeature : IApplicationFeature {
+    override fun getName(): String = "RoutingFeature"
+    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = true
+    override fun equals(other: Any?): Boolean = other is RoutingFeature
 }

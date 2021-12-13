@@ -15,14 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications.scenario.mailinglist
+package simora.simulator_iot.applications
 
+import simora.simulator_iot.IPayload
 import simora.simulator_iot.IPayloadBinary
 
-internal class Package_Application_Mail(
-    internal val text: String,
-) : IPayloadBinary {
-    override fun getSizeInBytes(): Int = text.length
-    override fun getTopic(): String = "Mail"
-    override fun getBytes(): ByteArray = text.encodeToByteArray()
+internal class Package_ApplicationStack_Multicast(
+    internal var targets: MutableList<Int>,
+    internal val pck: IPayloadBinary,
+) : IPayload {
+    override fun getSizeInBytes(): Int = pck.getSizeInBytes() + 4 * targets.size + 4
+    override fun getTopic(): String = pck.getTopic()
+    override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes() == other.pck.getBytes()
+    override fun hashCode(): Int = pck.getBytes().hashCode()
 }
