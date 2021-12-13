@@ -35,7 +35,7 @@ internal class ApplicationStack_Sequence(
     override fun startUp(): Unit = child.startUp()
     override fun shutDown(): Unit = child.shutDown()
     override fun getAllChildApplications(): Set<IApplicationStack_Actuator> {
-        var res = mutableSetOf<IApplicationStack_Actuator>()
+        val res = mutableSetOf<IApplicationStack_Actuator>()
         res.add(child)
         val c = child
         if (c is IApplicationStack_Middleware) {
@@ -64,7 +64,7 @@ internal class ApplicationStack_Sequence(
                     changed = false
                     for (c in caches[pck.src]) {
                         if (c.num == incomingNum[pck.src]) {
-                            var p = child.receive(c.data)
+                            val p = child.receive(c.data)
                             incomingNum[pck.src]++
                             caches[pck.src].remove(c)
                             changed = true

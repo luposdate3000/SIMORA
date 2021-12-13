@@ -69,7 +69,7 @@ internal class ApplicationStack_RPL_Fast(
     }
 
     override fun getAllChildApplications(): Set<IApplicationStack_Actuator> {
-        var res = mutableSetOf<IApplicationStack_Actuator>(child)
+        val res = mutableSetOf(child)
         if (child is IApplicationStack_Middleware) {
             res.addAll(child.getAllChildApplications())
         }
@@ -167,7 +167,7 @@ internal class ApplicationStack_RPL_Fast(
         if (isRoot) {
             globalParentCosts[parent.address] = 0.0
             globalParentTable[parent.address] = parent.address
-            val queue = mutableListOf<Device>(parent)
+            val queue = mutableListOf(parent)
             while (queue.size > 0) {
                 val a = queue.removeAt(0)
                 for (b in a.linkManager.getNeighbours().map { config.devices[it] }) {

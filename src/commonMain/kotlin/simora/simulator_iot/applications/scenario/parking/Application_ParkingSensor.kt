@@ -53,7 +53,7 @@ internal class Application_ParkingSensor(
     }
 
     override fun shutDown() {}
-    override fun receive(pck: IPayload): IPayload? = pck
+    override fun receive(pck: IPayload): IPayload = pck
     override fun onTimerExpired(clock: Long) {
         if (eventCounter < maxNumber || maxNumber == -1) {
             val sampleTimeObj = startUpTimeStamp.plus(clock, DateTimeUnit.NANOSECOND, TimeZone.UTC).toLocalDateTime(TimeZone.currentSystemDefault())

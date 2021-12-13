@@ -27,10 +27,6 @@ internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
     private var buffer = ByteArray(1)
     private val uuid = UUID_Counter.getNextUUID()
 
-    init {
-        // kotlin.io.println("MyInputStream.constructor $this")
-    }
-
     actual override fun read(buf: ByteArray): Int {
         return read(buf, buf.size)
     }
@@ -102,7 +98,6 @@ internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
                 return null
             }
         }
-        val res = buffer.decodeToString(0, len)
-        return res
+        return buffer.decodeToString(0, len)
     }
 }

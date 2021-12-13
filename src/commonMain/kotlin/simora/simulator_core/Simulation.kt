@@ -51,7 +51,7 @@ public class Simulation(
         }
     }
 
-    public fun run() {
+    private fun run() {
         var isFinished = false
         while (!isFinished)
             isFinished = runNextTimeStep()

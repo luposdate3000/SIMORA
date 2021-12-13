@@ -29,10 +29,10 @@ internal class Package_ApplicationStack_Sequence(
     override fun getSizeInBytes(): Int = data.getSizeInBytes() + 8
     override fun toString(): String = "Package_ApplicationStack_Sequence($data)"
     override fun getApplicationPayload(): List<IPayload> {
-        if (data is IPayloadLayer) {
-            return data.getApplicationPayload()
+        return if (data is IPayloadLayer) {
+            data.getApplicationPayload()
         } else {
-            return listOf(data)
+            listOf(data)
         }
     }
 

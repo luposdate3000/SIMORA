@@ -58,7 +58,7 @@ public class Configuration(private val simRun: SimulationRun) {
     }
 
     private val factories = mutableMapOf<String, IApplication_Factory>()
-    internal val features: MutableList<IApplicationFeature> = mutableListOf<IApplicationFeature>(RoutingFeature())
+    internal val features: MutableList<IApplicationFeature> = mutableListOf(RoutingFeature())
     private val featureIDRouting = 0
 
     public var devices: MutableList<Device> = mutableListOf()
@@ -107,7 +107,7 @@ public class Configuration(private val simRun: SimulationRun) {
         outputDirectory = json.getOrDefault("outputDirectory", defaultOutputDirectory) + "/"
         if (outputDirectory == "") {
             outputDirectory = defaultOutputDirectory
-            json.set("outputDirectory", defaultOutputDirectory)
+            json["outputDirectory"] = defaultOutputDirectory
         }
         val jsonLoggers = json.getOrEmptyObject("logging")
         for ((loggerName, loggerJson) in jsonLoggers) {
@@ -129,7 +129,7 @@ public class Configuration(private val simRun: SimulationRun) {
                     v.getOrDefault("rangeInMeters", 0),
                     v.getOrDefault("dataRateInKbps", 0),
                 )
-            }.toList<LinkType>().toTypedArray()
+            }.toList().toTypedArray()
         )
 // load all link types <<<---
         for ((name, fixedDevice) in json.getOrEmptyObject("fixedDevice")) {
@@ -140,7 +140,7 @@ public class Configuration(private val simRun: SimulationRun) {
                 JsonParserObject(mutableMapOf()),
             )
             SanityCheck.check(
-                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:143"/*SOURCE_FILE_END*/ },
+                { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:142"/*SOURCE_FILE_END*/ },
                 { namedAddresses[name] == null },
                 { "name $name must be unique" }
             )
@@ -194,7 +194,7 @@ public class Configuration(private val simRun: SimulationRun) {
         return simRun.randGenerator.getInt(percentage, maxDistance)
     }
 
-    public fun getDeviceByName(name: String): Device {
+    private fun getDeviceByName(name: String): Device {
         val index = namedAddresses[name]!!
         return devices[index]
     }
@@ -244,7 +244,7 @@ public class Configuration(private val simRun: SimulationRun) {
             ownAddress,
             ApplicationStack_CatchSelfMessages(
                 ownAddress,
-                ApplicationStack_MultipleChilds(applications.map { it -> ApplicationStack_Logger(ownAddress, simRun.logger, it) }.toTypedArray()),
+                ApplicationStack_MultipleChilds(applications.map { ApplicationStack_Logger(ownAddress, simRun.logger, it) }.toTypedArray()),
             )
         )
 // applications<<--
@@ -279,7 +279,7 @@ public class Configuration(private val simRun: SimulationRun) {
         }
         val linkTypes = linker.getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         SanityCheck.check(
-            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:282"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/config/Configuration.kt:281"/*SOURCE_FILE_END*/ },
             { jsonDevice.getOrDefault("performance", 100.0) > 0.0 },
             { "The performance level of a device can not be 0.0 %" },
         )
@@ -315,18 +315,9 @@ public class Configuration(private val simRun: SimulationRun) {
     ) {
         for (rand in patterns) {
             rand as JsonParserObject
-            val posLong = if (location != null) {
-                location.longitude
-            } else {
-                rand.getOrDefault("longitude", 0.0)
-            }
-            val posLat = if (location != null) {
-                location.latitude
-            } else {
-                rand.getOrDefault("latitude", 0.0)
-            }
-            val type = rand.getOrDefault("type", "random_fill")
-            when (type) {
+            val posLong = location?.longitude ?: rand.getOrDefault("longitude", 0.0)
+            val posLat = location?.latitude ?: rand.getOrDefault("latitude", 0.0)
+            when (rand.getOrDefault("type", "random_fill")) {
                 "random_fill" -> {
                     val radius = rand.getOrDefault("radius", 0.1)
                     val count = when (rand.getOrDefault("mode", "count")) {
@@ -376,7 +367,7 @@ public class Configuration(private val simRun: SimulationRun) {
                     val radius = rand.getOrDefault("radius", 0.1)
                     val count = rand.getOrDefault("count", 1)
                     val deviceTypeName = rand.getOrDefault("deviceType", "")
-                    var localDevices = mutableListOf<Device>()
+                    val localDevices = mutableListOf<Device>()
                     if (parent != null) {
                         localDevices.add(parent)
                     }
@@ -441,7 +432,7 @@ public class Configuration(private val simRun: SimulationRun) {
         var a = simRun.randGenerator.getDouble(0.0, 1.0)
         var b = simRun.randGenerator.getDouble(0.0, 1.0)
         if (b < a) {
-            var c = b
+            val c = b
             b = a
             a = c
         }

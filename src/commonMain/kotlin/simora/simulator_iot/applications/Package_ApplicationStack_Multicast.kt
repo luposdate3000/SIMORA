@@ -26,6 +26,7 @@ internal class Package_ApplicationStack_Multicast(
 ) : IPayload {
     override fun getSizeInBytes(): Int = pck.getSizeInBytes() + 4 * targets.size + 4
     override fun getTopic(): String = pck.getTopic()
-    override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes() == other.pck.getBytes()
+    override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes()
+        .contentEquals(other.pck.getBytes())
     override fun hashCode(): Int = pck.getBytes().hashCode()
 }

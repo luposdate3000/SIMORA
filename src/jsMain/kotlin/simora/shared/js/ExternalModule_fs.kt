@@ -33,11 +33,7 @@ internal object ExternalModule_fs {
 
     internal fun length(filename: String): Long {
         val f = inmemoryFs[filename]
-        return if (f == null) {
-            0
-        } else {
-            f.size.toLong()
-        }
+        return f?.size?.toLong() ?: 0
     }
 
     internal fun openOutputStream(filename: String, append: Boolean): JSOutputStream {

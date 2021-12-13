@@ -74,12 +74,11 @@ public class GeoLocation(internal var latitude: Double, internal var longitude: 
     }
 
     internal fun getDistanceInMeters(other: GeoLocation): Double {
-        val distance = LatLngTool.distance(
+        return LatLngTool.distance(
             LatLng(latitude, longitude),
             LatLng(other.latitude, other.longitude),
             LengthUnit.METER
         )
-        return distance
     }
 
     override fun equals(other: Any?): Boolean {

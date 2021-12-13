@@ -33,11 +33,11 @@ public class SimulationRun {
 
     internal val logger: Loggers = Loggers(mutableListOf())
 
-    public var notInitializedClock: Long = -1
+    private var notInitializedClock: Long = -1
 
-    public var simSteadyClock: Long = notInitializedClock
+    private var simSteadyClock: Long = notInitializedClock
 
-    public var simMaxClock: Long = notInitializedClock
+    private var simMaxClock: Long = notInitializedClock
 
     public fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
         return parseConfig(json as JsonParserObject, fileName, autocorrect)

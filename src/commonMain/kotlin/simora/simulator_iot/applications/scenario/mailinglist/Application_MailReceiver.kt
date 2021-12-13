@@ -33,10 +33,10 @@ internal class Application_MailReceiver : IApplicationStack_Actuator {
     }
 
     override fun receive(pck: IPayload): IPayload? {
-        if (pck is Package_Application_Mail) {
-            return null
+        return if (pck is Package_Application_Mail) {
+            null
         } else {
-            return pck
+            pck
         }
     }
 }

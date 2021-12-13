@@ -85,7 +85,7 @@ internal object LatLngTool {
      * @return the internal angle for the arc connecting the two points in
      * radians.
      */
-    internal fun distanceInRadians(point1: LatLng, point2: LatLng): Double {
+    private fun distanceInRadians(point1: LatLng, point2: LatLng): Double {
         val lat1R = toRadians(point1.getLatitude())
         val lat2R = toRadians(point2.getLatitude())
         val dLatR = abs(lat2R - lat1R)

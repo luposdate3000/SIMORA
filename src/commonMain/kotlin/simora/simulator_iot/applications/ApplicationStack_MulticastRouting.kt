@@ -35,7 +35,7 @@ internal class ApplicationStack_MulticastRouting(
     override fun startUp(): Unit = child.startUp()
     override fun shutDown(): Unit = child.shutDown()
     override fun getAllChildApplications(): Set<IApplicationStack_Actuator> {
-        var res = mutableSetOf<IApplicationStack_Actuator>()
+        val res = mutableSetOf<IApplicationStack_Actuator>()
         res.add(child)
         val c = child
         if (c is IApplicationStack_Middleware) {
@@ -80,7 +80,7 @@ internal class ApplicationStack_MulticastRouting(
     override fun receive(pck: IPayload): IPayload? {
         val res = if (pck is Package_ApplicationStack_Multicast) {
 // detect self targets
-            var newTargets = mutableListOf<Int>()
+            val newTargets = mutableListOf<Int>()
             for (t in pck.targets) {
                 if (t == ownAddress) {
                     child.receive(pck.pck)

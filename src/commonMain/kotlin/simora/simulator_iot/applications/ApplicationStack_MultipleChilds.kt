@@ -45,12 +45,11 @@ internal class ApplicationStack_MultipleChilds(
     }
 
     override fun getAllChildApplications(): Set<IApplicationStack_Actuator> {
-        var res = mutableSetOf<IApplicationStack_Actuator>()
+        val res = mutableSetOf<IApplicationStack_Actuator>()
         for (child in childs) {
             res.add(child)
-            val c = child
-            if (c is IApplicationStack_Middleware) {
-                res.addAll(c.getAllChildApplications())
+            if (child is IApplicationStack_Middleware) {
+                res.addAll(child.getAllChildApplications())
             }
         }
         return res
@@ -62,10 +61,7 @@ internal class ApplicationStack_MultipleChilds(
 
     override fun receive(pck: IPayload): IPayload? {
         for (child in childs) {
-            val pp = child.receive(pck)
-            if (pp == null) {
-                return null
-            }
+            val pp = child.receive(pck) ?: return null
         }
         return pck
     }
@@ -77,7 +73,7 @@ internal class ApplicationStack_MultipleChilds(
     override fun flush(): Unit = parent.flush()
     override fun resolveHostName(name: String): Int = parent.resolveHostName(name)
     override fun addChildApplication(child: IApplicationStack_Actuator) {
-        val res = Array<IApplicationStack_Actuator>(childs.size + 1) {
+        val res = Array(childs.size + 1) {
             if (it < childs.size) {
                 childs[it]
             } else {

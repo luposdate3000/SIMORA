@@ -20,12 +20,7 @@ import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
 import simora.shared.js.ExternalModule_fs
 
-internal actual class File {
-    internal val filename: String
-
-    actual constructor(filename: String) {
-        this.filename = filename
-    }
+internal actual class File actual constructor(internal val filename: String) {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean = ExternalModule_fs.exists(filename)
@@ -38,7 +33,7 @@ internal actual class File {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
-        var res = StringBuilder()
+        val res = StringBuilder()
         val stream = MyInputStream(filename)
         val buffer = ByteArray(8192)
         var pos = 0

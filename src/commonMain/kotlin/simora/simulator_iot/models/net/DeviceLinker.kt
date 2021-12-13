@@ -24,7 +24,7 @@ internal class DeviceLinker {
     private var numberOfLinks = 0
     private var sortedLinkTypes: Array<LinkType> = emptyArray()
 
-    private fun getLinkByName(name: String): LinkType = sortedLinkTypes.filter { it.name == name }.first()
+    private fun getLinkByName(name: String): LinkType = sortedLinkTypes.first { it.name == name }
     internal fun getSortedLinkTypeIndices(linkTypeNames: List<String>): IntArray = linkTypeNames.map { getLinkByName(it) }.map { sortedLinkTypes.indexOf(it) }.sorted().toIntArray()
 
     internal fun setLinkTypes(types: Array<LinkType>) {
@@ -41,7 +41,7 @@ internal class DeviceLinker {
         }
     }
 
-    internal fun linkIfPossible(one: Device, two: Device) {
+    private fun linkIfPossible(one: Device, two: Device) {
         if (one != two && !one.linkManager.hasLink(two)) {
             val distance = getDistanceInMeters(one, two)
             val oneIndices = one.linkManager.supportedLinkTypes
@@ -66,7 +66,7 @@ internal class DeviceLinker {
         link(one, two, Link(distance, -1, dataRate))
     }
 
-    internal fun link(one: Device, two: Device, link: Link) {
+    private fun link(one: Device, two: Device, link: Link) {
         one.linkManager.links[two.address] = link
         two.linkManager.links[one.address] = link
         numberOfLinks++

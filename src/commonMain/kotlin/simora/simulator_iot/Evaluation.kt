@@ -59,21 +59,21 @@ public class Evaluation {
                     n
                 }
             }
-            if (outputdirectoryTmp == "") {
-                outputdirectoryTmp += t
+            outputdirectoryTmp += if (outputdirectoryTmp == "") {
+                t
             } else {
-                outputdirectoryTmp += "_$t"
+                "_$t"
             }
         }
         val outputdirectory = json.getOrDefault("outputDirectory", outputdirectoryTmp) + "/"
         println("outputdirectory=$outputdirectory")
         File(outputdirectory).mkdirs()
-        File(outputdirectory + ".generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
+        File("$outputdirectory.generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
             out.println(JsonParser().jsonToString(json, false))
         }
         val runs = MultipleSimulationRuns(json)
         runs.startSimulationRuns()
-        File(outputdirectory + ".generated.used.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
+        File("$outputdirectory.generated.used.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
             out.println(JsonParser().jsonToString(json, true))
         }
     }

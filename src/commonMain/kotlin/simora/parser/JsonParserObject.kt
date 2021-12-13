@@ -162,8 +162,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
     }
     public fun getOrDefault(k: String, v: String): String {
         setAccessed()
-        val tmp = getOrDefault(k, JsonParserString(v))
-        val res = when (tmp) {
+        val res = when (val tmp = getOrDefault(k, JsonParserString(v))) {
             is JsonParserString -> tmp.value
             is JsonParserBoolean -> "${tmp.value}"
             is JsonParserInt -> "${tmp.value}"
@@ -180,8 +179,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
 
     public fun getOrDefault(k: String, v: Boolean): Boolean {
         setAccessed()
-        val tmp = getOrDefault(k, JsonParserBoolean(v))
-        val res = when (tmp) {
+        val res = when (val tmp = getOrDefault(k, JsonParserBoolean(v))) {
             is JsonParserString -> tmp.value.lowercase() == "true"
             is JsonParserBoolean -> tmp.value
             is JsonParserInt -> tmp.value != 0
@@ -198,8 +196,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
 
     public fun getOrDefault(k: String, v: Int): Int {
         setAccessed()
-        val tmp = getOrDefault(k, JsonParserInt(v))
-        val res = when (tmp) {
+        val res = when (val tmp = getOrDefault(k, JsonParserInt(v))) {
             is JsonParserString -> tmp.value.toInt()
             is JsonParserBoolean -> if (tmp.value) 1 else 0
             is JsonParserInt -> tmp.value
@@ -215,8 +212,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
 
     public fun getOrDefault(k: String, v: Long): Long {
         setAccessed()
-        val tmp = getOrDefault(k, JsonParserLong(v))
-        val res = when (tmp) {
+        val res = when (val tmp = getOrDefault(k, JsonParserLong(v))) {
             is JsonParserString -> tmp.value.toLong()
             is JsonParserBoolean -> if (tmp.value) 1 else 0
             is JsonParserInt -> tmp.value.toLong()
@@ -233,8 +229,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
 
     public fun getOrDefault(k: String, v: Double): Double {
         setAccessed()
-        val tmp = getOrDefault(k, JsonParserDouble(v))
-        val res = when (tmp) {
+        val res = when (val tmp = getOrDefault(k, JsonParserDouble(v))) {
             is JsonParserString -> tmp.value.toDouble()
             is JsonParserBoolean -> if (tmp.value) 1.0 else 0.0
             is JsonParserInt -> tmp.value.toDouble()

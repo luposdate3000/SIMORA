@@ -24,4 +24,6 @@ internal class ApplicationFactory_ParkingSensorFeature : IApplicationFeature {
     override fun getName(): String = "Sensor"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_ParkingSensor
     override fun equals(other: Any?): Boolean = other is ApplicationFactory_ParkingSensorFeature
+    override fun hashCode(): Int =getName().hashCode()
+
 }

@@ -24,9 +24,9 @@ internal class Package_ApplicationStack_MergeMessages(
     internal val data: MutableList<IPayload>,
 ) : IPayloadLayer {
     override fun toString(): String = "Package_ApplicationStack_MergeMessages($data)"
-    override fun getSizeInBytes(): Int = data.map { it.getSizeInBytes() }.sum()
+    override fun getSizeInBytes(): Int = data.sumOf { it.getSizeInBytes() }
     override fun getApplicationPayload(): List<IPayload> {
-        var res = mutableListOf<IPayload>()
+        val res = mutableListOf<IPayload>()
         for (d in data) {
             if (d is IPayloadLayer) {
                 res.addAll(d.getApplicationPayload())

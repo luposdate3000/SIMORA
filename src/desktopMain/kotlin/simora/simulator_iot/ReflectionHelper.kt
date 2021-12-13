@@ -19,8 +19,8 @@ package simora.simulator_iot
 internal actual object ReflectionHelper {
     internal actual fun create(name: String): Any {
         return when (name) {
-            "simora.simulator_iot.LoggerMeasure" -> simora.simulator_iot.LoggerMeasure()
-            "simora.simulator_iot.LoggerStdout" -> simora.simulator_iot.LoggerStdout()
+            "simora.simulator_iot.LoggerMeasure" -> LoggerMeasure()
+            "simora.simulator_iot.LoggerStdout" -> LoggerStdout()
             "simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ParkingSensor" -> simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ParkingSensor()
             "simora.simulator_iot.applications.scenario.parking.ApplicationFactory_QuerySender" -> simora.simulator_iot.applications.scenario.parking.ApplicationFactory_QuerySender()
             "simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ReceiveParkingSample" -> simora.simulator_iot.applications.scenario.parking.ApplicationFactory_ReceiveParkingSample()

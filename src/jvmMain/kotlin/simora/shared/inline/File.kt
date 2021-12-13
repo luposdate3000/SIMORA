@@ -24,11 +24,11 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.jvm.JvmField
 
-internal actual class File {
+internal actual class File actual constructor(filename: String) {
     @JvmField
     internal val filename: String
 
-    actual constructor(filename: String) {
+    init {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")
     }
 

@@ -18,7 +18,6 @@ package simora.simulator_iot.applications.scenario.mailinglist
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.plus
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.RandomGenerator
@@ -56,7 +55,7 @@ internal class Application_MailSender(
             .joinToString("")
     }
     override fun shutDown() {}
-    override fun receive(pck: IPayload): IPayload? = pck
+    override fun receive(pck: IPayload): IPayload = pck
     override fun onTimerExpired(clock: Long) {
         if (eventCounter < maxNumber || maxNumber == -1) {
             eventCounter++
@@ -67,10 +66,10 @@ internal class Application_MailSender(
                 allReveivers.size
             }
             val reveiverList = (allReveivers + allReveivers).subList(startIndex, startIndex + count)
-            val text = "${getRandomString(text_length_fixed)}"
-            val names = reveiverList.map { it to "${getRandomString(text_length_dynamic)}" }.toMap()
+            val text = getRandomString(text_length_fixed)
+            val names = reveiverList.associateWith { getRandomString(text_length_dynamic) }
             if (useApplicationSideMulticast) {
-                parent.send(ownAddress, Package_Application_MailGroup("§" + text, names))
+                parent.send(ownAddress, Package_Application_MailGroup("§$text", names))
             } else {
                 for ((address, name) in names) {
                     parent.send(address, Package_Application_Mail(name + text))

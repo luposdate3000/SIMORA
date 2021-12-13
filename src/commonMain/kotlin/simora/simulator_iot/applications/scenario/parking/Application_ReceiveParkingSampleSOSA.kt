@@ -44,7 +44,7 @@ internal class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int)
         )
         SanityCheck.check(
             { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:45"/*SOURCE_FILE_END*/ },
-            { idCacheRequested.size == 0 }
+            { idCacheRequested.isEmpty() }
         )
         SanityCheck.check(
             { /*SOURCE_FILE_START*/"/src/simora/src/commonMain/kotlin/simora/simulator_iot/applications/scenario/parking/Application_ReceiveParkingSampleSOSA.kt:49"/*SOURCE_FILE_END*/ },

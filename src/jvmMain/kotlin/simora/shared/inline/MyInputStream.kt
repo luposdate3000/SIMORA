@@ -19,17 +19,12 @@ package simora.shared.inline
 import simora.shared.IMyInputStream
 import simora.shared.UUID_Counter
 import java.io.InputStream
-import kotlin.jvm.JvmField
 
 internal actual class MyInputStream( private val stream: InputStream) : IMyInputStream {
 
     private val buf8: ByteArray = ByteArray(8)
 
     private val uuid = UUID_Counter.getNextUUID()
-
-    init {
-        // kotlin.io.println("MyInputStream.constructor $this")
-    }
 
     actual override fun read(buf: ByteArray): Int {
         return read(buf, buf.size)
@@ -102,7 +97,6 @@ internal actual class MyInputStream( private val stream: InputStream) : IMyInput
                 return null
             }
         }
-        val res = buffer.decodeToString(0, len)
-        return res
+        return buffer.decodeToString(0, len)
     }
 }

@@ -20,7 +20,7 @@ import simora.shared.IMyInputStream
 import simora.shared.js.JSInputStream
 
 internal actual class MyInputStream : IMyInputStream {
-    val tmp: JSInputStream
+    private val tmp: JSInputStream
 
     internal constructor(filename: String) {
         tmp = JSInputStream(filename)

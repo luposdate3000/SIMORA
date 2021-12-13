@@ -35,7 +35,7 @@ public class ApplicationStack_RPL(
     }
 
     private lateinit var parent: Device
-    public lateinit var routingTable: ApplicationStack_RPL_RoutingTable
+    private lateinit var routingTable: ApplicationStack_RPL_RoutingTable
     private val notInitializedAddress = -1
     private var isRoot: Boolean = false
     private var rank: Int = INFINITE_RANK
@@ -224,7 +224,7 @@ public class ApplicationStack_RPL(
     }
 
     override fun getAllChildApplications(): Set<IApplicationStack_Actuator> {
-        var res = mutableSetOf<IApplicationStack_Actuator>(child)
+        val res = mutableSetOf(child)
         if (child is IApplicationStack_Middleware) {
             res.addAll(child.getAllChildApplications())
         }

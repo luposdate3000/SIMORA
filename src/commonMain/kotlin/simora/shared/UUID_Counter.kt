@@ -16,8 +16,6 @@
  */
 package simora.shared
 
-import kotlin.jvm.JvmField
-
 internal object UUID_Counter {
     private var uuid = 0L
 

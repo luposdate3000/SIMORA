@@ -179,14 +179,16 @@ internal class LoggerMeasure : ILogger {
     override fun onStartUp() { // phase 2
         startUpTimeStamp = Clock.System.now()
         data[StatSimulationStartupDurationReal] = (startUpTimeStamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
-        data[StatNetworkLinkCounter] = simRun.config.devices.map { d -> d.linkManager.getNeighbours().filter { it -> it > d.address }.size }.sum().toDouble()
+        data[StatNetworkLinkCounter] = simRun.config.devices.sumOf { d ->
+            d.linkManager.getNeighbours().filter { it > d.address }.size
+        }.toDouble()
     }
 
     override fun onSteadyState() { // phase 3
     }
 
     override fun onShutDown() { // phase 4
-        var shutDownTimeStampVirtual = startSimulationTimeStamp.plus(simRun.sim.clock, DateTimeUnit.NANOSECOND, TimeZone.UTC)
+        val shutDownTimeStampVirtual = startSimulationTimeStamp.plus(simRun.sim.clock, DateTimeUnit.NANOSECOND, TimeZone.UTC)
         shutDownTimeStamp = Clock.System.now()
         data[StatSimulationDurationReal] = (shutDownTimeStamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
         data[StatSimulationDurationVirtual] = (shutDownTimeStampVirtual - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0

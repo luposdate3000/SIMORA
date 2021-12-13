@@ -21,10 +21,10 @@ import platform.posix.*
 import simora.shared.IMyInputStream
 import simora.shared.IMyOutputStream
 
-internal actual class File {
+internal actual class File actual constructor(filename: String) {
     internal val filename: String
 
-    actual constructor(filename: String) {
+    init {
         this.filename = filename.replace("\\", "/").replace("/./", "/").replace("//", "/")
     }
 
@@ -38,7 +38,7 @@ internal actual class File {
     internal actual inline fun length(): Long {
         val stream = myOpen(filename, "rb")
         fseek(stream, 0, SEEK_END)
-        val size = ftell(stream).toLong()
+        val size = ftell(stream)
         fclose(stream)
         return size
     }
@@ -66,10 +66,10 @@ internal actual class File {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-        if (append) {
-            return MyOutputStream(myOpen(filename, "ab"))
+        return if (append) {
+            MyOutputStream(myOpen(filename, "ab"))
         } else {
-            return MyOutputStream(myOpen(filename, "wb"))
+            MyOutputStream(myOpen(filename, "wb"))
         }
     }
 
@@ -91,10 +91,6 @@ internal actual class File {
         }
     }
     private inline fun myOpen(name: String, mode: String): CPointer<FILE> {
-        val f = fopen(name, mode)
-        if (f == null) {
-            throw Exception("File '$name' error for mode '$mode'")
-        }
-        return f
+        return fopen(name, mode) ?: throw Exception("File '$name' error for mode '$mode'")
     }
 }

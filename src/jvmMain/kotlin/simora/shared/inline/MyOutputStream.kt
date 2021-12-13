@@ -19,7 +19,6 @@ package simora.shared.inline
 import simora.shared.IMyOutputStream
 import simora.shared.SanityCheck
 import java.io.OutputStream
-import kotlin.jvm.JvmField
 
 internal actual class MyOutputStream : IMyOutputStream {
 private    val buffer: ByteArray
@@ -42,7 +41,7 @@ private    var bufferPos = 0
 
     actual override fun close() {
         SanityCheck(
-            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:44"/*SOURCE_FILE_END*/ },
+            { /*SOURCE_FILE_START*/"/src/simora/src/jvmMain/kotlin/simora/shared/inline/MyOutputStream.kt:43"/*SOURCE_FILE_END*/ },
             {
                 try {
                     throw Exception()

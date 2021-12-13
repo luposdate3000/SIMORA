@@ -21,14 +21,14 @@ import simora.shared.inline.File
 
 internal class JsonParser {
     private fun readValueAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
-        var i = readSpacesAt(data, off)
+        val i = readSpacesAt(data, off)
         while (i < data.length) {
-            when (data[i]) {
-                '{' -> return readMapAt(data, i)
-                '[' -> return readArrayAt(data, i)
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+', '.' -> return readNumberAt(data, i)
-                '"' -> return readStringAt(data, i)
-                't', 'f', 'T', 'F' -> return readBooleanAt(data, i)
+            return when (data[i]) {
+                '{' -> readMapAt(data, i)
+                '[' -> readArrayAt(data, i)
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+', '.' -> readNumberAt(data, i)
+                '"' -> readStringAt(data, i)
+                't', 'f', 'T', 'F' -> readBooleanAt(data, i)
                 else -> throw Exception("unknown char at A $i '${data[i]}' $data")
             }
         }
@@ -190,7 +190,7 @@ internal class JsonParser {
         return jsonToString(data, "", printDefaults)
     }
 
-    internal fun jsonToString(data: IJsonParserValue, indention: String, printDefaults: Boolean): String {
+    private fun jsonToString(data: IJsonParserValue, indention: String, printDefaults: Boolean): String {
         val r = when (data) {
             is JsonParserObject -> {
                 if (data.isEmpty()) {
@@ -198,7 +198,7 @@ internal class JsonParser {
                 } else {
                     var res = "{\n"
                     for ((k, v) in data.toList().sortedBy { it.first }) {
-                        res += "$indention    \"$k\": ${jsonToString(v, indention + "    ", printDefaults)},\n"
+                        res += "$indention    \"$k\": ${jsonToString(v, "$indention    ", printDefaults)},\n"
                     }
                     "$res$indention}"
                 }
@@ -209,7 +209,7 @@ internal class JsonParser {
                 } else {
                     var res = "[\n"
                     for (e in data) {
-                        res += "$indention    ${jsonToString(e, indention + "    ", printDefaults)},\n"
+                        res += "$indention    ${jsonToString(e, "$indention    ", printDefaults)},\n"
                     }
                     "$res$indention]"
                 }
@@ -251,16 +251,15 @@ internal class JsonParser {
             }
             else -> throw Exception("unknown JSON element G $data")
         }
-        if (data.isAccessed() || !printDefaults) {
-            return r
+        return if (data.isAccessed() || !printDefaults) {
+            r
         } else {
-            return "$r /* unused */"
+            "$r /* unused */"
         }
     }
 
     internal fun stringToJson(data: String): IJsonParserValue {
-        val res = readValueAt(data, 0).second
-        return res
+        return readValueAt(data, 0).second
     }
 
     internal fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
@@ -280,7 +279,7 @@ internal class JsonParser {
     }
 
     internal fun fileMergeToJson(fileNames: List<String>, autoformat: Boolean = true): JsonParserObject {
-        var res = JsonParserObject(mutableMapOf())
+        val res = JsonParserObject(mutableMapOf())
         for (fileName in fileNames) {
             try {
                 val json = fileToJson(fileName, autoformat) as JsonParserObject

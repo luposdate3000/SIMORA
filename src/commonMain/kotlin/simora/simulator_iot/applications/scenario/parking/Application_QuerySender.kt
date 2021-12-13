@@ -62,18 +62,18 @@ public class Application_QuerySender(
     }
 
     override fun receive(pck: IPayload): IPayload? {
-        if (pck is Package_QueryResponse) {
+        return if (pck is Package_QueryResponse) {
             if (awaitingQueries.contains(pck.queryID)) {
                 awaitingQueries.remove(pck.queryID)
                 File(outputdirectory + "result_${pck.queryID}").withOutputStream { out ->
                     out.write(pck.result)
                 }
-                return null
+                null
             } else {
-                return pck
+                pck
             }
         } else {
-            return pck
+            pck
         }
     }
 

@@ -30,7 +30,7 @@ internal class ApplicationStack_MergeMessages(private val child: IApplicationSta
     override fun startUp(): Unit = child.startUp()
     override fun shutDown(): Unit = child.shutDown()
     override fun getAllChildApplications(): Set<IApplicationStack_Actuator> {
-        var res = mutableSetOf<IApplicationStack_Actuator>()
+        val res = mutableSetOf<IApplicationStack_Actuator>()
         res.add(child)
         val c = child
         if (c is IApplicationStack_Middleware) {

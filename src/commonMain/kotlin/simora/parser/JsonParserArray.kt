@@ -36,8 +36,7 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         var k = 0
         while (k < array.size && k < other.array.size) {
             val other_v = other.array[k]
-            val my_v = array[k]
-            when (my_v) {
+            when (val my_v = array[k]) {
                 is JsonParserObject -> my_v.mergeWith(other_v as JsonParserObject)
                 is JsonParserArray -> my_v.mergeWith(other_v as JsonParserArray)
                 is JsonParserInt, is JsonParserLong, is JsonParserBoolean, is JsonParserDouble, is JsonParserString -> array[k] = other_v

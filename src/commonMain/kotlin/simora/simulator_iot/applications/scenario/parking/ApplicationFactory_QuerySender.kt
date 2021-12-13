@@ -40,7 +40,7 @@ internal class ApplicationFactory_QuerySender : IApplication_Factory {
                         it.getOrDefault("maxNumberOfQueries", 1),
                         it.getOrDefault("query", ""),
                         ownAddress,
-                        outputDirectory + "/",
+                        "$outputDirectory/",
                     )
                 )
             }
