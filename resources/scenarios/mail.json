@@ -8,7 +8,8 @@
         "CentralTower": {
             "performance": 100.0,
             "supportedLinkTypes": [
-                "WIRE",
+ "WPAN",
+                "WLAN",
             ],
             "applications": {
                 "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender": {
@@ -25,26 +26,31 @@
         "MeshHop": {
             "performance": 100.0,
             "supportedLinkTypes": [
-                "WIRE",
+ "WLAN",
             ],
         },
         "EdgeDevice": {
             "performance": 100.0,
             "supportedLinkTypes": [
-                "WIRE",
+"WPAN",
+                "WLAN",
             ],
         },
         "SensorDevice": {
             "performance": 100.0,
             "supportedLinkTypes": [
-                "WIRE",
+ "WPAN",
             ],
         },
     },
-    "linkType": {
-        "WIRE": {
-            "dataRateInKbps": 50000,
-            "rangeInMeters": 40000,
+"linkType": {
+        "WLAN": {
+            "dataRateInKbps": 25000,
+            "rangeInMeters": 150,
+        },
+        "WPAN": {
+            "dataRateInKbps": 25000,
+            "rangeInMeters": 60,
         },
     },
     "logging": {
