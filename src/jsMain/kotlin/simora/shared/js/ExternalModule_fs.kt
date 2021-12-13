@@ -44,4 +44,3 @@ public object ExternalModule_fs {
         return JSOutputStream(filename, append)
     }
 }
-

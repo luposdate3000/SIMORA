@@ -82,7 +82,7 @@ public class JSOutputStream(private val filename: String, append: Boolean) {
     public fun print(x: Int) {
         print("$x")
     }
-public fun print(x: Double) {
+    public fun print(x: Double) {
         print("$x")
     }
 

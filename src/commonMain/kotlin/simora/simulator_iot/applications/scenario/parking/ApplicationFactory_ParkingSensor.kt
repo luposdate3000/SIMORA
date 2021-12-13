@@ -25,7 +25,6 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
-
 public class ApplicationFactory_ParkingSensor : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
         features.add(ApplicationFactory_ParkingSensorFeature())

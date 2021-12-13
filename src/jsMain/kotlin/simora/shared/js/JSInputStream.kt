@@ -57,7 +57,7 @@ public class JSInputStream {
 
     public fun close() {
     }
-public fun readLine(): String? {
+    public fun readLine(): String? {
 // TODO this may break on utf-8
         val buf = mutableListOf<Byte>()
         try {
@@ -77,4 +77,3 @@ public fun readLine(): String? {
         return buf.toByteArray().decodeToString()
     }
 }
-

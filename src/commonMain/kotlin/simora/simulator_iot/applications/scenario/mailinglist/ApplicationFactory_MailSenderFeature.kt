@@ -17,13 +17,8 @@
 
 package simora.simulator_iot.applications.scenario.mailinglist
 
-import simora.parser.IJsonParserValue
-import simora.parser.JsonParserObject
-import simora.simulator_iot.ILogger
-import simora.simulator_iot.RandomGenerator
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplication_Factory
 
 public class ApplicationFactory_MailSenderFeature : IApplicationFeature {
     override fun getName(): String = "MailSender"
