@@ -83,7 +83,7 @@ internal class ApplicationStack_AllShortestPath(
     private fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
             val size = config.devices.size
-            val matrix = DoubleArray(size * size) { Double.MAX_VALUE }
+            val matrix = DoubleArray(size * size) { -1.0 }
             val matrixNext = IntArray(size * size) { -1 }
 // matrix self links
             for (i in 0 until size) {
@@ -97,28 +97,28 @@ internal class ApplicationStack_AllShortestPath(
                 for ((addrDest, _) in device.linkManager.links) {
                     val idx = addrDest * size + addrSrc
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001
-                    if (cost < matrix[idx]) {
+                    if (cost < matrix[idx] || matrix[idx] <0.0) {
                         matrix[idx] = cost
                         matrixNext[idx] = addrDest
                     }
                 }
             }
 // floydWarshal
-            for (k in 0 until size) {
-                for (i in 0 until size) {
-                    for (j in 0 until size) {
-                        val idx = j * size + i
-                        val idx1 = k * size + i
-                        val idx2 = j * size + i
-                        if (matrix[idx1] == Double.MAX_VALUE || matrix[idx2] == Double.MAX_VALUE) {
-                            continue
-                        }
-                        if (matrix[idx] > matrix[idx1] + matrix[idx2]) {
-                            matrix[idx] = matrix[idx1] + matrix[idx2]
-                            matrixNext[idx] = matrixNext[idx1]
+                for (k in 0 until size) {
+                    for (i in 0 until size) {
+                        for (j in 0 until size) {
+                            val idx = j * size + i
+                            val idx1 = k * size + i
+                            val idx2 = j * size + k
+                            if (matrix[idx] <0.0) {
+                                matrix[idx] = matrix[idx1] + matrix[idx2]
+                                matrixNext[idx] = matrixNext[idx1]
+                            } else if (matrix[idx] > matrix[idx1] + matrix[idx2]) {
+                                matrix[idx] = matrix[idx1] + matrix[idx2]
+                                matrixNext[idx] = matrixNext[idx1]
+                            }
                         }
                     }
-                }
             }
             config.routingHelper = matrixNext
         }
@@ -132,15 +132,23 @@ internal class ApplicationStack_AllShortestPath(
         routingTable = IntArray(size) { helper[it * size + address] }
         routingTableFeatureHops = Array(config.features.size) { feature ->
             val devicesWithFeature = config.getAllDevicesForFeature(feature).map { it.address }
-            IntArray(size) {
-                if (devicesWithFeature.contains(it)) {
-                    var next = helper[it * size + address]
-                    while (next != it && !devicesWithFeature.contains(next)) {
-                        next = helper[it * size + next]
+            if (devicesWithFeature.size == size) {
+                routingTable
+            } else {
+                IntArray(size) {
+                    if (devicesWithFeature.contains(it)) {
+                        var next = helper[it * size + address]
+                        while (next != -1 && next != it && !devicesWithFeature.contains(next)) {
+                            next = helper[it * size + next]
+                        }
+                        if (next == -1) {
+                            it
+                        } else {
+                            next
+                        }
+                    } else {
+                        -1
                     }
-                    next
-                } else {
-                    -1
                 }
             }
         }

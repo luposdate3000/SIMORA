@@ -27,7 +27,11 @@ public class LinkManager(
     internal var links: MutableMap<Int, Link> = mutableMapOf()
 
     internal fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
-        val link = links[destinationAddress]!!
+        val l = links[destinationAddress]
+        if (l == null) {
+            println("getTransmissionDelay .. $destinationAddress $links")
+        }
+        val link = l!!
         val kiloBits = numberOfBytesToSend.toDouble() / 125
         val seconds = kiloBits / link.dataRateInKbps.toDouble()
         return TimeUtils.toNanoSec(seconds)

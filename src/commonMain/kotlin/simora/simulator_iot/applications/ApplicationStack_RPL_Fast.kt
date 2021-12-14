@@ -83,10 +83,10 @@ internal class ApplicationStack_RPL_Fast(
     private fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
             val size = config.devices.size
-            val matrix = DoubleArray(size) { Double.MAX_VALUE }
-            val matrixNext = IntArray(size) { -1 }
-            matrix[config.rootRouterAddress] = 0.0
-            matrixNext[config.rootRouterAddress] = config.rootRouterAddress
+            val tinyMatrix = DoubleArray(size) { Double.MAX_VALUE }
+            val tinyMatrixNext = IntArray(size) { -1 }
+            tinyMatrix[config.rootRouterAddress] = 0.0
+            tinyMatrixNext[config.rootRouterAddress] = config.rootRouterAddress
 // dijkstra
             val queue = IntArray(size) { -1 }
             queue[0] = config.rootRouterAddress
@@ -94,12 +94,12 @@ internal class ApplicationStack_RPL_Fast(
             for (i in 0 until size) {
                 var queueIdx = 0
                 var addrSrc = queue[queueIdx]
-                var mincost = matrix[addrSrc]
+                var mincost = tinyMatrix[addrSrc]
                 for (j in 0 until queueSize) {
-                    if (mincost > matrix[queue[j]]) {
+                    if (mincost > tinyMatrix[queue[j]]) {
                         queueIdx = j
                         addrSrc = queue[queueIdx]
-                        mincost = matrix[addrSrc]
+                        mincost = tinyMatrix[addrSrc]
                     }
                 }
                 queueSize--
@@ -107,17 +107,17 @@ internal class ApplicationStack_RPL_Fast(
                 queue[queueSize] = -1
                 val device = config.devices[addrSrc]
                 for ((addrDest, _) in device.linkManager.links) {
-                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + matrix[addrSrc]
-                    if (cost < matrix[addrDest]) {
-                        matrix[addrDest] = cost
-                        matrixNext[addrDest] = addrSrc
+                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + tinyMatrix[addrSrc]
+                    if (cost < tinyMatrix[addrDest]) {
+                        tinyMatrix[addrDest] = cost
+                        tinyMatrixNext[addrDest] = addrSrc
                         if (!queue.contains(addrDest)) {
                             queue[queueSize++] = addrDest
                         }
                     }
                 }
             }
-            config.routingHelper = matrixNext
+            config.routingHelper = tinyMatrixNext
         }
     }
 
