@@ -21,12 +21,11 @@ import simora.parser.IJsonParserValue
 import simora.parser.JsonParser
 import simora.parser.JsonParserObject
 import simora.shared.inline.File
-import simora.simulator_core.Simulation
+import simora.simulator_core.Entity
+import simora.simulator_core.Event
+import simora.simulator_core.PriorityQueue
 import simora.simulator_iot.config.Configuration
-
 public class SimulationRun {
-
-    public lateinit var sim: Simulation
 
     internal val randGenerator = RandomGenerator()
     public val config: Configuration = Configuration(this)
@@ -54,14 +53,101 @@ public class SimulationRun {
         modifyJson(json)
         return parseConfig(json, fileName, autocorrect)
     }
-
+    private lateinit var entities: List<Entity>
     public fun startSimulation(configuration: Configuration) {
-        sim = Simulation(configuration.getEntities())
-        sim.logger = logger
-        sim.maxClock = if (simMaxClock == notInitializedClock) sim.maxClock else simMaxClock
-        sim.steadyClock = if (simSteadyClock == notInitializedClock) sim.steadyClock else simSteadyClock
+        entities = configuration.getEntities()
+        maxClock = if (simMaxClock == notInitializedClock) maxClock else simMaxClock
+        steadyClock = if (simSteadyClock == notInitializedClock) steadyClock else simSteadyClock
         logger.onStartSimulation()
-        sim.startSimulation()
+        startSimulation()
         logger.onStopSimulation()
+    }
+    private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
+
+    public var maxClock: Long = Long.MAX_VALUE
+
+    public var steadyClock: Long = Long.MAX_VALUE
+
+    public var clock: Long = 0
+
+    private var addedEventCounter: Int = 0
+
+    internal fun startSimulation() {
+        startUp()
+        run()
+        shutDown()
+    }
+
+    private fun startUpAllEntities() {
+        for (entity: Entity in entities) {
+            entity.simulation = this
+            entity.onStartUp()
+        }
+    }
+
+    public fun run() {
+        var isFinished = false
+        while (!isFinished)
+            isFinished = runNextTimeStep()
+    }
+
+    public fun runNextTimeStep(): Boolean {
+        if (!futureEvents.hasNext()) {
+            return true
+        }
+
+        if (isSteadyStateReached()) {
+            transferToSteadyState()
+        }
+
+        if (isMaxClockReached()) {
+            return true
+        }
+
+        processEvent()
+        return false
+    }
+    private fun processEvent() {
+        val nextEvent = futureEvents.dequeue()
+        clock = nextEvent.occurrenceTime
+        val entity = nextEvent.destination
+        entity.processIncomingEvent(nextEvent)
+    }
+
+    private fun transferToSteadyState() {
+        clock = steadyClock
+        notifyAboutSteadyState()
+    }
+
+    private fun getTimeOfNextTimeStep() = futureEvents.peek().occurrenceTime
+
+    private fun isSteadyStateReached() = getTimeOfNextTimeStep() > steadyClock
+
+    private fun isMaxClockReached() = getTimeOfNextTimeStep() > maxClock
+
+    private fun notifyAboutSteadyState() {
+        for (entity in entities) {
+            entity.onSteadyState()
+        }
+        logger.onSteadyState() // call this last due to time measurement
+    }
+
+    internal fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
+        addedEventCounter++
+        val occurringTime = clock + delay
+        val ev = Event(addedEventCounter, occurringTime, src, dest, data)
+        futureEvents.enqueue(ev)
+    }
+
+    public fun startUp() {
+        startUpAllEntities()
+        logger.onStartUp() // call this last due to time measurement
+    }
+
+    public fun shutDown() {
+        logger.onShutDown() // call this first due to time measurement
+        for (ent: Entity in entities) {
+            ent.onShutDown()
+        }
     }
 }

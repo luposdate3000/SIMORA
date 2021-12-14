@@ -188,7 +188,7 @@ internal class LoggerMeasure : ILogger {
     }
 
     override fun onShutDown() { // phase 4
-        val shutDownTimeStampVirtual = startSimulationTimeStamp.plus(simRun.sim.clock, DateTimeUnit.NANOSECOND, TimeZone.UTC)
+        val shutDownTimeStampVirtual = startSimulationTimeStamp.plus(simRun.clock, DateTimeUnit.NANOSECOND, TimeZone.UTC)
         shutDownTimeStamp = Clock.System.now()
         data[StatSimulationDurationReal] = (shutDownTimeStamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
         data[StatSimulationDurationVirtual] = (shutDownTimeStampVirtual - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0

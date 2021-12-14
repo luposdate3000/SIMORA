@@ -54,7 +54,7 @@ internal class MultipleSimulationRuns(
             }
         }
         if (measurements.size > 0) {
-val size=measurements[0].getDataAggregated().size
+            val size = measurements[0].getDataAggregated().size
             val firstLogger = measurements.first()
             val dataAvg = DoubleArray(size)
             val dataDev = DoubleArray(size)

@@ -24,40 +24,40 @@ internal class LoggerStdout : ILogger {
     }
 
     override fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long) {
-        println("${simRun.sim.clock} onSendNetworkPackage $src $dest $hop $delay $pck")
+        println("${simRun.clock} onSendNetworkPackage $src $dest $hop $delay $pck")
     }
 
     override fun onReceiveNetworkPackage(address: Int, pck: IPayload) {
-        println("${simRun.sim.clock} onReceiveNetworkPackage $address $pck")
+        println("${simRun.clock} onReceiveNetworkPackage $address $pck")
     }
 
     override fun onSendPackage(src: Int, dest: Int, pck: IPayload) {
-        println("${simRun.sim.clock} onSendPackage $src $dest $pck")
+        println("${simRun.clock} onSendPackage $src $dest $pck")
     }
 
     override fun onReceivePackage(address: Int, pck: IPayload) {
-        println("${simRun.sim.clock} onReceivePackage $address $pck")
+        println("${simRun.clock} onReceivePackage $address $pck")
     }
 
     override fun addConnectionTable(src: Int, dest: Int, hop: Int) {}
     override fun onStartUp() {
-        println("${simRun.sim.clock} onStartUp")
+        println("${simRun.clock} onStartUp")
     }
 
     override fun onShutDown() {
-        println("${simRun.sim.clock} onShutDown")
+        println("${simRun.clock} onShutDown")
     }
 
     override fun onSteadyState() {
-        println("${simRun.sim.clock} onSteadyState")
+        println("${simRun.clock} onSteadyState")
     }
 
     override fun onStartSimulation() {
-        println("${simRun.sim.clock} onStartSimulation")
+        println("${simRun.clock} onStartSimulation")
     }
 
     override fun onStopSimulation() {
-        println("${simRun.sim.clock} onStopSimulation")
+        println("${simRun.clock} onStopSimulation")
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {

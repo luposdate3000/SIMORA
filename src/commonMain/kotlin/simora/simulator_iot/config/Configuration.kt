@@ -325,7 +325,7 @@ public class Configuration(private val simRun: SimulationRun) {
                     val count = rand.getOrDefault("count", 1)
                     val deviceTypeName = rand.getOrDefault("deviceType", "")
                     var firstDevice: Device? = parent
-                    var lastDevice: Device?=parent
+                    var lastDevice: Device? = parent
                     for (i in 0 until count) {
                         val alpha = 2 * PI * i.toDouble() / count.toDouble()
                         rand["latitude"] = posLat + sin(alpha) * radius
