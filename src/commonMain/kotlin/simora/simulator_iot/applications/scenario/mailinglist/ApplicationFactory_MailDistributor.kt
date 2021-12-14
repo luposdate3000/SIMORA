@@ -26,11 +26,7 @@ import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 
 internal class ApplicationFactory_MailDistributor : IApplication_Factory {
-    private var applicationFactory_MailDistributorFeature = ApplicationFactory_MailDistributorFeature()
-    private var featureID = -1
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
-        features.add(applicationFactory_MailDistributorFeature)
-        featureID = features.indexOf(applicationFactory_MailDistributorFeature)
     }
 
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
@@ -38,7 +34,7 @@ internal class ApplicationFactory_MailDistributor : IApplication_Factory {
         if (json.getOrDefault("enabled", true)) {
             return listOf(
                 Application_MailDistributor(
-                    featureID
+                    0
                 )
             )
         }

@@ -27,7 +27,6 @@ import simora.simulator_iot.applications.IApplication_Factory
 
 internal class ApplicationFactory_MailSender : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
-        features.add(ApplicationFactory_MailSenderFeature())
     }
 
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
