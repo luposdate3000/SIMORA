@@ -17,11 +17,8 @@
 package simora.shared.js
 internal class JSInputStream internal constructor(filename: String) {
     private var pos = 0
-    private lateinit var buffer: ByteArray
+    private val buffer: ByteArray=ExternalModule_fs.inmemoryFs[filename]!!
 
-    init {
-        buffer = ExternalModule_fs.inmemoryFs[filename]!!
-    }
 
     internal fun readByte(): Byte {
         return buffer[pos++]

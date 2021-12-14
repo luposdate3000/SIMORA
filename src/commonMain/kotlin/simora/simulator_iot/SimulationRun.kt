@@ -36,7 +36,7 @@ public class SimulationRun {
     internal val randGenerator = RandomGenerator()
     internal val logger: Loggers = Loggers(mutableListOf())
     private var addedEventCounter: Int = 0
-    private lateinit var entities: List<Entity>
+    public lateinit var entities: List<Entity>
     private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
 
     public fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
