@@ -15,8 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot
-
+package simora.simulator_iot.applications.scenario.parking
 import simora.shared.UUID_Counter
 
 public class Package_QueryResponse(

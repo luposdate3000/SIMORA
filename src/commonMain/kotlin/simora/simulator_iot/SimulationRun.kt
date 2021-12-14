@@ -26,17 +26,18 @@ import simora.simulator_core.Event
 import simora.simulator_core.PriorityQueue
 import simora.simulator_iot.config.Configuration
 public class SimulationRun {
-
-    internal val randGenerator = RandomGenerator()
     public val config: Configuration = Configuration(this)
-
-    internal val logger: Loggers = Loggers(mutableListOf())
-
     public var notInitializedClock: Long = -1
-
     public var simSteadyClock: Long = notInitializedClock
-
     public var simMaxClock: Long = notInitializedClock
+    public var maxClock: Long = Long.MAX_VALUE
+    public var steadyClock: Long = Long.MAX_VALUE
+    public var clock: Long = 0
+    internal val randGenerator = RandomGenerator()
+    internal val logger: Loggers = Loggers(mutableListOf())
+    private var addedEventCounter: Int = 0
+    private lateinit var entities: List<Entity>
+    private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
 
     public fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
         return parseConfig(json as JsonParserObject, fileName, autocorrect)
@@ -53,99 +54,54 @@ public class SimulationRun {
         modifyJson(json)
         return parseConfig(json, fileName, autocorrect)
     }
-    private lateinit var entities: List<Entity>
     public fun startSimulation(configuration: Configuration) {
         entities = configuration.getEntities()
         maxClock = if (simMaxClock == notInitializedClock) maxClock else simMaxClock
         steadyClock = if (simSteadyClock == notInitializedClock) steadyClock else simSteadyClock
         logger.onStartSimulation()
-        startSimulation()
-        logger.onStopSimulation()
-    }
-    private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
-
-    public var maxClock: Long = Long.MAX_VALUE
-
-    public var steadyClock: Long = Long.MAX_VALUE
-
-    public var clock: Long = 0
-
-    private var addedEventCounter: Int = 0
-
-    internal fun startSimulation() {
         startUp()
         run()
         shutDown()
-    }
-
-    private fun startUpAllEntities() {
-        for (entity: Entity in entities) {
-            entity.simulation = this
-            entity.onStartUp()
-        }
+        logger.onStopSimulation()
     }
 
     public fun run() {
-        var isFinished = false
-        while (!isFinished)
-            isFinished = runNextTimeStep()
-    }
-
-    public fun runNextTimeStep(): Boolean {
-        if (!futureEvents.hasNext()) {
-            return true
+        while (true) {
+            if (!futureEvents.hasNext()) {
+                break
+            }
+            if (futureEvents.peek().occurrenceTime > steadyClock) {
+                clock = steadyClock
+                for (entity in entities) {
+                    entity.onSteadyState()
+                }
+                logger.onSteadyState() // call this last due to time measurement
+            }
+            if (futureEvents.peek().occurrenceTime > maxClock) {
+                break
+            }
+            val nextEvent = futureEvents.dequeue()
+            clock = nextEvent.occurrenceTime
+            val entity = nextEvent.destination
+            entity.processIncomingEvent(nextEvent)
         }
-
-        if (isSteadyStateReached()) {
-            transferToSteadyState()
-        }
-
-        if (isMaxClockReached()) {
-            return true
-        }
-
-        processEvent()
-        return false
-    }
-    private fun processEvent() {
-        val nextEvent = futureEvents.dequeue()
-        clock = nextEvent.occurrenceTime
-        val entity = nextEvent.destination
-        entity.processIncomingEvent(nextEvent)
-    }
-
-    private fun transferToSteadyState() {
-        clock = steadyClock
-        notifyAboutSteadyState()
-    }
-
-    private fun getTimeOfNextTimeStep() = futureEvents.peek().occurrenceTime
-
-    private fun isSteadyStateReached() = getTimeOfNextTimeStep() > steadyClock
-
-    private fun isMaxClockReached() = getTimeOfNextTimeStep() > maxClock
-
-    private fun notifyAboutSteadyState() {
-        for (entity in entities) {
-            entity.onSteadyState()
-        }
-        logger.onSteadyState() // call this last due to time measurement
     }
 
     internal fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
         addedEventCounter++
-        val occurringTime = clock + delay
-        val ev = Event(addedEventCounter, occurringTime, src, dest, data)
-        futureEvents.enqueue(ev)
+        futureEvents.enqueue(Event(addedEventCounter, clock + delay, src, dest, data))
     }
 
     public fun startUp() {
-        startUpAllEntities()
-        logger.onStartUp() // call this last due to time measurement
+        for (entity: Entity in entities) {
+            entity.simulation = this
+            entity.onStartUp()
+        }
+        logger.onStartUp()
     }
 
     public fun shutDown() {
-        logger.onShutDown() // call this first due to time measurement
+        logger.onShutDown()
         for (ent: Entity in entities) {
             ent.onShutDown()
         }

@@ -17,7 +17,6 @@
 package simora.simulator_iot.applications.scenario.parking
 
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.Package_Query
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 

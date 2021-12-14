@@ -15,10 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_core
+package simora.simulator_iot.applications.scenario.parking
 
-internal class LoggerCoreNone : ILoggerCore {
-    override fun onStartUp() {}
-    override fun onShutDown() {}
-    override fun onSteadyState() {}
+import simora.simulator_iot.IPayload
+
+public interface IPackage_Database : IPayload {
+    public fun getPackageID(): Long // for message tracing only, this does not affect the simulated data volume
 }

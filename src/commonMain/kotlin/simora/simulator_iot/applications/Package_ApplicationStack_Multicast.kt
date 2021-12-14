@@ -19,14 +19,16 @@ package simora.simulator_iot.applications
 
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.IPayloadBinary
+import simora.simulator_iot.IPayloadLayer
 
 internal class Package_ApplicationStack_Multicast(
     internal var targets: MutableList<Int>,
     internal val pck: IPayloadBinary,
-) : IPayload {
+) : IPayloadLayer {
     override fun getSizeInBytes(): Int = pck.getSizeInBytes() + 4 * targets.size + 4
     override fun getTopic(): String = pck.getTopic()
     override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes()
         .contentEquals(other.pck.getBytes())
     override fun hashCode(): Int = pck.getBytes().hashCode()
+    override fun getApplicationPayload(): List<IPayload> = List(targets.size) { pck }
 }

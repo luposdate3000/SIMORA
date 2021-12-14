@@ -17,9 +17,9 @@
 
 package simora.simulator_iot.applications
 
-import simora.simulator_iot.IPayload
+import simora.simulator_iot.IPayloadRouting
 
-internal class Package_ApplicationStack_RPL_DIO(internal val rank: Int) : IPayload {
+internal class Package_ApplicationStack_RPL_DIO(internal val rank: Int) : IPayloadRouting {
     override fun getSizeInBytes(): Int {
         return 2
     }
