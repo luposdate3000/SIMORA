@@ -95,20 +95,19 @@ internal class ApplicationStack_RPL_Fast(
                 var queueIdx = 0
                 var addrSrc = queue[queueIdx]
                 var cost = matrix[addrSrc]
-                queueIdx++
-                while (queueIdx <queueSize) {
-                    if (cost> matrix[queue[queueIdx]]) {
+                for (i in 0 until queueSize) {
+                    if (cost> matrix[queue[i]]) {
+                        queueIdx = i
                         addrSrc = queue[queueIdx]
                         cost = matrix[addrSrc]
                     }
-                    queueIdx++
                 }
                 queueSize--
                 queue[queueIdx] = queue[queueSize]
                 queue[queueSize] = -1
                 val device = config.devices[addrSrc]
                 for ((addrDest, link) in device.linkManager.links) {
-                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001
+                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + matrix[addrSrc]
                     if (cost <matrix[addrDest]) {
                         matrix[addrDest] = cost
                         matrixNext[addrDest] = addrSrc
@@ -142,37 +141,44 @@ internal class ApplicationStack_RPL_Fast(
                         node
                     }
                     var featureNodeCpy = IntArray(config.features.size) { featureNode[it] }
-                    for (i in 0 until config.features.size) {
-                        if (featureNodeCpy[i] == address && featuredDevices[i].contains(hop)) {
-                            featureNodeCpy[i] = i
+                    for (j in 0 until config.features.size) {
+                        if (featureNodeCpy[j] == -1 && i != address && featuredDevices[j].contains(i)) {
+                            featureNodeCpy[j] = i
                         }
                     }
-                    treeDown(i, newNode, featureNodeCpy)
+                    if (i != hop) {
+                        treeDown(i, newNode, featureNodeCpy)
+                    }
                 }
             }
         }
-        treeDown(address, address, IntArray(config.features.size) { address })
+        treeDown(address, address, IntArray(config.features.size) { -1 })
         var p = helper[address]
         var treeUp = IntArray(config.features.size) { -1 }
-        while (p != config.rootRouterAddress) {
+        while (true) {
             for (i in 0 until config.features.size) {
-                routingTableFeatureHops[i][p] = treeUp[i]
-                if (treeUp[i] == address && featuredDevices[i].contains(p)) {
+                if (treeUp[i] == -1 && p != address && featuredDevices[i].contains(p)) {
                     treeUp[i] = p
                 }
+                routingTableFeatureHops[i][p] = treeUp[i]
+            }
+            if (p == config.rootRouterAddress) {
+                break
             }
             p = helper[p]
         }
-
         routingTable[address] = address
         for (feature in 0 until config.features.size) {
             for (i in 0 until size) {
-                if (i != address) {
-                    if (routingTableFeatureHops[feature][i] == address) {
-                        routingTableFeatureHops[feature][i] = treeUp[feature]
-                    }
+                if (routingTableFeatureHops[feature][i] == address) {
+                    routingTableFeatureHops[feature][i] = treeUp[feature]
                 }
             }
+        }
+        println("matrix[$address][-] .. ${routingTable.toList()}")
+        for (f in 0 until config.features.size) {
+            println("featuredDevices[$f] .. ${featuredDevices[f].toList()}")
+            println("matrix[$address][$f] .. ${routingTableFeatureHops[f].toList()}")
         }
         child.startUp()
     }
