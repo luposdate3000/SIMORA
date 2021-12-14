@@ -42,7 +42,12 @@ public class LinkManager(
     internal fun hasLink(otherDevice: Device): Boolean = getLink(otherDevice) != null
 
     public fun getNeighbours(): MutableSet<Int> = links.keys
-internal fun addLink(addr:Int,l:Link){
-links[addr]=l
-}
+    internal fun addLink(
+        addr: Int,
+        distanceInMeters: Double,
+        linkTypeIndex: Int,
+        dataRateInKbps: Int,
+    ) {
+        links[addr] = Link(distanceInMeters, linkTypeIndex, dataRateInKbps)
+    }
 }

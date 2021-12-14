@@ -176,7 +176,6 @@ public class ApplicationStack_RPL(
         return routingTable.getNextFeatureHops(destinationAddresses)
     }
 
-
     internal companion object {
 
         // ApplicationStack_RPL Constants (see section 17. of RFC 6550)

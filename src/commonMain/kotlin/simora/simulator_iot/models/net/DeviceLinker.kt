@@ -21,7 +21,6 @@ import simora.simulator_iot.config.LinkType
 import simora.simulator_iot.models.Device
 
 internal class DeviceLinker {
-    private var numberOfLinks = 0
     private var sortedLinkTypes: Array<LinkType> = emptyArray()
 
     private fun getLinkByName(name: String): LinkType = sortedLinkTypes.first { it.name == name }
@@ -50,7 +49,8 @@ internal class DeviceLinker {
                 for (i2 in twoIndices) {
                     if (i == i2) {
                         if (distance <= sortedLinkTypes[i].rangeInMeters) {
-                            link(one, two, Link(distance, i, sortedLinkTypes[i].dataRateInKbps))
+                            one.linkManager.addLink(two.address, distance, i, sortedLinkTypes[i].dataRateInKbps)
+                            two.linkManager.addLink(one.address, distance, i, sortedLinkTypes[i].dataRateInKbps)
                             return
                         }
                     }
@@ -63,12 +63,7 @@ internal class DeviceLinker {
 
     internal fun link(one: Device, two: Device, dataRate: Int) {
         val distance = getDistanceInMeters(one, two)
-        link(one, two, Link(distance, -1, dataRate))
-    }
-
-    private fun link(one: Device, two: Device, link: Link) {
-        one.linkManager.addLink(two.address , link)
-        two.linkManager.addLink(one.address, link)
-        numberOfLinks++
+        one.linkManager.addLink(two.address, distance, -1, dataRate)
+        two.linkManager.addLink(one.address, distance, -1, dataRate)
     }
 }
