@@ -94,19 +94,19 @@ internal class ApplicationStack_RPL_Fast(
             for (i in 0 until size) {
                 var queueIdx = 0
                 var addrSrc = queue[queueIdx]
-                var cost = matrix[addrSrc]
-                for (i in 0 until queueSize) {
-                    if (cost> matrix[queue[i]]) {
-                        queueIdx = i
+                var mincost = matrix[addrSrc]
+                for (j in 0 until queueSize) {
+                    if (mincost> matrix[queue[j]]) {
+                        queueIdx = j
                         addrSrc = queue[queueIdx]
-                        cost = matrix[addrSrc]
+                        mincost = matrix[addrSrc]
                     }
                 }
                 queueSize--
                 queue[queueIdx] = queue[queueSize]
                 queue[queueSize] = -1
                 val device = config.devices[addrSrc]
-                for ((addrDest, link) in device.linkManager.links) {
+                for ((addrDest, _) in device.linkManager.links) {
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + matrix[addrSrc]
                     if (cost <matrix[addrDest]) {
                         matrix[addrDest] = cost
@@ -127,7 +127,7 @@ internal class ApplicationStack_RPL_Fast(
         val helper = config.routingHelper as IntArray
         routingTable = IntArray(size) { helper[address] }
         val featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address } }
-        routingTableFeatureHops = Array(config.features.size) { feature -> IntArray(size) { address } }
+        routingTableFeatureHops = Array(config.features.size) {  IntArray(size) { address } }
         fun treeDown(hop: Int, node: Int, featureNode: IntArray) {
             routingTable[hop] = node
             for (i in 0 until config.features.size) {
@@ -174,11 +174,6 @@ internal class ApplicationStack_RPL_Fast(
                     routingTableFeatureHops[feature][i] = treeUp[feature]
                 }
             }
-        }
-        println("matrix[$address][-] .. ${routingTable.toList()}")
-        for (f in 0 until config.features.size) {
-            println("featuredDevices[$f] .. ${featuredDevices[f].toList()}")
-            println("matrix[$address][$f] .. ${routingTableFeatureHops[f].toList()}")
         }
         child.startUp()
     }

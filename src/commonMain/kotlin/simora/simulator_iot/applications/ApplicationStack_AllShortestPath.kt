@@ -94,7 +94,7 @@ internal class ApplicationStack_AllShortestPath(
 // matrix direct connections
             for (device in config.devices) {
                 val addrSrc = device.address
-                for ((addrDest, link) in device.linkManager.links) {
+                for ((addrDest, _) in device.linkManager.links) {
                     val idx = addrDest * size + addrSrc
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001
                     if (cost <matrix[idx]) {

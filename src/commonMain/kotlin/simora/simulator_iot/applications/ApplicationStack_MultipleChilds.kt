@@ -61,7 +61,7 @@ internal class ApplicationStack_MultipleChilds(
 
     override fun receive(pck: IPayload): IPayload? {
         for (child in childs) {
-            val pp = child.receive(pck) ?: return null
+            child.receive(pck) ?: return null
         }
         return pck
     }

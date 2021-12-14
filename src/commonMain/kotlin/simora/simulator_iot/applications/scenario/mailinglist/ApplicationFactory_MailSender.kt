@@ -33,7 +33,7 @@ internal class ApplicationFactory_MailSender : IApplication_Factory {
     override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserObject
         var mailReceiverFactory: ApplicationFactory_MailReceiver? = null
-        for ((n, f) in factories) {
+        for ((_, f) in factories) {
             if (f is ApplicationFactory_MailReceiver) {
                 mailReceiverFactory = f
                 break
