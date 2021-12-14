@@ -55,6 +55,7 @@ public class Configuration(private val simRun: SimulationRun) {
     internal companion object {
         internal const val defaultOutputDirectory: String = "simulator_output/"
     }
+
     internal var routingHelper: Any? = null
     private val factories = mutableMapOf<String, IApplication_Factory>()
     internal val features: MutableList<IApplicationFeature> = mutableListOf(RoutingFeature())

@@ -47,6 +47,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
             }
         }
     }
+
     override operator fun iterator(): Iterator<Pair<String, IJsonParserValue>> {
         return object : Iterator<Pair<String, IJsonParserValue>> {
             var iter = map.iterator()
@@ -95,6 +96,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         tmp.setAccessed()
         map[k] = tmp
     }
+
     internal operator fun set(k: String, v: Long) {
         setAccessed()
         val tmp = JsonParserLong(v)
@@ -160,6 +162,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         res.setAccessed()
         return res
     }
+
     public fun getOrDefault(k: String, v: String): String {
         setAccessed()
         val res = when (val tmp = getOrDefault(k, JsonParserString(v))) {

@@ -16,6 +16,7 @@
  */
 
 import simora.mainfunc
+
 public fun main(args: Array<String>) {
     mainfunc(args.toList())
 }

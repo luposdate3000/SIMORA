@@ -48,19 +48,21 @@ internal class Application_MailSender(
         startUpTimeStamp = Clock.System.now()
         parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
     }
+
     private fun getRandomString(length: Int): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length)
             .map { allowedChars.random() }
             .joinToString("")
     }
+
     override fun shutDown() {}
     override fun receive(pck: IPayload): IPayload = pck
     override fun onTimerExpired(clock: Long) {
         if (eventCounter < maxNumber || maxNumber == -1) {
             eventCounter++
             val startIndex = eventCounter % allReveivers.size
-            val count = if (receiverCount <allReveivers.size) {
+            val count = if (receiverCount < allReveivers.size) {
                 receiverCount
             } else {
                 allReveivers.size

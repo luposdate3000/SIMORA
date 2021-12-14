@@ -25,6 +25,7 @@ import simora.simulator_core.Entity
 import simora.simulator_core.Event
 import simora.simulator_core.PriorityQueue
 import simora.simulator_iot.config.Configuration
+
 public class SimulationRun {
     public val config: Configuration = Configuration(this)
     public var notInitializedClock: Long = -1
@@ -54,6 +55,7 @@ public class SimulationRun {
         modifyJson(json)
         return parseConfig(json, fileName, autocorrect)
     }
+
     public fun startSimulation(configuration: Configuration) {
         entities = configuration.getEntities()
         maxClock = if (simMaxClock == notInitializedClock) maxClock else simMaxClock

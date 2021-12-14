@@ -47,6 +47,7 @@ internal class ApplicationStack_MulticastRouting(
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router
     }
+
     private var myQueue = mutableSetOf<Package_ApplicationStack_Multicast>()
     private fun myFlush() {
 // indentify duplicates
@@ -77,6 +78,7 @@ internal class ApplicationStack_MulticastRouting(
             }
         }
     }
+
     override fun receive(pck: IPayload): IPayload? {
         val res = if (pck is Package_ApplicationStack_Multicast) {
 // detect self targets
@@ -102,6 +104,7 @@ internal class ApplicationStack_MulticastRouting(
         myFlush()
         return res
     }
+
     override fun send(destinationAddress: Int, pck: IPayload) {
         if (pck is IPayloadBinary) {
 // add all possible elements to send queue
@@ -116,6 +119,7 @@ internal class ApplicationStack_MulticastRouting(
             parent.send(destinationAddress, pck)
         }
     }
+
     override fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray {
         return if (enableApplciationSideMulticast) {
             parent.getNextFeatureHops(destinationAddresses, flag)
@@ -123,11 +127,13 @@ internal class ApplicationStack_MulticastRouting(
             IntArray(destinationAddresses.size) { -1 }
         }
     }
+
     override fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = parent.registerTimer(durationInNanoSeconds, entity)
     override fun flush() {
         myFlush()
         parent.flush()
     }
+
     override fun resolveHostName(name: String): Int = parent.resolveHostName(name)
     override fun closestDeviceWithFeature(name: String): Int = parent.closestDeviceWithFeature(name)
     override fun addChildApplication(child: IApplicationStack_Actuator): Unit = (this.child as IApplicationStack_Middleware).addChildApplication(child)

@@ -16,8 +16,10 @@
  */
 
 package simora.simulator_iot.config
+
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
+
 internal class RoutingFeature : IApplicationFeature {
     override fun getName(): String = "RoutingFeature"
     override fun hasFeature(application: IApplicationStack_Actuator): Boolean = true

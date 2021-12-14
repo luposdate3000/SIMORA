@@ -16,6 +16,7 @@
  */
 
 package simora.simulator_iot.applications.scenario.parking
+
 import simora.parser.IJsonParserValue
 import simora.parser.JsonParserArray
 import simora.parser.JsonParserObject

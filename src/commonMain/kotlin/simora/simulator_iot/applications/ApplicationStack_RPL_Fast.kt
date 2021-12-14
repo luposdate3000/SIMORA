@@ -96,7 +96,7 @@ internal class ApplicationStack_RPL_Fast(
                 var addrSrc = queue[queueIdx]
                 var mincost = matrix[addrSrc]
                 for (j in 0 until queueSize) {
-                    if (mincost> matrix[queue[j]]) {
+                    if (mincost > matrix[queue[j]]) {
                         queueIdx = j
                         addrSrc = queue[queueIdx]
                         mincost = matrix[addrSrc]
@@ -108,7 +108,7 @@ internal class ApplicationStack_RPL_Fast(
                 val device = config.devices[addrSrc]
                 for ((addrDest, _) in device.linkManager.links) {
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + matrix[addrSrc]
-                    if (cost <matrix[addrDest]) {
+                    if (cost < matrix[addrDest]) {
                         matrix[addrDest] = cost
                         matrixNext[addrDest] = addrSrc
                         if (!queue.contains(addrDest)) {
@@ -120,6 +120,7 @@ internal class ApplicationStack_RPL_Fast(
             config.routingHelper = matrixNext
         }
     }
+
     override fun startUp() {
         calculateConfigRoutingHelper()
         val address = parent.address
@@ -127,7 +128,7 @@ internal class ApplicationStack_RPL_Fast(
         val helper = config.routingHelper as IntArray
         routingTable = IntArray(size) { helper[address] }
         val featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address } }
-        routingTableFeatureHops = Array(config.features.size) {  IntArray(size) { address } }
+        routingTableFeatureHops = Array(config.features.size) { IntArray(size) { address } }
         fun treeDown(hop: Int, node: Int, featureNode: IntArray) {
             routingTable[hop] = node
             for (i in 0 until config.features.size) {

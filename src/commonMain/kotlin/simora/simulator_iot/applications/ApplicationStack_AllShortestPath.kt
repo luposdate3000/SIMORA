@@ -97,7 +97,7 @@ internal class ApplicationStack_AllShortestPath(
                 for ((addrDest, _) in device.linkManager.links) {
                     val idx = addrDest * size + addrSrc
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001
-                    if (cost <matrix[idx]) {
+                    if (cost < matrix[idx]) {
                         matrix[idx] = cost
                         matrixNext[idx] = addrDest
                     }
@@ -113,7 +113,7 @@ internal class ApplicationStack_AllShortestPath(
                         if (matrix[idx1] == Double.MAX_VALUE || matrix[idx2] == Double.MAX_VALUE) {
                             continue
                         }
-                        if (matrix[idx]> matrix[idx1] + matrix[idx2]) {
+                        if (matrix[idx] > matrix[idx1] + matrix[idx2]) {
                             matrix[idx] = matrix[idx1] + matrix[idx2]
                             matrixNext[idx] = matrixNext[idx1]
                         }
@@ -123,6 +123,7 @@ internal class ApplicationStack_AllShortestPath(
             config.routingHelper = matrixNext
         }
     }
+
     override fun startUp() {
         calculateConfigRoutingHelper()
         val address = parent.address

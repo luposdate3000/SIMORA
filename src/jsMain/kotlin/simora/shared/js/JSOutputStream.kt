@@ -82,6 +82,7 @@ internal class JSOutputStream(private val filename: String, append: Boolean) {
     internal fun print(x: Int) {
         print("$x")
     }
+
     internal fun print(x: Double) {
         print("$x")
     }

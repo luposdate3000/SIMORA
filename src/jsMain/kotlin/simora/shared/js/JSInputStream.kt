@@ -15,10 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.shared.js
+
 internal class JSInputStream internal constructor(filename: String) {
     private var pos = 0
-    private val buffer: ByteArray=ExternalModule_fs.inmemoryFs[filename]!!
-
+    private val buffer: ByteArray = ExternalModule_fs.inmemoryFs[filename]!!
 
     internal fun readByte(): Byte {
         return buffer[pos++]
@@ -49,6 +49,7 @@ internal class JSInputStream internal constructor(filename: String) {
 
     internal fun close() {
     }
+
     internal fun readLine(): String? {
 // TODO this may break on utf-8
         val buf = mutableListOf<Byte>()

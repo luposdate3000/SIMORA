@@ -65,7 +65,10 @@ kotlin {
             binaries {
                 sharedLib {
                 }
-                executable {
+                executable(listOf(DEBUG)) {
+                }
+                executable(listOf(RELEASE)) {
+                    freeCompilerArgs += "-opt﻿"
                 }
             }
         }
@@ -154,6 +157,7 @@ tasks.register("luposSetup") {
         }
         return res
     }
+
     val regexDisableNoInline = "(^|[^a-zA-Z])noinline ".toRegex()
     val regexDisableInline = "(^|[^a-zA-Z])inline ".toRegex()
     val regexDisableCrossInline = "(^|[^a-zA-Z])crossinline ".toRegex()

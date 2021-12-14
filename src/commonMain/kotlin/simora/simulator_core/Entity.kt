@@ -16,7 +16,9 @@
  */
 
 package simora.simulator_core
+
 import simora.simulator_iot.SimulationRun
+
 public abstract class Entity {
     internal lateinit var simulation: SimulationRun
 
