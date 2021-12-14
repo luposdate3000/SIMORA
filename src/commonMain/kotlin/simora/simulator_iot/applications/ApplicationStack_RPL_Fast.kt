@@ -106,7 +106,7 @@ internal class ApplicationStack_RPL_Fast(
                 queue[queueIdx] = queue[queueSize]
                 queue[queueSize] = -1
                 val device = config.devices[addrSrc]
-                for ((addrDest, _) in device.linkManager.links) {
+                for (addrDest in device.linkManager.getNeighbours()) {
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + tinyMatrix[addrSrc]
                     if (cost < tinyMatrix[addrDest]) {
                         tinyMatrix[addrDest] = cost

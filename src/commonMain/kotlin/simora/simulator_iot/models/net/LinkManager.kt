@@ -24,7 +24,7 @@ public class LinkManager(
     internal val supportedLinkTypes: IntArray
 ) {
 
-    internal var links: MutableMap<Int, Link> = mutableMapOf()
+    private var links: MutableMap<Int, Link> = mutableMapOf()
 
     internal fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
         val l = links[destinationAddress]
@@ -42,4 +42,7 @@ public class LinkManager(
     internal fun hasLink(otherDevice: Device): Boolean = getLink(otherDevice) != null
 
     public fun getNeighbours(): MutableSet<Int> = links.keys
+internal fun addLink(addr:Int,l:Link){
+links[addr]=l
+}
 }

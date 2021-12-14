@@ -68,7 +68,6 @@ kotlin {
                 executable(listOf(DEBUG)) {
                 }
                 executable(listOf(RELEASE)) {
-                    freeCompilerArgs += "-opt﻿"
                 }
             }
         }
@@ -110,6 +109,7 @@ kotlin {
         if (compileJVM) {
             val jvmMain by getting {
                 dependencies {
+                    implementation("com.google.code.java-allocation-instrumenter:java-allocation-instrumenter:3.3.0")
                 }
             }
             val jvmTest by getting {

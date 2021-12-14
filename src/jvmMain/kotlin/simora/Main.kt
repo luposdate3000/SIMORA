@@ -16,7 +16,30 @@
  */
 
 package simora
-
+import com.google.monitoring.runtime.instrumentation.AllocationRecorder
+import com.google.monitoring.runtime.instrumentation.Sampler
+private class SamplerImpl : Sampler {
+val mapping=mutableMapOf<String,Pair<Long,Long>>()
+    override fun sampleAllocation(count: Int, desc: String, newObj: Any, size: Long) {
+if(!desc.contains("runtime/instrumentation/asm")){
+var counter=mapping[desc]
+if(counter==null){
+mapping[desc]=1L to size
+}else{
+mapping[desc]=counter.first+1 to counter.second+size
+}
+}
+    }
+internal fun finish(){
+for((name,v) in mapping){
+val (count,size)=v
+println("$count,$size,$name")
+}
+}
+}
 public fun main(args: Array<String>) {
+val impl=SamplerImpl()
+    AllocationRecorder.addSampler(impl)
     mainfunc(args.toList())
+impl.finish()
 }

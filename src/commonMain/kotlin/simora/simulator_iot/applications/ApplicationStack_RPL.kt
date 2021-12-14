@@ -176,34 +176,6 @@ public class ApplicationStack_RPL(
         return routingTable.getNextFeatureHops(destinationAddresses)
     }
 
-    override fun toString(): String {
-        val strBuilder = StringBuilder()
-        strBuilder
-            .append("> $parent").append(", ")
-            .append("rank $rank").append(", ")
-            .append(getParentString())
-            .appendLine().append("  ")
-            .append("children [${getChildrenString()}]")
-
-        return strBuilder.toString()
-    }
-
-    private fun getParentString() =
-        if (hasParent()) "parent ${config.getDeviceByAddress(preferredParent.address)}" else "root"
-
-    private fun getChildrenString(): StringBuilder {
-        val strBuilder = StringBuilder()
-        val separator = ", "
-        for (children in routingTable.getHops()) {
-            val link = parent.linkManager.links[children]!!
-            val device = config.getDeviceByAddress(children)
-            strBuilder.append("$link to $device").append(separator).append("\n  ")
-        }
-        if (strBuilder.length >= separator.length) {
-            strBuilder.deleteRange(strBuilder.length - separator.length, strBuilder.length)
-        }
-        return strBuilder
-    }
 
     internal companion object {
 

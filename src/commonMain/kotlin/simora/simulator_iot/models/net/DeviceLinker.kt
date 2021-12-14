@@ -67,8 +67,8 @@ internal class DeviceLinker {
     }
 
     private fun link(one: Device, two: Device, link: Link) {
-        one.linkManager.links[two.address] = link
-        two.linkManager.links[one.address] = link
+        one.linkManager.addLink(two.address , link)
+        two.linkManager.addLink(one.address, link)
         numberOfLinks++
     }
 }
