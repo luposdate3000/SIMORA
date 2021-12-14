@@ -9,6 +9,8 @@ scenarios=( \
 ./resources/scenarios/mail.json \
 )
 topologies=( \
+./resources/topologies/Uniform64.json \
+./resources/topologies/Uniform32.json \
 ./resources/topologies/Full16.json \
 ./resources/topologies/Full32.json \
 ./resources/topologies/Full4.json \
@@ -25,9 +27,7 @@ topologies=( \
 ./resources/topologies/Ring64.json \
 ./resources/topologies/Ring8.json \
 ./resources/topologies/Uniform16.json \
-./resources/topologies/Uniform32.json \
 ./resources/topologies/Uniform4.json \
-./resources/topologies/Uniform64.json \
 ./resources/topologies/Uniform8.json \
 )
 
@@ -39,13 +39,13 @@ for t in ${topologies[@]}
 do
 echo
 echo java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
-time java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
-echo
-echo ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
-time ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
-echo
-echo ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
-time ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
+/usr/bin/time -v java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
+#echo
+#echo ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
+#/usr/bin/time -v ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
+#echo
+#echo ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
+#/usr/bin/time -v ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
 exit
 done
 done

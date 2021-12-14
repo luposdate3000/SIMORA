@@ -54,11 +54,12 @@ internal class MultipleSimulationRuns(
             }
         }
         if (measurements.size > 0) {
+val size=measurements[0].getDataAggregated().size
             val firstLogger = measurements.first()
-            val dataAvg = DoubleArray(LoggerMeasure.StatCounter)
-            val dataDev = DoubleArray(LoggerMeasure.StatCounter)
-            val dataDevp = DoubleArray(LoggerMeasure.StatCounter)
-            for (i in 0 until LoggerMeasure.StatCounter) {
+            val dataAvg = DoubleArray(size)
+            val dataDev = DoubleArray(size)
+            val dataDevp = DoubleArray(size)
+            for (i in 0 until size) {
                 var sum = 0.0
                 for (m in measurements) {
                     sum += m.getDataAggregated()[i]

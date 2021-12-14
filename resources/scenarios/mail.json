@@ -61,6 +61,5 @@
             "enabled": false,
         },
     },
-    "outputDirectory": "simulator_output",
     "rootRouter": "CentralTower",
 }
