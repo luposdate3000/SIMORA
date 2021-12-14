@@ -36,7 +36,7 @@ internal class ApplicationStack_AllShortestPath(
     private lateinit var parent: Device
     private var isRoot = false
     private var routingTable = intArrayOf()
-    private var routingTableDatabaseHops = Array(config.features.size) { intArrayOf() }
+    private var routingTableFeatureHops = Array(config.features.size) { intArrayOf() }
     override fun setDevice(device: Device) {
         parent = device
     }
@@ -45,7 +45,7 @@ internal class ApplicationStack_AllShortestPath(
         isRoot = true
     }
 
-    override fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray = IntArray(destinationAddresses.size) { routingTableDatabaseHops[flag][destinationAddresses[it]] }
+    override fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray = IntArray(destinationAddresses.size) { routingTableFeatureHops[flag][destinationAddresses[it]] }
     override fun send(destinationAddress: Int, pck: IPayload) {
         val pck2 = NetworkPackage(parent.address, destinationAddress, pck)
         val hop = routingTable[destinationAddress]
@@ -80,98 +80,69 @@ internal class ApplicationStack_AllShortestPath(
     override fun resolveHostName(name: String): Int = parent.resolveHostName(name)
     override fun shutDown() = child.shutDown()
     override fun addChildApplication(child: IApplicationStack_Actuator): Unit = (this.child as IApplicationStack_Middleware).addChildApplication(child)
-    private fun generateRoutingTableUsingGlobalParentTable(globalParentTable: IntArray) {
-        routingTable = IntArray(config.devices.size) { -1 }
-        routingTable[parent.address] = parent.address // myself
-        for (i in 0 until config.devices.size) {
-            if (globalParentTable[i] == parent.address) {
-                routingTable[i] = i // the next hops write down their own address
+    private fun calculateConfigRoutingHelper() {
+        if (config.routingHelper == null) {
+            val size = config.devices.size
+            val matrix = DoubleArray(size * size) { Double.MAX_VALUE }
+            val matrixNext = IntArray(size * size) { -1 }
+// matrix self links
+            for (i in 0 until size) {
+                val idx = i * size * i
+                matrix[idx] = 0.0
+                matrixNext[idx] = i
             }
-        }
-        var changed2 = true
-        while (changed2) {
-            changed2 = false
-            for (i in 0 until config.devices.size) {
-                if (routingTable[i] == -1 && routingTable[globalParentTable[i]] != -1) {
-                    routingTable[i] = routingTable[globalParentTable[i]] // their next hop is known, so use it
-                    changed2 = true
+// matrix direct connections
+            for (device in config.devices) {
+                val addrSrc = device.address
+                for ((addrDest, link) in device.linkManager.links) {
+                    val idx = addrDest * size + addrSrc
+                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001
+                    if (cost <matrix[idx]) {
+                        matrix[idx] = cost
+                        matrixNext[idx] = addrDest
+                    }
                 }
             }
-        }
-        routingTableDatabaseHops = Array(config.features.size) { IntArray(config.devices.size) { -1 } }
-        for (flag in 0 until config.features.size) {
-            val devicesWithDatabase = config.getAllDevicesForFeature(flag).map { it.address }
-            routingTableDatabaseHops[flag][parent.address] = parent.address // myself
-            if (devicesWithDatabase.contains(parent.address)) {
-                val localParentTable = IntArray(globalParentTable.size) { globalParentTable[it] }
-                var changed = true
-                while (changed) {
-                    changed = false
-                    for (d in 0 until globalParentTable.size) {
-                        if (devicesWithDatabase.contains(localParentTable[d])) {
-// done, my parent is a database
-                        } else if (localParentTable[d] == localParentTable[localParentTable[d]]) {
-// done, endless loop
-                        } else {
-                            localParentTable[d] = localParentTable[localParentTable[d]]
-                            changed = true
+// floydWarshal
+            for (k in 0 until size) {
+                for (i in 0 until size) {
+                    for (j in 0 until size) {
+                        val idx = j * size + i
+                        val idx1 = k * size + i
+                        val idx2 = j * size + i
+                        if (matrix[idx1] == Double.MAX_VALUE || matrix[idx2] == Double.MAX_VALUE) {
+                            continue
+                        }
+                        if (matrix[idx]> matrix[idx1] + matrix[idx2]) {
+                            matrix[idx] = matrix[idx1] + matrix[idx2]
+                            matrixNext[idx] = matrixNext[idx1]
                         }
                     }
                 }
-                changed = true
-                while (changed) {
-                    changed = false
-                    for (d in 0 until globalParentTable.size) {
-                        if (localParentTable[d] == parent.address) {
-// done, i am a direct neighbor
-                        } else if (localParentTable[localParentTable[d]] == parent.address) {
-// done, i am a indirect neighbor
-                        } else if (localParentTable[d] == localParentTable[localParentTable[d]]) {
-// done, endless loop
-                        } else {
-                            localParentTable[d] = localParentTable[localParentTable[d]]
-                            changed = true
-                        }
-                    }
-                }
-                for (i in 0 until config.devices.size) {
-                    if (localParentTable[i] == parent.address) {
-                        routingTableDatabaseHops[flag][i] = i
-                    } else {
-                        routingTableDatabaseHops[flag][i] = localParentTable[i]
-                    }
-                }
             }
-        }
-        for (dest in 0 until config.devices.size) {
-            val hop = routingTable[dest]
-            logger.addConnectionTable(parent.address, dest, hop)
+            config.routingHelper = matrixNext
         }
     }
-
     override fun startUp() {
-        val globalParentTable = IntArray(config.devices.size) { -1 }
-        val globalParentCosts = DoubleArray(config.devices.size) { Double.MAX_VALUE }
-        globalParentCosts[parent.address] = 0.0
-        globalParentTable[parent.address] = parent.address
-        val queue = mutableListOf(parent)
-        while (queue.size > 0) {
-            val a = queue.removeAt(0)
-            for (b in a.linkManager.getNeighbours().map { config.devices[it] }) {
-                val distance = a.location.getDistanceInMeters(b.location)
-                val p = if (globalParentCosts[a.address] < globalParentCosts[b.address]) {
-                    a to b
+        calculateConfigRoutingHelper()
+        val address = parent.address
+        val size = config.devices.size
+        val helper = config.routingHelper as IntArray
+        routingTable = IntArray(size) { helper[it * size + address] }
+        routingTableFeatureHops = Array(config.features.size) { feature ->
+            val devicesWithFeature = config.getAllDevicesForFeature(feature).map { it.address }
+            IntArray(size) {
+                if (devicesWithFeature.contains(it)) {
+                    var next = helper[it * size + address]
+                    while (next != it && !devicesWithFeature.contains(next)) {
+                        next = helper[it * size + next]
+                    }
+                    next
                 } else {
-                    b to a
-                }
-                if (globalParentCosts[p.second.address] > globalParentCosts[p.first.address] + distance) {
-                    globalParentCosts[p.second.address] = globalParentCosts[p.first.address] + distance
-                    globalParentTable[p.second.address] = p.first.address
-                    queue.add(p.second)
+                    -1
                 }
             }
         }
-        generateRoutingTableUsingGlobalParentTable(globalParentTable)
         child.startUp()
     }
 }
