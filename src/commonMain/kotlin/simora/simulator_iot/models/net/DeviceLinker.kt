@@ -49,8 +49,8 @@ internal class DeviceLinker {
                 for (i2 in twoIndices) {
                     if (i == i2) {
                         if (distance <= sortedLinkTypes[i].rangeInMeters) {
-                            one.linkManager.addLink(two.address, distance, i, sortedLinkTypes[i].dataRateInKbps)
-                            two.linkManager.addLink(one.address, distance, i, sortedLinkTypes[i].dataRateInKbps)
+                            one.linkManager.addLink(two.address, sortedLinkTypes[i].dataRateInKbps)
+                            two.linkManager.addLink(one.address, sortedLinkTypes[i].dataRateInKbps)
                             return
                         }
                     }
@@ -63,7 +63,7 @@ internal class DeviceLinker {
 
     internal fun link(one: Device, two: Device, dataRate: Int) {
         val distance = getDistanceInMeters(one, two)
-        one.linkManager.addLink(two.address, distance, -1, dataRate)
-        two.linkManager.addLink(one.address, distance, -1, dataRate)
+        one.linkManager.addLink(two.address,  dataRate)
+        two.linkManager.addLink(one.address,  dataRate)
     }
 }

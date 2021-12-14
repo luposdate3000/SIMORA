@@ -24,30 +24,32 @@ public class LinkManager(
     internal val supportedLinkTypes: IntArray
 ) {
 
-    private var links: MutableMap<Int, Link> = mutableMapOf()
+    private var link_Addresses = mutableListOf<Int>()
+    private var link_dataRateInKbps = mutableListOf<Int>()
 
     internal fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
-        val l = links[destinationAddress]
-        if (l == null) {
-            println("getTransmissionDelay .. $destinationAddress $links")
+        val idx = link_Addresses.indexOf(destinationAddress)
+        if (idx <0) {
+            println("getTransmissionDelay .. $destinationAddress")
         }
-        val link = l!!
         val kiloBits = numberOfBytesToSend.toDouble() / 125
-        val seconds = kiloBits / link.dataRateInKbps.toDouble()
+        val seconds = kiloBits / link_dataRateInKbps[idx].toDouble()
         return TimeUtils.toNanoSec(seconds)
     }
 
-    private fun getLink(otherDevice: Device): Link? = links[otherDevice.address]
+    internal fun hasLink(otherDevice: Device): Boolean = link_Addresses.indexOf(otherDevice.address) >= 0
 
-    internal fun hasLink(otherDevice: Device): Boolean = getLink(otherDevice) != null
-
-    public fun getNeighbours(): MutableSet<Int> = links.keys
+    public fun getNeighbours(): List<Int> = link_Addresses
     internal fun addLink(
         addr: Int,
-        distanceInMeters: Double,
-        linkTypeIndex: Int,
         dataRateInKbps: Int,
     ) {
-        links[addr] = Link(distanceInMeters, linkTypeIndex, dataRateInKbps)
+        var idx = link_Addresses.indexOf(addr)
+        if (idx <0) {
+            link_Addresses.add(addr)
+            link_dataRateInKbps.add(dataRateInKbps)
+        } else {
+            link_dataRateInKbps[idx] = dataRateInKbps
+        }
     }
 }
