@@ -87,7 +87,7 @@ internal class ApplicationStack_AllShortestPath(
             val matrixNext = IntArray(size * size) { -1 }
 // matrix self links
             for (i in 0 until size) {
-                val idx = i * size * i
+                val idx = i * size + i
                 matrix[idx] = 0.0
                 matrixNext[idx] = i
             }
