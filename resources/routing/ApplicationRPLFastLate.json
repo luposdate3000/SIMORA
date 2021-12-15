@@ -2,6 +2,6 @@
     "routing": {
         "multicast": "ApplicationSide",
         "protocol": "RPL_Fast",
-"lateInitRoutingTable":false,
+"lateInitRoutingTable":true,
     },
 }

@@ -238,6 +238,7 @@ public class Configuration(private val simRun: SimulationRun) {
             "RPL_Fast" -> ApplicationStack_RPL_Fast(
                 multicastLayer,
                 simRun.config,
+		jsonRouting.getOrDefault("lateInitRoutingTable", false),
             )
             "RPL" -> ApplicationStack_RPL(
                 multicastLayer,

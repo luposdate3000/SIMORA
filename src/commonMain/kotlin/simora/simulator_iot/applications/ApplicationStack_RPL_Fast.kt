@@ -26,6 +26,7 @@ import simora.simulator_iot.models.net.NetworkPackage
 internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val config: Configuration,
+private val lateInitRoutingTable:Boolean,
 ) : IApplicationStack_Rooter {
     init {
         child.setRouter(this)
@@ -33,6 +34,7 @@ internal class ApplicationStack_RPL_Fast(
 
     private lateinit var parent: Device
     private var isRoot = false
+private var isRoutingTableInitialized=false
     private var routingTable = intArrayOf()
     private var routingTableFeatureHops = Array(config.features.size) { intArrayOf() }
     override fun setDevice(device: Device) {
@@ -43,9 +45,13 @@ internal class ApplicationStack_RPL_Fast(
         isRoot = true
     }
 
-    override fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray = IntArray(destinationAddresses.size) { routingTableFeatureHops[flag][destinationAddresses[it]] }
+    override fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray {
+initRoutingTable()
+return IntArray(destinationAddresses.size) { routingTableFeatureHops[flag][destinationAddresses[it]] }
+}
     override fun send(destinationAddress: Int, pck: IPayload) {
         val pck2 = NetworkPackage(parent.address, destinationAddress, pck)
+initRoutingTable()
         val hop = routingTable[destinationAddress]
         val delay = parent.getNetworkDelay(hop, pck2)
         parent.assignToSimulation(destinationAddress, hop, pck2, delay)
@@ -57,6 +63,7 @@ internal class ApplicationStack_RPL_Fast(
         if (pck.destinationAddress == parent.address) {
             child.receive(payload)
         } else {
+initRoutingTable()
             val hop = routingTable[pck.destinationAddress]
             val delay = parent.getNetworkDelay(hop, pck)
             parent.assignToSimulation(pck.destinationAddress, hop, pck, delay)
@@ -121,6 +128,12 @@ internal class ApplicationStack_RPL_Fast(
 
     override fun startUpRouting() {
         calculateConfigRoutingHelper()
+if(lateInitRoutingTable){
+initRoutingTable()
+}
+}
+private fun initRoutingTable(){
+if(!isRoutingTableInitialized){
         val address = parent.address
         val size = config.devices.size
         val helper = config.routingHelper as IntArray
@@ -183,7 +196,9 @@ internal class ApplicationStack_RPL_Fast(
                 }
             }
         }
+isRoutingTableInitialized=true
     }
+}
     override fun startUp() {
         child.startUp()
     }

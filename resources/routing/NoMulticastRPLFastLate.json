@@ -1,7 +1,7 @@
 {
     "routing": {
         "multicast": "None",
-"lateInitRoutingTable":false,
+"lateInitRoutingTable":true,
         "protocol": "RPL_Fast",
     },
 }
