@@ -127,7 +127,6 @@ internal class ApplicationStack_RPL_Fast(
         routingTable = IntArray(size) { helper[address] }
         val featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toIntArray() }
         routingTableFeatureHops = Array(config.features.size) { IntArray(size) { address } }
-
         fun treeDown(hop: Int, node: Int) {
             routingTable[hop] = node
             for (i in 0 until size) {
@@ -144,7 +143,7 @@ internal class ApplicationStack_RPL_Fast(
             }
         }
         treeDown(address, address)
-        fun treeDown2(hop: Int, node: Int, feature: Int, table: IntArray, devices: IntArray) {
+        fun treeDown2(hop: Int, node: Int,  table: IntArray, devices: IntArray) {
             table[hop] = node
             for (i in 0 until size) {
                 if (helper[i] == hop) {
@@ -154,13 +153,13 @@ internal class ApplicationStack_RPL_Fast(
                         node
                     }
                     if (i != hop) {
-                        treeDown2(i, newNode, feature, table, devices)
+                        treeDown2(i, newNode,  table, devices)
                     }
                 }
             }
         }
         for (f in 0 until config.features.size) {
-            treeDown2(address, -1, f, routingTableFeatureHops[f], featuredDevices[f])
+            treeDown2(address, -1, routingTableFeatureHops[f], featuredDevices[f])
         }
         var p = helper[address]
         val treeUp = IntArray(config.features.size) { -1 }
