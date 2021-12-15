@@ -11,10 +11,10 @@ do
 for s in ${scenarios[@]}
 do
 echo
-pkill java -9
-echo java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
-x=$(/usr/bin/time -o tmp -v java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json | grep simulator_output | sed "s/.*outputdirectory=//g")
-mv tmp "$x/time"
+#pkill java -9
+#echo java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
+#x=$(/usr/bin/time -o tmp -v java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json | grep simulator_output | sed "s/.*outputdirectory=//g")
+#mv tmp "$x/time"
 done
 done
 done
@@ -24,7 +24,6 @@ for r in ${routing[@]}
 do
 for s in ${scenarios[@]}
 do
-exit
 echo
 echo ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
 x=$(/usr/bin/time -o tmp -v ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json | grep simulator_output | sed "s/.*outputdirectory=//g")

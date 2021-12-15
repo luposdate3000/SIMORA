@@ -13,7 +13,7 @@ fun addRow(row: Map<String, String>) {
     }
     var r = MutableList<String>(argumentNames.size) { "" }
     for ((k, v) in row) {
-        r[argumentNames.indexOf(k)] = v
+        r[argumentNames.indexOf(k)] = v.trim()
     }
     rows.add(r)
 }
@@ -28,6 +28,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
         baseRow["scenario"] = x[1]
         baseRow["topology"] = x[2]
         baseRow["platform"] = x[3]
+try{
         File(filename + "/time").forEachLine { line ->
 if(line.contains("User time (seconds)")){
 baseRow["system time (Seconds)"]=line.substring(line.lastIndexOf(":")+2)
@@ -39,6 +40,9 @@ baseRow["system page faults"]=line.substring(line.lastIndexOf(":")+2)
 baseRow["system context switches"]=line.substring(line.lastIndexOf(":")+2)
 }
         }
+}catch(e:Throwable){
+}
+try{
         File(filename + "/measurement.csv").forEachLine { line ->
             val l = line.split(",")
             val h = headers
@@ -54,11 +58,13 @@ baseRow["system context switches"]=line.substring(line.lastIndexOf(":")+2)
                 addRow(row)
             }
         }
+}catch(e:Throwable){ 
+}
     }
 }
 
 
-println(argumentNames.joinToString())
+println(argumentNames.joinToString(","))
 for (r in rows) {
-    println(r.joinToString() + ",".repeat(argumentNames.size - r.size))
+    println(r.joinToString(",") + ",".repeat(argumentNames.size - r.size))
 }

@@ -1,6 +1,0 @@
-{
-    "routing": {
-        "multicast": "ApplicationSide",
-        "protocol": "AllShortestPath",
-    },
-}
