@@ -16,11 +16,11 @@
  */
 
 package simora.simulator_core
-
+import simora.simulator_iot.models.Device
 internal data class Event(
     val eventNumber: Int,
     val occurrenceTime: Long,
-    val source: Entity,
-    val destination: Entity,
+    val source: Device,
+    val destination: Device,
     val data: Any,
 )

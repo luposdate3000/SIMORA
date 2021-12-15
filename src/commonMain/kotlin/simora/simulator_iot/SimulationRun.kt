@@ -21,23 +21,21 @@ import simora.parser.IJsonParserValue
 import simora.parser.JsonParser
 import simora.parser.JsonParserObject
 import simora.shared.inline.File
-import simora.simulator_core.Entity
 import simora.simulator_core.Event
 import simora.simulator_core.PriorityQueue
 import simora.simulator_iot.config.Configuration
+import simora.simulator_iot.models.Device
 
 public class SimulationRun {
     public val config: Configuration = Configuration(this)
     public var notInitializedClock: Long = -1
-    public var simSteadyClock: Long = notInitializedClock
     public var simMaxClock: Long = notInitializedClock
     public var maxClock: Long = Long.MAX_VALUE
-    public var steadyClock: Long = Long.MAX_VALUE
     public var clock: Long = 0
     internal val randGenerator = RandomGenerator()
     internal val logger: Loggers = Loggers(mutableListOf())
     private var addedEventCounter: Int = 0
-    public lateinit var entities: List<Entity>
+    public lateinit var entities: List<Device>
     private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
 
     public fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
@@ -59,7 +57,6 @@ public class SimulationRun {
     public fun startSimulation(configuration: Configuration) {
         entities = configuration.getEntities()
         maxClock = if (simMaxClock == notInitializedClock) maxClock else simMaxClock
-        steadyClock = if (simSteadyClock == notInitializedClock) steadyClock else simSteadyClock
         logger.onStartSimulation()
         startUp()
         run()
@@ -68,17 +65,7 @@ public class SimulationRun {
     }
 
     public fun run() {
-        while (true) {
-            if (!futureEvents.hasNext()) {
-                break
-            }
-            if (futureEvents.peek().occurrenceTime > steadyClock) {
-                clock = steadyClock
-                for (entity in entities) {
-                    entity.onSteadyState()
-                }
-                logger.onSteadyState() // call this last due to time measurement
-            }
+        while (futureEvents.hasNext()) {
             if (futureEvents.peek().occurrenceTime > maxClock) {
                 break
             }
@@ -89,13 +76,24 @@ public class SimulationRun {
         }
     }
 
-    internal fun addEvent(delay: Long, src: Entity, dest: Entity, data: Any) {
+    internal fun addEvent(delay: Long, src: Device, dest: Device, data: Any) {
         addedEventCounter++
         futureEvents.enqueue(Event(addedEventCounter, clock + delay, src, dest, data))
     }
 
     public fun startUp() {
-        for (entity: Entity in entities) {
+        for (entity: Device in entities) {
+            entity.simulation = this
+            entity.onStartUpRouting()
+        }
+        while (futureEvents.hasNext()) {
+            val nextEvent = futureEvents.dequeue()
+            clock = nextEvent.occurrenceTime
+            val entity = nextEvent.destination
+            entity.processIncomingEvent(nextEvent)
+        }
+        logger.onStartUpRouting()
+        for (entity in entities) {
             entity.simulation = this
             entity.onStartUp()
         }
@@ -104,7 +102,7 @@ public class SimulationRun {
 
     public fun shutDown() {
         logger.onShutDown()
-        for (ent: Entity in entities) {
+        for (ent in entities) {
             ent.onShutDown()
         }
     }

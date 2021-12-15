@@ -124,7 +124,7 @@ internal class ApplicationStack_AllShortestPath(
         }
     }
 
-    override fun startUp() {
+    override fun startUpRouting() {
         calculateConfigRoutingHelper()
         val address = parent.address
         val size = config.devices.size
@@ -152,6 +152,8 @@ internal class ApplicationStack_AllShortestPath(
                 }
             }
         }
+    }
+    override fun startUp() {
         child.startUp()
     }
 }

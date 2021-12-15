@@ -119,13 +119,15 @@ public class ApplicationStack_RPL(
     private fun hasParent(): Boolean =
         preferredParent.address != notInitializedAddress
 
-    override fun startUp() {
+    override fun startUpRouting() {
         val numberOfDevices = config.getNumberOfDevices()
         routingTable = ApplicationStack_RPL_RoutingTable(parent.address, numberOfDevices, hasDatabase())
         if (isRoot) {
             rank = ROOT_RANK
             broadcastPackage_ApplicationStack_RPL_DIO()
         }
+    }
+    override fun startUp() {
         child.startUp()
     }
 

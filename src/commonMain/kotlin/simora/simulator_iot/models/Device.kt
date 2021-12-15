@@ -16,9 +16,8 @@
  */
 
 package simora.simulator_iot.models
-
 import kotlinx.datetime.Instant
-import simora.simulator_core.Entity
+import simora.simulator_core.Event
 import simora.simulator_core.ITimer
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.applications.IApplicationStack_Actuator
@@ -37,7 +36,31 @@ public class Device(
     private val isDeterministic: Boolean,
     public val applicationStack: IApplicationStack_Rooter,
     private val hostNameLookUpTable: MutableMap<String, Int>,
-) : Entity() {
+) {
+    internal lateinit var simulation: SimulationRun
+
+    private var isTerminated = false
+
+    internal fun processIncomingEvent(event: Event) {
+        if (isTerminated) {
+            return
+        }
+        val data = event.data
+        if (data is ITimer) {
+            data.onTimerExpired(simulation.clock)
+        } else {
+            onEvent(event.source, data)
+        }
+    }
+
+    protected fun scheduleEvent(destination: Device, data: Any, delay: Long) {
+        simulation.addEvent(delay, this, destination, data)
+    }
+
+    internal fun setTimer(time: Long, callback: ITimer) {
+        scheduleEvent(this, callback, time)
+    }
+
     internal var isStarNetworkChild: Boolean = false
     private lateinit var deviceStart: Instant
 
@@ -65,22 +88,23 @@ public class Device(
         }
     }
 
-    override fun onStartUp() {
+    internal fun onStartUp() {
         deviceStart = TimeUtils.stamp()
         applicationStack.startUp()
     }
-
-    override fun onSteadyState() {
+    internal fun onStartUpRouting() {
+        deviceStart = TimeUtils.stamp()
+        applicationStack.startUpRouting()
     }
 
-    override fun onEvent(source: Entity, data: Any) {
+    internal fun onEvent(source: Device, data: Any) {
         deviceStart = TimeUtils.stamp()
         val pck = data as NetworkPackage
         simRun.logger.onReceiveNetworkPackage(address, pck.payload)
         applicationStack.receive(pck)
     }
 
-    override fun onShutDown() {
+    internal fun onShutDown() {
         applicationStack.shutDown()
     }
 

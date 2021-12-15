@@ -60,15 +60,15 @@ internal class Loggers internal constructor(internal val loggers: MutableList<IL
         }
     }
 
-    override fun onShutDown() {
+    override fun onStartUpRouting() {
         for (logger in loggers) {
-            logger.onShutDown()
+            logger.onStartUpRouting()
         }
     }
 
-    override fun onSteadyState() {
+    override fun onShutDown() {
         for (logger in loggers) {
-            logger.onSteadyState()
+            logger.onShutDown()
         }
     }
 

@@ -121,7 +121,7 @@ internal class ApplicationStack_RPL_Fast(
         }
     }
 
-    override fun startUp() {
+    override fun startUpRouting() {
         calculateConfigRoutingHelper()
         val address = parent.address
         val size = config.devices.size
@@ -176,6 +176,8 @@ internal class ApplicationStack_RPL_Fast(
                 }
             }
         }
+    }
+    override fun startUp() {
         child.startUp()
     }
 }

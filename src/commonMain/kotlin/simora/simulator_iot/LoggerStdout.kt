@@ -43,13 +43,12 @@ internal class LoggerStdout : ILogger {
     override fun onStartUp() {
         println("${simRun.clock} onStartUp")
     }
+    override fun onStartUpRouting() {
+        println("${simRun.clock} onStartUpRouting")
+    }
 
     override fun onShutDown() {
         println("${simRun.clock} onShutDown")
-    }
-
-    override fun onSteadyState() {
-        println("${simRun.clock} onSteadyState")
     }
 
     override fun onStartSimulation() {

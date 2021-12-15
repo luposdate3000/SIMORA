@@ -18,9 +18,7 @@
 package simora.simulator_iot
 
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlin.time.ExperimentalTime
 
@@ -36,9 +34,12 @@ internal class LoggerMeasure : ILogger {
         private val StatNumberOfDevices: Int = StatCounter++
         private val StatNetworkLinkCounter: Int = StatCounter++
 
+        private val StatSimulationStartupRoutingDurationReal: Int = StatCounter++
         private val StatSimulationStartupDurationReal: Int = StatCounter++
         private val StatSimulationShutdownDurationReal: Int = StatCounter++
         private val StatSimulationDurationReal: Int = StatCounter++
+
+        private val StatSimulationStartupRoutingDurationVirtual: Int = StatCounter++
         private val StatSimulationDurationVirtual: Int = StatCounter++
 
         private val StatNetworkCounterForwarded: Int = StatCounter++
@@ -55,9 +56,12 @@ internal class LoggerMeasure : ILogger {
             StatNumberOfDevices -> "number of devices"
             StatNetworkLinkCounter -> "number of links"
 
+            StatSimulationStartupRoutingDurationReal -> "simulation startup duration routing real (Seconds)"
             StatSimulationStartupDurationReal -> "simulation startup duration real (Seconds)"
             StatSimulationShutdownDurationReal -> "simulation shutdown duration real (Seconds)"
             StatSimulationDurationReal -> "simulation duration real (Seconds)"
+
+            StatSimulationStartupRoutingDurationVirtual -> "simulation startup duration routing virtual (Seconds)"
             StatSimulationDurationVirtual -> "simulation duration virtual (Seconds)"
 
             StatNetworkCounterForwarded -> "number of forwarded packages"
@@ -70,8 +74,7 @@ internal class LoggerMeasure : ILogger {
         }
     }
     private var startSimulationTimeStamp: Instant = Clock.System.now()
-    private var startUpTimeStamp: Instant = Clock.System.now()
-    private var shutDownTimeStamp: Instant = Clock.System.now()
+    private var startSimulationTimeStampVirtual: Long = 0
     private val packageByTopic = mutableMapOf<String, Int>()
     private val packageCounter = mutableListOf<Double>()
     private val packageSize = mutableListOf<Double>()
@@ -174,29 +177,29 @@ internal class LoggerMeasure : ILogger {
 
     override fun onStartSimulation() { // phase 1
         startSimulationTimeStamp = Clock.System.now()
+        startSimulationTimeStampVirtual = simRun.clock
     }
 
-    override fun onStartUp() { // phase 2
-        startUpTimeStamp = Clock.System.now()
-        data[StatSimulationStartupDurationReal] = (startUpTimeStamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
-        data[StatNetworkLinkCounter] = simRun.config.devices.sumOf { d ->
-            d.linkManager.getNeighbours().filter { it > d.address }.size
-        }.toDouble()
+    override fun onStartUpRouting() { // phase 2
+        val stamp = Clock.System.now()
+        data[StatSimulationStartupRoutingDurationReal] = (stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        data[StatSimulationStartupRoutingDurationVirtual] = (simRun.clock - startSimulationTimeStampVirtual).toDouble() / 1000000000.0
     }
 
-    override fun onSteadyState() { // phase 3
+    override fun onStartUp() { // phase 3
+        val stamp = Clock.System.now()
+        data[StatSimulationStartupDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal]
+        data[StatNetworkLinkCounter] = simRun.config.devices.sumOf { d -> d.linkManager.getNeighbours().filter { it > d.address }.size }.toDouble()
     }
-
     override fun onShutDown() { // phase 4
-        val shutDownTimeStampVirtual = startSimulationTimeStamp.plus(simRun.clock, DateTimeUnit.NANOSECOND, TimeZone.UTC)
-        shutDownTimeStamp = Clock.System.now()
-        data[StatSimulationDurationReal] = (shutDownTimeStamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
-        data[StatSimulationDurationVirtual] = (shutDownTimeStampVirtual - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        val stamp = Clock.System.now()
+        data[StatSimulationDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal] - data[StatSimulationStartupDurationReal]
+        data[StatSimulationDurationVirtual] = ((simRun.clock - startSimulationTimeStampVirtual).toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationVirtual]
     }
 
     override fun onStopSimulation() { // phase 5
-        val stopSimulationTimeStamp = Clock.System.now()
-        data[StatSimulationShutdownDurationReal] = (stopSimulationTimeStamp - shutDownTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        val stamp = Clock.System.now()
+        data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal]-data[StatSimulationStartupDurationReal]-    data[StatSimulationStartupRoutingDurationReal] 
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {

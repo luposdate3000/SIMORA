@@ -23,7 +23,6 @@ import simora.parser.JsonParserArray
 import simora.parser.JsonParserObject
 import simora.parser.JsonParserString
 import simora.shared.inline.File
-import simora.simulator_core.Entity
 import simora.simulator_iot.ILogger
 import simora.simulator_iot.ReflectionHelper
 import simora.simulator_iot.SimulationRun
@@ -177,8 +176,8 @@ public class Configuration(private val simRun: SimulationRun) {
         parse(json, fileName, autocorrect)
     }
 
-    public fun getEntities(): MutableList<Entity> {
-        val entities: MutableList<Entity> = mutableListOf()
+    public fun getEntities(): MutableList<Device> {
+        val entities: MutableList<Device> = mutableListOf()
         entities.addAll(devices)
         return entities
     }

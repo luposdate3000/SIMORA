@@ -23,6 +23,7 @@ import simora.simulator_iot.models.Device
 public interface IApplicationStack_Rooter : IApplicationStack_Middleware {
     public fun setRoot()
     public fun receive(pck: IPayload): IPayload? // return null on success, or the errored package on failure
+    public fun startUpRouting()
     public fun startUp()
     public fun shutDown()
     public fun setDevice(device: Device)
