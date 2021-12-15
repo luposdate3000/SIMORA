@@ -62,6 +62,33 @@ internal class Application_MailDistributor(
                 }
             }
             return null
+        } else if (pck is Package_Application_MailGroupIdentical) {
+            val destinations = pck.targets.toIntArray()
+            val hops = parent.getNextFeatureHops(destinations, mailDistributorFlag)
+            for (i in hops.indices) {
+                if (hops[i] == -1) {
+                    hops[i] = destinations[i]
+                }
+            }
+            val packets = mutableMapOf<Int, MutableSet<Int>>()
+            for (target in pck.targets) {
+                val hop = hops[destinations.indexOf(target)]
+                var p = packets[hop]
+                if (p == null) {
+                    p = mutableSetOf()
+                    packets[hop] = p
+                }
+                p.add(target)
+            }
+            for ((target, mapping) in packets) {
+                if (mapping.size == 1) {
+                    val x = mapping.toList().first()
+                    parent.send(x, Package_Application_Mail(pck.text))
+                } else {
+                    parent.send(target, Package_Application_MailGroupIdentical(pck.text, mapping))
+                }
+            }
+            return null
         } else {
             return pck
         }

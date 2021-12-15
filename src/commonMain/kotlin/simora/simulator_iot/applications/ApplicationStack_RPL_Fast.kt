@@ -143,7 +143,7 @@ internal class ApplicationStack_RPL_Fast(
             }
         }
         treeDown(address, address)
-        fun treeDown2(hop: Int, node: Int,  table: IntArray, devices: IntArray) {
+        fun treeDown2(hop: Int, node: Int, table: IntArray, devices: IntArray) {
             table[hop] = node
             for (i in 0 until size) {
                 if (helper[i] == hop) {
@@ -153,7 +153,7 @@ internal class ApplicationStack_RPL_Fast(
                         node
                     }
                     if (i != hop) {
-                        treeDown2(i, newNode,  table, devices)
+                        treeDown2(i, newNode, table, devices)
                     }
                 }
             }
