@@ -1,6 +1,6 @@
 {
     "routing": {
-"lateInitRoutingTable":true,
+        "lateInitRoutingTable": true,
         "multicast": "StateOfTheArt",
         "protocol": "RPL_Fast",
     },

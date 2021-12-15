@@ -3,6 +3,7 @@ pluginManagement {
         mavenLocal()
         google()
         gradlePluginPortal()
+mavenCentral()
     }
 }
 rootProject.name = "simora"
