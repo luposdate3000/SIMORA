@@ -23,7 +23,6 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.config.Configuration
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.NetworkPackage
-import simora.simulator_iot.utils.TimeUtils
 
 public class ApplicationStack_RPL(
     private val child: IApplicationStack_Actuator,
@@ -147,7 +146,7 @@ public class ApplicationStack_RPL(
                     val hasApplicationStack_RPL_RoutingTableChanged = updateApplicationStack_RPL_RoutingTable(pck.sourceAddress, payload)
                     if (hasParent() && hasApplicationStack_RPL_RoutingTableChanged) {
                         if (!isDelayPackage_ApplicationStack_RPL_DAOTimerRunning) {
-                            val daoDelay = TimeUtils.toNanoSec(DEFAULT_Package_ApplicationStack_RPL_DAO_DELAY)
+                            val daoDelay = DEFAULT_Package_ApplicationStack_RPL_DAO_DELAY * 1000L * 1000L * 1000L
                             parent.setTimer(
                                 daoDelay,
                                 object : ITimer {

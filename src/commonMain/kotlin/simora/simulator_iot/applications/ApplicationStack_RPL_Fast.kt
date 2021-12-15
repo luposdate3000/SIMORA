@@ -18,7 +18,6 @@
 package simora.simulator_iot.applications
 
 import simora.simulator_core.ITimer
-import simora.simulator_iot.ILogger
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.config.Configuration
 import simora.simulator_iot.models.Device
@@ -26,7 +25,6 @@ import simora.simulator_iot.models.net.NetworkPackage
 
 internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
-    private val logger: ILogger,
     private val config: Configuration,
 ) : IApplicationStack_Rooter {
     init {
@@ -136,12 +134,12 @@ internal class ApplicationStack_RPL_Fast(
             }
             for (i in 0 until size) {
                 if (helper[i] == hop) {
-                    var newNode = if (node == address) {
+                    val newNode = if (node == address) {
                         i
                     } else {
                         node
                     }
-                    var featureNodeCpy = IntArray(config.features.size) { featureNode[it] }
+                    val featureNodeCpy = IntArray(config.features.size) { featureNode[it] }
                     for (j in 0 until config.features.size) {
                         if (featureNodeCpy[j] == -1 && i != address && featuredDevices[j].contains(i)) {
                             featureNodeCpy[j] = i
@@ -155,7 +153,7 @@ internal class ApplicationStack_RPL_Fast(
         }
         treeDown(address, address, IntArray(config.features.size) { -1 })
         var p = helper[address]
-        var treeUp = IntArray(config.features.size) { -1 }
+        val treeUp = IntArray(config.features.size) { -1 }
         while (true) {
             for (i in 0 until config.features.size) {
                 if (treeUp[i] == -1 && p != address && featuredDevices[i].contains(p)) {

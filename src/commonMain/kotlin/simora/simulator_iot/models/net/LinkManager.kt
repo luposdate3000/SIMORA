@@ -18,7 +18,7 @@
 package simora.simulator_iot.models.net
 
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.utils.TimeUtils
+import kotlin.math.roundToLong
 
 public class LinkManager(
     internal val supportedLinkTypes: IntArray
@@ -34,7 +34,7 @@ public class LinkManager(
         }
         val kiloBits = numberOfBytesToSend.toDouble() / 125
         val seconds = kiloBits / link_dataRateInKbps[idx].toDouble()
-        return TimeUtils.toNanoSec(seconds)
+        return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
 
     internal fun hasLink(otherDevice: Device): Boolean = link_Addresses.indexOf(otherDevice.address) >= 0
@@ -44,7 +44,7 @@ public class LinkManager(
         addr: Int,
         dataRateInKbps: Int,
     ) {
-        var idx = link_Addresses.indexOf(addr)
+        val idx = link_Addresses.indexOf(addr)
         if (idx <0) {
             link_Addresses.add(addr)
             link_dataRateInKbps.add(dataRateInKbps)

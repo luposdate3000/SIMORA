@@ -57,14 +57,14 @@ internal class ApplicationStack_MulticastRouting(
             } else {
                 val targets = p.targets.toIntArray()
                 val hops = parent.getNextFeatureHops(targets, featureFlag)
-                for (h in 0 until hops.size) {
+                for (h in hops.indices) {
                     if (hops[h] == -1) {
                         hops[h] = targets[h]
                     }
                 }
                 for (hop in hops.toSet()) {
                     val filteredTargets = mutableListOf<Int>()
-                    for (h in 0 until hops.size) {
+                    for (h in hops.indices) {
                         if (hops[h] == hop) {
                             filteredTargets.add(targets[h])
                         }

@@ -19,7 +19,6 @@ package simora.simulator_iot
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.plus
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -199,7 +198,7 @@ internal class LoggerMeasure : ILogger {
 
     override fun onStopSimulation() { // phase 5
         val stamp = Clock.System.now()
-        data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal]-data[StatSimulationStartupDurationReal]-    data[StatSimulationStartupRoutingDurationReal] 
+        data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal] - data[StatSimulationStartupDurationReal] - data[StatSimulationStartupRoutingDurationReal]
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {

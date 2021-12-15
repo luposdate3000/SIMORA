@@ -19,17 +19,16 @@ package simora
 import com.google.monitoring.runtime.instrumentation.AllocationRecorder
 import com.google.monitoring.runtime.instrumentation.Sampler
 private class SamplerImpl : Sampler {
-    internal data class MappingKey(internal val s: String)
-    internal data class MappingValue(internal var counter: Int, internal var size: Long)
+    data class MappingKey(internal val s: String)
+    data class MappingValue(internal var counter: Int, internal var size: Long)
     val mapping = mutableMapOf<MappingKey, MappingValue>()
-    var ctr = 0
     override fun sampleAllocation(count: Int, desc: String, newObj: Any, size: Long) {
         if (desc == "java/util/LinkedHashMap\$Entry") {
             println(newObj)
         }
         if (!desc.contains("runtime/instrumentation/asm")) {
             val key = MappingKey(desc)
-            var value = mapping[key]
+            val value = mapping[key]
             if (value == null) {
                 mapping[key] = MappingValue(1, size)
             } else {
@@ -38,7 +37,7 @@ private class SamplerImpl : Sampler {
             }
         }
     }
-    internal fun finish() {
+    fun finish() {
         for ((name, v) in mapping) {
             val (count, size) = v
             println("$count,$size,${name.s}")

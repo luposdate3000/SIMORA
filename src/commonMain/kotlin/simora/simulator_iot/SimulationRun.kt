@@ -17,7 +17,6 @@
 
 package simora.simulator_iot
 
-import simora.parser.IJsonParserValue
 import simora.parser.JsonParser
 import simora.parser.JsonParserObject
 import simora.shared.inline.File
@@ -37,10 +36,6 @@ public class SimulationRun {
     private var addedEventCounter: Int = 0
     public lateinit var entities: List<Device>
     private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
-
-    public fun parseConfig(json: IJsonParserValue, fileName: String, autocorrect: Boolean = true): Configuration {
-        return parseConfig(json as JsonParserObject, fileName, autocorrect)
-    }
 
     public fun parseConfig(json: JsonParserObject, fileName: String, autocorrect: Boolean = true): Configuration {
         config.parse(json, fileName, autocorrect)

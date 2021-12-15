@@ -123,6 +123,4 @@ public class ApplicationStack_RPL_RoutingTable(
             }
         return destinations
     }
-
-    internal fun getHops(): Set<Int> = hops
 }

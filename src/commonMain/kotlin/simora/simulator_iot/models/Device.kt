@@ -16,6 +16,8 @@
  */
 
 package simora.simulator_iot.models
+
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import simora.simulator_core.Event
 import simora.simulator_core.ITimer
@@ -25,7 +27,6 @@ import simora.simulator_iot.applications.IApplicationStack_Rooter
 import simora.simulator_iot.models.geo.GeoLocation
 import simora.simulator_iot.models.net.LinkManager
 import simora.simulator_iot.models.net.NetworkPackage
-import simora.simulator_iot.utils.TimeUtils
 
 public class Device(
     private val simRun: SimulationRun,
@@ -53,7 +54,7 @@ public class Device(
         }
     }
 
-    protected fun scheduleEvent(destination: Device, data: Any, delay: Long) {
+    private fun scheduleEvent(destination: Device, data: Any, delay: Long) {
         simulation.addEvent(delay, this, destination, data)
     }
 
@@ -68,12 +69,13 @@ public class Device(
         applicationStack.setDevice(this)
     }
 
+@OptIn(kotlin.time.ExperimentalTime::class)
     private fun getProcessingDelay(): Long {
         if (isDeterministic) {
             return 1
         }
-        val now = TimeUtils.stamp()
-        val microDif = TimeUtils.differenceInNanoSec(deviceStart, now)
+        val now = Clock.System.now()
+        val microDif = (now - deviceStart).inWholeNanoseconds
         val scaled = microDif * 100 / performance
         return scaled.toLong()
     }
@@ -89,16 +91,16 @@ public class Device(
     }
 
     internal fun onStartUp() {
-        deviceStart = TimeUtils.stamp()
+        deviceStart = Clock.System.now()
         applicationStack.startUp()
     }
     internal fun onStartUpRouting() {
-        deviceStart = TimeUtils.stamp()
+        deviceStart = Clock.System.now()
         applicationStack.startUpRouting()
     }
 
-    internal fun onEvent(source: Device, data: Any) {
-        deviceStart = TimeUtils.stamp()
+    private fun onEvent(source: Device, data: Any) {
+        deviceStart = Clock.System.now()
         val pck = data as NetworkPackage
         simRun.logger.onReceiveNetworkPackage(address, pck.payload)
         applicationStack.receive(pck)

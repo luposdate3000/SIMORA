@@ -62,7 +62,6 @@ internal class DeviceLinker {
     private fun getDistanceInMeters(one: Device, two: Device): Double = one.location.getDistanceInMeters(two.location)
 
     internal fun link(one: Device, two: Device, dataRate: Int) {
-        val distance = getDistanceInMeters(one, two)
         one.linkManager.addLink(two.address, dataRate)
         two.linkManager.addLink(one.address, dataRate)
     }

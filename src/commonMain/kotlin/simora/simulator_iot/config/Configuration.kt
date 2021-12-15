@@ -70,14 +70,6 @@ public class Configuration(private val simRun: SimulationRun) {
     private var linker = DeviceLinker()
 
     internal fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
-    public fun featureIdForName(name: String): Int {
-        for (i in 0 until features.size) {
-            if (features[i].getName() == name) {
-                return i
-            }
-        }
-        TODO()
-    }
 
     public fun featureIdForName2(name: String): Int {
         for (i in 0 until features.size) {
@@ -170,12 +162,6 @@ public class Configuration(private val simRun: SimulationRun) {
         }
     }
 
-    internal fun parse(fileName: String, autocorrect: Boolean = true) {
-        val fileStr = File(fileName).readAsString()
-        val json = JsonParser().stringToJson(fileStr) as JsonParserObject
-        parse(json, fileName, autocorrect)
-    }
-
     public fun getEntities(): MutableList<Device> {
         val entities: MutableList<Device> = mutableListOf()
         entities.addAll(devices)
@@ -186,8 +172,6 @@ public class Configuration(private val simRun: SimulationRun) {
         val index = namedAddresses[name]!!
         return devices[index]
     }
-
-    public fun getRootDevice(): Device = devices[rootRouterAddress]
 
     private fun createDevice(deviceTypeName: String, jsonDeviceParam: JsonParserObject, valuesPassThrough: JsonParserObject): Device {
         val ownAddress = devices.size
@@ -249,12 +233,10 @@ public class Configuration(private val simRun: SimulationRun) {
         val router = when (jsonRouting.getOrDefault("protocol", "RPL")) {
             "AllShortestPath" -> ApplicationStack_AllShortestPath(
                 multicastLayer,
-                simRun.logger,
                 simRun.config,
             )
             "RPL_Fast" -> ApplicationStack_RPL_Fast(
                 multicastLayer,
-                simRun.logger,
                 simRun.config,
             )
             "RPL" -> ApplicationStack_RPL(

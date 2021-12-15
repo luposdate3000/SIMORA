@@ -38,7 +38,7 @@ internal class Application_MailDistributor(
         if (pck is Package_Application_MailGroup) {
             val destinations = pck.replacements.keys.toSet().toIntArray()
             val hops = parent.getNextFeatureHops(destinations, mailDistributorFlag)
-            for (i in 0 until hops.size) {
+            for (i in hops.indices) {
                 if (hops[i] == -1) {
                     hops[i] = destinations[i]
                 }
