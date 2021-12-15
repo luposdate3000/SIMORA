@@ -1,33 +1,59 @@
 #!/bin/bash
-routing=( $(find ./resources/routing/ -name *.json | sort))
-topologies=($(find ./resources/topologies/ -name *.json | sort))
-scenarios=( \
-./resources/scenarios/mail.json \
+commands=( \
+"java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json" \
+"./build/bin/linuxX64/releaseExecutable/simora.kexe linux.json"
 )
-for t in ${topologies[@]}
+
+
+# compare topologies
+r="./resources/routing/ApplicationRPLFastLate.json"
+for s in $(find ./resources/scenarios/ -name *.json | sort)
 do
-for r in ${routing[@]}
+for t in $(find ./resources/topologies/ -name *.json | grep 64 | sort)
 do
-for s in ${scenarios[@]}
+for ((i = 0; i < ${#commands[@]}; i++))
 do
+c="${commands[$i]}"
 echo
-#pkill java -9
-#echo java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json
-#x=$(/usr/bin/time -o tmp -v java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt $r $s $t jvm.json | grep simulator_output | sed "s/.*outputdirectory=//g")
-#mv tmp "$x/time"
-done
-done
-done
-for t in ${topologies[@]}
-do
-for r in ${routing[@]}
-do
-for s in ${scenarios[@]}
-do
-echo
-echo ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
-x=$(/usr/bin/time -o tmp -v ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json | grep simulator_output | sed "s/.*outputdirectory=//g")
+pkill java -9
+echo $c $r $s $t
+x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done
+done
+done
+
+
+# compare routing
+t="./resources/topologies/Uniform64.json"
+for s in $(find ./resources/scenarios/ -name *.json | sort)
+do
+for r in $(find ./resources/routing/ -name *.json | sort)
+do
+for ((i = 0; i < ${#commands[@]}; i++))
+do
+c="${commands[$i]}"
+echo
+pkill java -9
+echo $c $r $s $t
+x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+mv tmp "$x/time"
+done
+done
+done
+
+
+# compare scalability
+c="java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
+r="./resources/routing/ApplicationRPLFastLate.json"
+for s in $(find ./resources/scenarios/ -name *.json | sort)
+do
+for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
+do
+echo
+pkill java -9
+echo $c $r $s $t
+x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+mv tmp "$x/time"
 done
 done
