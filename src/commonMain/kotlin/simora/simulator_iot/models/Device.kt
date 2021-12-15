@@ -69,7 +69,7 @@ public class Device(
         applicationStack.setDevice(this)
     }
 
-@OptIn(kotlin.time.ExperimentalTime::class)
+    @OptIn(kotlin.time.ExperimentalTime::class)
     private fun getProcessingDelay(): Long {
         if (isDeterministic) {
             return 1

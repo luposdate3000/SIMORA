@@ -43,9 +43,9 @@ echo java -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/lib
 echo
 echo ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
 /usr/bin/time -v ./build/bin/linuxX64/releaseExecutable/simora.kexe $r $s $t linux.json
-echo
-echo ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
-/usr/bin/time -v ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
+#echo
+#echo ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
+#/usr/bin/time -v ./build/bin/linuxX64/debugExecutable/simora.kexe $r $s $t linux.json
 exit
 done
 done

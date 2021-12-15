@@ -125,13 +125,11 @@ internal class ApplicationStack_RPL_Fast(
         val size = config.devices.size
         val helper = config.routingHelper as IntArray
         routingTable = IntArray(size) { helper[address] }
-        val featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address } }
+        val featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toIntArray() }
         routingTableFeatureHops = Array(config.features.size) { IntArray(size) { address } }
-        fun treeDown(hop: Int, node: Int, featureNode: IntArray) {
+
+        fun treeDown(hop: Int, node: Int) {
             routingTable[hop] = node
-            for (i in 0 until config.features.size) {
-                routingTableFeatureHops[i][hop] = featureNode[i]
-            }
             for (i in 0 until size) {
                 if (helper[i] == hop) {
                     val newNode = if (node == address) {
@@ -139,19 +137,31 @@ internal class ApplicationStack_RPL_Fast(
                     } else {
                         node
                     }
-                    val featureNodeCpy = IntArray(config.features.size) { featureNode[it] }
-                    for (j in 0 until config.features.size) {
-                        if (featureNodeCpy[j] == -1 && i != address && featuredDevices[j].contains(i)) {
-                            featureNodeCpy[j] = i
-                        }
-                    }
                     if (i != hop) {
-                        treeDown(i, newNode, featureNodeCpy)
+                        treeDown(i, newNode)
                     }
                 }
             }
         }
-        treeDown(address, address, IntArray(config.features.size) { -1 })
+        treeDown(address, address)
+        fun treeDown2(hop: Int, node: Int, feature: Int, table: IntArray, devices: IntArray) {
+            table[hop] = node
+            for (i in 0 until size) {
+                if (helper[i] == hop) {
+                    val newNode = if (node == -1 && i != address && devices.contains(i)) {
+                        i
+                    } else {
+                        node
+                    }
+                    if (i != hop) {
+                        treeDown2(i, newNode, feature, table, devices)
+                    }
+                }
+            }
+        }
+        for (f in 0 until config.features.size) {
+            treeDown2(address, -1, f, routingTableFeatureHops[f], featuredDevices[f])
+        }
         var p = helper[address]
         val treeUp = IntArray(config.features.size) { -1 }
         while (true) {
