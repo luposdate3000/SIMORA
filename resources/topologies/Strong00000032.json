@@ -7,10 +7,10 @@
             "longitude": 10.702377248379614,
             "patterns": [
                 {
-                    "count": 1023,
+                    "count": 31,
                     "deviceType": "EdgeDevice",
                     "mode": "count",
-                    "radius": 0.64,
+                    "radius": 0.01,
                     "type": "full",
                 },
             ],
