@@ -17,7 +17,7 @@
 
 @file:Suppress("UnusedImport")
 
-package simora.simulator_iot.config
+package simora.simulator_iot
 
 internal class LinkType(
     internal val name: String = "",

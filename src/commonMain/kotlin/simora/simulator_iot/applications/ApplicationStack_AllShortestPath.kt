@@ -19,13 +19,13 @@ package simora.simulator_iot.applications
 
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.config.Configuration
+import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.NetworkPackage
 
 internal class ApplicationStack_AllShortestPath(
     private val child: IApplicationStack_Actuator,
-    private val config: Configuration,
+    private val config: SimulationRun,
 ) : IApplicationStack_Rooter {
     init {
         child.setRouter(this)

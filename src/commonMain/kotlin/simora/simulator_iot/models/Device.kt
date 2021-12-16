@@ -50,7 +50,7 @@ public class Device(
         if (data is ITimer) {
             data.onTimerExpired(simulation.clock)
         } else {
-            onEvent(event.source, data)
+            onEvent(data)
         }
     }
 
@@ -99,7 +99,7 @@ public class Device(
         applicationStack.startUpRouting()
     }
 
-    private fun onEvent(source: Device, data: Any) {
+    private fun onEvent(data: Any) {
         deviceStart = Clock.System.now()
         val pck = data as NetworkPackage
         simRun.logger.onReceiveNetworkPackage(address, pck.payload)
@@ -111,7 +111,7 @@ public class Device(
     }
 
     internal fun closestDeviceWithFeature(name: String): Int {
-        val devicesWithFeature = simRun.config.getAllDevicesForFeature(simRun.config.featureIdForName2(name)).toMutableList()
+        val devicesWithFeature = simRun.getAllDevicesForFeature(simRun.featureIdForName2(name)).toMutableList()
         if (devicesWithFeature.size == 0) {
             return -1
         }
@@ -133,7 +133,7 @@ public class Device(
     }
 
     internal fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
-        val entity = simRun.config.getDeviceByAddress(hop)
+        val entity = simRun.getDeviceByAddress(hop)
         scheduleEvent(entity, pck, delay)
         simRun.logger.onSendNetworkPackage(address, dest, hop, pck.payload, delay)
     }

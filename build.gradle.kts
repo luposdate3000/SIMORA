@@ -12,7 +12,6 @@ buildscript {
         mavenLocal()
         google()
         mavenCentral()
-
     }
 }
 plugins {

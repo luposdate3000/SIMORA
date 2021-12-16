@@ -19,14 +19,13 @@ package simora.simulator_iot
 
 import simora.parser.JsonParser
 import simora.shared.inline.File
-import simora.simulator_iot.config.Configuration
 import kotlin.math.sqrt
 
 public class Evaluation {
 
     public fun evalConfigFileMerge(configFileNames: List<String>) {
         val json = JsonParser().fileMergeToJson(configFileNames)
-        var outputdirectoryTmp = Configuration.defaultOutputDirectory + "/"
+        var outputdirectoryTmp = SimulationRun.defaultOutputDirectory + "/"
         for (n in configFileNames) {
             val a = n.lastIndexOf("/") + 1
             val b = n.lastIndexOf(".")
@@ -73,8 +72,8 @@ public class Evaluation {
         val numberOfRepetitions: Int = json.getOrDefault("repeatSimulationCount", 1)
         for (repetition in 0 until numberOfRepetitions) {
             val simRun = SimulationRun()
-            val config = simRun.parseConfig(json, "", false)
-            simRun.startSimulation(config)
+            simRun.parseConfig(json, "", false)
+            simRun.startSimulation()
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
                     measurements.add(logger)

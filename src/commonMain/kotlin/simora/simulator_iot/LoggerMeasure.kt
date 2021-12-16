@@ -86,10 +86,10 @@ internal class LoggerMeasure : ILogger {
         for (d in data) {
             res.add(d)
         }
-        for (feature in 0 until simRun.config.features.size) {
+        for (feature in 0 until simRun.features.size) {
             var counter = 0.0
-            for (d in simRun.config.devices) {
-                if (simRun.config.hasFeature(d, feature)) {
+            for (d in simRun.devices) {
+                if (simRun.hasFeature(d, feature)) {
                     counter++
                 }
             }
@@ -109,7 +109,7 @@ internal class LoggerMeasure : ILogger {
         for (h in headers) {
             res.add(h)
         }
-        for (feature in simRun.config.features) {
+        for (feature in simRun.features) {
             res.add("number of devices having '" + feature.getName() + "'")
         }
         val packageByTopicReverse = mutableMapOf<Int, String>()
@@ -177,8 +177,8 @@ internal class LoggerMeasure : ILogger {
     override fun addConnectionTable(src: Int, dest: Int, hop: Int) {}
 
     override fun onStartSimulation() { // phase 1
-val stamp = Clock.System.now()
-data[StatSimulationStartupRoutingDurationReal] = (stamp - simRun.config.startConfigurationStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        val stamp = Clock.System.now()
+        data[StatSimulationStartupRoutingDurationReal] = (stamp - simRun.startConfigurationStamp).inWholeNanoseconds.toDouble() / 1000000000.0
         startSimulationTimeStamp = stamp
         startSimulationTimeStampVirtual = simRun.clock
     }
@@ -192,7 +192,7 @@ data[StatSimulationStartupRoutingDurationReal] = (stamp - simRun.config.startCon
     override fun onStartUp() { // phase 3
         val stamp = Clock.System.now()
         data[StatSimulationStartupDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal]
-        data[StatNetworkLinkCounter] = simRun.config.devices.sumOf { d -> d.linkManager.getNeighbours().filter { it > d.address }.size }.toDouble()
+        data[StatNetworkLinkCounter] = simRun.devices.sumOf { d -> d.linkManager.getNeighbours().filter { it > d.address }.size }.toDouble()
     }
     override fun onShutDown() { // phase 4
         val stamp = Clock.System.now()
