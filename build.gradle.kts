@@ -32,6 +32,7 @@ kotlin {
         compilations.forEach {
             it.kotlinOptions {
                 freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+                freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
                 freeCompilerArgs += "-Xnew-inference"
                 freeCompilerArgs += "-Xinline-classes"
             }

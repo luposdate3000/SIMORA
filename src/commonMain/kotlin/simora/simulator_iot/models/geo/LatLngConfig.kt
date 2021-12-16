@@ -16,12 +16,13 @@
 * The code was translated into Kotlin and cut to the required parts.
 * */
 package simora.simulator_iot.models.geo
-
+import kotlin.native.concurrent . ThreadLocal
 /**
  * Configuration parameters for latitude and longitude calculations.
  *
  * @author Tyler Coles
  */
+@ThreadLocal
 internal object LatLngConfig {
     /**
      * The tolerance (in degrees) by which two angles can differ and still be

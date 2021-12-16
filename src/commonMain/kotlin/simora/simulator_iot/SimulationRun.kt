@@ -49,12 +49,11 @@ import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
-
 public class SimulationRun() {
     internal companion object {
         internal const val defaultOutputDirectory: String = "simulator_output/"
     }
-    internal val startConfigurationStamp: Instant = Clock.System.now()
+    internal var startConfigurationStamp: Instant = Clock.System.now()
     public var notInitializedClock: Long = -1
     public var simMaxClock: Long = notInitializedClock
     public var maxClock: Long = Long.MAX_VALUE

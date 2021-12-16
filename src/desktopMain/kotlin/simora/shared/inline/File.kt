@@ -31,7 +31,27 @@ internal actual class File actual constructor(filename: String) {
     internal actual inline fun exists() = access(filename, F_OK) == 0
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun mkdirs() = mkdir(filename, S_IRWXU) == 0
+    internal actual inline fun mkdirs(): Boolean {
+        var arr = filename.split("/").filterNot { it == "" || it == "." }
+        if (filename.startsWith("/")) {
+            arr = listOf("") + arr
+        }
+        var i = arr.size
+        while (i >= 0) {
+            if (mkdir(arr.subList(0, i).joinToString("/"), S_IRWXU) == 0) {
+                break
+            }
+            i--
+        }
+        i++
+        while (i <= arr.size) {
+            if (mkdir(arr.subList(0, i).joinToString("/"), S_IRWXU) != 0) {
+                return false
+            }
+            i++
+        }
+        return true
+    }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
