@@ -1,7 +1,7 @@
 #!/usr/bin/env kotlin
 import java.io.File
 
-val limit = 9999999
+val limit = 30000
 val limitLength=limit.toString().length+1
 var i = 2
 var radius = 0.0025
