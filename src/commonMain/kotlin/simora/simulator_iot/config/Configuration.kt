@@ -18,6 +18,9 @@
 package simora.simulator_iot.config
 
 import simora.parser.IJsonParserValue
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
 import simora.parser.JsonParser
 import simora.parser.JsonParserArray
 import simora.parser.JsonParserObject
@@ -51,6 +54,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 public class Configuration(private val simRun: SimulationRun) {
+internal val startConfigurationStamp: Instant = Clock.System.now()
     internal companion object {
         internal const val defaultOutputDirectory: String = "simulator_output/"
     }

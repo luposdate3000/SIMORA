@@ -17,8 +17,8 @@ do
 c="${commands[$i]}"
 echo
 pkill java -9
-echo $c $r $s $t
-x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+echo $c topologies.json $r $s $t
+x=$(/usr/bin/time -o tmp -v $c topologies.json $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done
 done
@@ -36,8 +36,8 @@ do
 c="${commands[$i]}"
 echo
 pkill java -9
-echo $c $r $s $t
-x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+echo $c routing.json $r $s $t
+x=$(/usr/bin/time -o tmp -v $c routing.json $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done
 done
@@ -52,8 +52,8 @@ for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
 do
 echo
 pkill java -9
-echo $c $r $s $t
-x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+echo $c scalability.json $r $s $t
+x=$(/usr/bin/time -o tmp -v $c scalability.json $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done
 
@@ -65,7 +65,7 @@ for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
 do
 echo
 pkill java -9
-echo $c $r $s $t
-x=$(/usr/bin/time -o tmp -v $c $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+echo $c scalability.json $r $s $t
+x=$(/usr/bin/time -o tmp -v $c scalability.json $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done

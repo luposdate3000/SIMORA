@@ -23,10 +23,11 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
         val x = filename.substring(filename.lastIndexOf("/") + 2).split("_")
         var headers: List<String>? = null
         val baseRow = mutableMapOf<String, String>()
-        baseRow["routing"] = x[0]
-        baseRow["scenario"] = x[1]
-        baseRow["topology"] = x[2]
-        baseRow["platform"] = x[3]
+        baseRow["platform"] = x[0]
+        baseRow["benchmark_case"] = x[1]
+        baseRow["routing"] = x[2]
+        baseRow["scenario"] = x[3]
+        baseRow["topology"] = x[4]
         try {
             File(filename + "/time").forEachLine { line ->
                 if (line.contains("User time (seconds)")) {

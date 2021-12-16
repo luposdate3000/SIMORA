@@ -33,6 +33,7 @@ internal class LoggerMeasure : ILogger {
         private val StatNumberOfDevices: Int = StatCounter++
         private val StatNetworkLinkCounter: Int = StatCounter++
 
+        private val StatSimulationStartupConfigDurationReal: Int = StatCounter++
         private val StatSimulationStartupRoutingDurationReal: Int = StatCounter++
         private val StatSimulationStartupDurationReal: Int = StatCounter++
         private val StatSimulationShutdownDurationReal: Int = StatCounter++
@@ -55,6 +56,7 @@ internal class LoggerMeasure : ILogger {
             StatNumberOfDevices -> "number of devices"
             StatNetworkLinkCounter -> "number of links"
 
+            StatSimulationStartupConfigDurationReal -> "simulation startup duration config real (Seconds)"
             StatSimulationStartupRoutingDurationReal -> "simulation startup duration routing real (Seconds)"
             StatSimulationStartupDurationReal -> "simulation startup duration real (Seconds)"
             StatSimulationShutdownDurationReal -> "simulation shutdown duration real (Seconds)"
@@ -175,7 +177,9 @@ internal class LoggerMeasure : ILogger {
     override fun addConnectionTable(src: Int, dest: Int, hop: Int) {}
 
     override fun onStartSimulation() { // phase 1
-        startSimulationTimeStamp = Clock.System.now()
+val stamp = Clock.System.now()
+data[StatSimulationStartupRoutingDurationReal] = (stamp - simRun.config.startConfigurationStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        startSimulationTimeStamp = stamp
         startSimulationTimeStampVirtual = simRun.clock
     }
 

@@ -28,6 +28,7 @@ internal actual object ReflectionHelper {
             "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailDistributor" -> simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailDistributor()
             "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailReceiver" -> simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailReceiver()
             "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender" -> simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender()
+"simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical"->simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical()
             else -> TODO("ReflectionHelper.create(\"$name\")")
         }
     }
