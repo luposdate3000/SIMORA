@@ -7,6 +7,8 @@ commands=( \
 
 
 # compare topologies
+if false
+then
 r="./resources/routing/ApplicationRPLFastLate.json"
 for s in $(find ./resources/scenarios/ -name *.json | sort)
 do
@@ -23,9 +25,12 @@ mv tmp "$x/time"
 done
 done
 done
+fi
 
 
 # compare routing
+if false
+then
 t="./resources/topologies/Uniform64.json"
 for s in $(find ./resources/scenarios/ -name *.json | sort)
 do
@@ -42,6 +47,7 @@ mv tmp "$x/time"
 done
 done
 done
+fi
 
 
 # compare scalability

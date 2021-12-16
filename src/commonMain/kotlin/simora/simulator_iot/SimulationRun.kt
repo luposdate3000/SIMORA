@@ -61,7 +61,7 @@ public class SimulationRun() {
     internal val randGenerator = RandomGenerator()
     internal val logger: Loggers = Loggers(mutableListOf())
     private var addedEventCounter: Int = 0
-    private var futureEvents: PriorityQueue = PriorityQueue()
+    private var futureEvents: PriorityQueue<Event> = PriorityQueue<Event>()
     internal var routingHelper: Any? = null
     private val factories = mutableMapOf<String, IApplication_Factory>()
     internal val features: MutableList<IApplicationFeature> = mutableListOf(RoutingFeature())
@@ -423,7 +423,7 @@ public class SimulationRun() {
     }
 
     public fun run() {
-        var nextEvent = futureEvents.extractMin() as Event?
+        var nextEvent = futureEvents.extractMinValue()
         while (nextEvent != null) {
             if (nextEvent.occurrenceTime > maxClock) {
                 break
@@ -431,7 +431,7 @@ public class SimulationRun() {
             clock = nextEvent.occurrenceTime
             val entity = nextEvent.destination
             entity.processIncomingEvent(nextEvent)
-            nextEvent = futureEvents.extractMin() as Event?
+            nextEvent = futureEvents.extractMinValue()
         }
     }
 
@@ -444,12 +444,12 @@ public class SimulationRun() {
             entity.simulation = this
             entity.onStartUpRouting()
         }
-        var nextEvent = futureEvents.extractMin() as Event?
+        var nextEvent = futureEvents.extractMinValue()
         while (nextEvent != null) {
             clock = nextEvent.occurrenceTime
             val entity = nextEvent.destination
             entity.processIncomingEvent(nextEvent)
-            nextEvent = futureEvents.extractMin() as Event?
+            nextEvent = futureEvents.extractMinValue()
         }
         logger.onStartUpRouting()
         for (entity in devices) {

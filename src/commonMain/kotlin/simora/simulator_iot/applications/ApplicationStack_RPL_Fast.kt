@@ -18,6 +18,7 @@
 package simora.simulator_iot.applications
 
 import simora.simulator_core.ITimer
+import simora.simulator_core.PriorityQueue
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
@@ -93,34 +94,20 @@ internal class ApplicationStack_RPL_Fast(
             tinyMatrix[config.rootRouterAddress] = 0.0
             tinyMatrixNext[config.rootRouterAddress] = config.rootRouterAddress
 // dijkstra
-            val queue = IntArray(size) { -1 }
-            queue[0] = config.rootRouterAddress
-            var queueSize = 1
-            for (i in 0 until size) {
-                var queueIdx = 0
-                var addrSrc = queue[queueIdx]
-                var mincost = tinyMatrix[addrSrc]
-                for (j in 0 until queueSize) {
-                    if (mincost > tinyMatrix[queue[j]]) {
-                        queueIdx = j
-                        addrSrc = queue[queueIdx]
-                        mincost = tinyMatrix[addrSrc]
-                    }
-                }
-                queueSize--
-                queue[queueIdx] = queue[queueSize]
-                queue[queueSize] = -1
+            val q = PriorityQueue<Int>()
+            q.insert(config.rootRouterAddress, 0)
+            var addrSrc = q.extractMinValue()
+            while (addrSrc != null) {
                 val device = config.devices[addrSrc]
                 for (addrDest in device.linkManager.getNeighbours()) {
                     val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + tinyMatrix[addrSrc]
                     if (cost < tinyMatrix[addrDest]) {
                         tinyMatrix[addrDest] = cost
                         tinyMatrixNext[addrDest] = addrSrc
-                        if (!queue.contains(addrDest)) {
-                            queue[queueSize++] = addrDest
-                        }
+                        q.insert(addrDest, (cost * 1000.0).toLong())
                     }
                 }
+                addrSrc = q.extractMinValue()
             }
             config.routingHelper = tinyMatrixNext
         }
