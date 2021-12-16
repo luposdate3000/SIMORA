@@ -16,7 +16,7 @@
 * The code was translated into Kotlin and cut to the required parts.
 * */
 package simora.simulator_iot.models.geo
-import kotlin.native.concurrent . ThreadLocal
+import kotlin.native.concurrent.ThreadLocal
 /**
  * Configuration parameters for latitude and longitude calculations.
  *

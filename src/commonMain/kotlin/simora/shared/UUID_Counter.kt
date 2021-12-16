@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.shared
-import kotlin.native.concurrent . ThreadLocal
+import kotlin.native.concurrent.ThreadLocal
 @ThreadLocal
 internal object UUID_Counter {
     private var uuid = 0L

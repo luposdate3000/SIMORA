@@ -25,7 +25,7 @@ import kotlin.math.sqrt
 public class Evaluation {
 
     public fun evalConfigFileMerge(configFileNames: List<String>) {
-var stamp = Clock.System.now()
+        var stamp = Clock.System.now()
         val json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = SimulationRun.defaultOutputDirectory + "/"
         for (n in configFileNames) {
@@ -72,10 +72,10 @@ var stamp = Clock.System.now()
         }
 
         val numberOfRepetitions: Int = json.getOrDefault("repeatSimulationCount", 1)
-val initTime=Clock.System.now()-stamp
+        val initTime = Clock.System.now() - stamp
         for (repetition in 0 until numberOfRepetitions) {
             val simRun = SimulationRun()
-simRun.startConfigurationStamp=Clock.System.now()-initTime
+            simRun.startConfigurationStamp = Clock.System.now() - initTime
             simRun.parseConfig(json, "", false)
             simRun.startSimulation()
             for (logger in simRun.logger.loggers) {

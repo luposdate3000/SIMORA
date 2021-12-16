@@ -23,7 +23,7 @@ internal object ExternalModule_fs {
         return inmemoryFs[filename] != null
     }
 
-    internal fun mkdirs(@Suppress("UNUSED_PARAMETER")filename: String): Boolean {
+    internal fun mkdirs(@Suppress("UNUSED_PARAMETER") filename: String): Boolean {
         return true
     }
 

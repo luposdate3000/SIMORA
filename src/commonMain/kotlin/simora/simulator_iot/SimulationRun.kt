@@ -61,7 +61,7 @@ public class SimulationRun() {
     internal val randGenerator = RandomGenerator()
     internal val logger: Loggers = Loggers(mutableListOf())
     private var addedEventCounter: Int = 0
-    private var futureEvents: PriorityQueue<Event> = PriorityQueue(compareBy<Event> { it.occurrenceTime }.thenBy { it.eventNumber })
+    private var futureEvents: PriorityQueue = PriorityQueue()
     internal var routingHelper: Any? = null
     private val factories = mutableMapOf<String, IApplication_Factory>()
     internal val features: MutableList<IApplicationFeature> = mutableListOf(RoutingFeature())
@@ -423,31 +423,33 @@ public class SimulationRun() {
     }
 
     public fun run() {
-        while (futureEvents.hasNext()) {
-            if (futureEvents.peek().occurrenceTime > maxClock) {
+        var nextEvent = futureEvents.extractMin() as Event?
+        while (nextEvent != null) {
+            if (nextEvent.occurrenceTime > maxClock) {
                 break
             }
-            val nextEvent = futureEvents.dequeue()
             clock = nextEvent.occurrenceTime
             val entity = nextEvent.destination
             entity.processIncomingEvent(nextEvent)
+            nextEvent = futureEvents.extractMin() as Event?
         }
     }
 
     internal fun addEvent(delay: Long, src: Device, dest: Device, data: Any) {
         addedEventCounter++
-        futureEvents.enqueue(Event(addedEventCounter, clock + delay, src, dest, data))
+        futureEvents.insert(Event(addedEventCounter, clock + delay, src, dest, data), clock + delay)
     }
     public fun startUp() {
         for (entity: Device in devices) {
             entity.simulation = this
             entity.onStartUpRouting()
         }
-        while (futureEvents.hasNext()) {
-            val nextEvent = futureEvents.dequeue()
+        var nextEvent = futureEvents.extractMin() as Event?
+        while (nextEvent != null) {
             clock = nextEvent.occurrenceTime
             val entity = nextEvent.destination
             entity.processIncomingEvent(nextEvent)
+            nextEvent = futureEvents.extractMin() as Event?
         }
         logger.onStartUpRouting()
         for (entity in devices) {

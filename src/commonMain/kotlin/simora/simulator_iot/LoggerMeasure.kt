@@ -19,7 +19,7 @@ package simora.simulator_iot
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlin.native.concurrent . ThreadLocal
+import kotlin.native.concurrent.ThreadLocal
 @OptIn(kotlin.time.ExperimentalTime::class)
 internal class LoggerMeasure : ILogger {
     private lateinit var simRun: SimulationRun
@@ -27,7 +27,7 @@ internal class LoggerMeasure : ILogger {
         this.simRun = simRun
     }
 
-@ThreadLocal
+    @ThreadLocal
     internal companion object {
         internal var StatCounter: Int = 0
         private val StatNumberOfDevices: Int = StatCounter++

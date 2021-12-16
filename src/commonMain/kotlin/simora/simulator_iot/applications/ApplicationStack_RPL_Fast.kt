@@ -128,7 +128,7 @@ internal class ApplicationStack_RPL_Fast(
 
     override fun startUpRouting() {
         calculateConfigRoutingHelper()
-        if (lateInitRoutingTable) {
+        if (!lateInitRoutingTable) {
             initRoutingTable()
         }
     }

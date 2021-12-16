@@ -16,6 +16,8 @@
  */
 
 package simora
+
+/*
 import com.google.monitoring.runtime.instrumentation.AllocationRecorder
 import com.google.monitoring.runtime.instrumentation.Sampler
 private class SamplerImpl : Sampler {
@@ -49,4 +51,8 @@ public fun main(args: Array<String>) {
     AllocationRecorder.addSampler(impl)
     mainfunc(args.toList())
     impl.finish()
+}
+*/
+public fun main(args: Array<String>) {
+    mainfunc(args.toList())
 }
