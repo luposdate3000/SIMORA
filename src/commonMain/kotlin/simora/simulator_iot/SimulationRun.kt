@@ -509,9 +509,7 @@ public class SimulationRun {
             val dLatR = abs(lat2R - lat1R)
             val dLngR = abs((two.longitude - one.longitude) / 180.0 * PI)
             val a = sin(dLatR / 2) * sin(dLatR / 2) + (cos(lat1R) * cos(lat2R) * sin(dLngR / 2) * sin(dLngR / 2))
-            val x = 2 * atan2(sqrt(a), sqrt(1 - a))
-            val y = 6371009
-            return x * y
+            return 2 * atan2(sqrt(a), sqrt(1 - a))*6371009
         } else {
             val x = two.latitude - one.latitude
             val y = two.longitude - one.longitude
