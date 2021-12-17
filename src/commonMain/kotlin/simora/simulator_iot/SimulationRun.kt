@@ -42,17 +42,15 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.models.geo.LatLngTool
 import simora.simulator_iot.models.net.LinkManager
 import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
 public class SimulationRun {
-    internal companion object {
-        internal const val defaultOutputDirectory: String = "simulator_output/"
-    }
     internal var startConfigurationStamp: Instant = Clock.System.now()
     public var notInitializedClock: Long = -1
     public var simMaxClock: Long = notInitializedClock
@@ -68,7 +66,7 @@ public class SimulationRun {
     private val featureIDRouting = 0
     public var devices: MutableList<Device> = mutableListOf()
     private var namedAddresses: MutableMap<String, Int> = mutableMapOf()
-    public var outputDirectory: String = defaultOutputDirectory
+    public var outputDirectory: String = Config.defaultOutputDirectory
     private var json: JsonParserObject? = null
     public var rootRouterAddress: Int = -1
     private var sortedLinkTypes: Array<LinkType> = emptyArray()
@@ -99,10 +97,10 @@ public class SimulationRun {
 
     private fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
         this.json = json
-        outputDirectory = json.getOrDefault("outputDirectory", defaultOutputDirectory) + "/"
+        outputDirectory = json.getOrDefault("outputDirectory", Config.defaultOutputDirectory) + "/"
         if (outputDirectory == "") {
-            outputDirectory = defaultOutputDirectory
-            json["outputDirectory"] = defaultOutputDirectory
+            outputDirectory = Config.defaultOutputDirectory
+            json["outputDirectory"] = Config.defaultOutputDirectory
         }
         val jsonLoggers = json.getOrEmptyObject("logging")
         for ((loggerName, loggerJson) in jsonLoggers) {
@@ -239,7 +237,6 @@ public class SimulationRun {
                 multicastLayer,
                 this,
                 jsonRouting.getOrDefault("lateInitRoutingTable", false),
-                jsonRouting.getOrDefault("usePriorityQueue", true),
             )
             "RPL" -> ApplicationStack_RPL(
                 multicastLayer,
@@ -505,7 +502,22 @@ public class SimulationRun {
         }
     }
 
-    internal fun getDistanceInMeters(one: Device, two: Device): Double = LatLngTool.getDistanceInMeters(one.latitude, one.longitude, two.latitude, two.longitude)
+    internal fun getDistanceInMeters(one: Device, two: Device): Double {
+        if (Config.useDistanceLatLong) {
+            val lat1R = one.latitude / 180.0 * PI
+            val lat2R = two.latitude / 180.0 * PI
+            val dLatR = abs(lat2R - lat1R)
+            val dLngR = abs((two.longitude - one.longitude) / 180.0 * PI)
+            val a = sin(dLatR / 2) * sin(dLatR / 2) + (cos(lat1R) * cos(lat2R) * sin(dLngR / 2) * sin(dLngR / 2))
+            val x = 2 * atan2(sqrt(a), sqrt(1 - a))
+            val y = 6371009
+            return x * y
+        } else {
+            val x = two.latitude - one.latitude
+            val y = two.longitude - one.longitude
+            return sqrt(x * x + y * y)
+        }
+    }
 
     private fun link(one: Device, two: Device, dataRate: Int) {
         one.linkManager.addLink(two.address, dataRate)

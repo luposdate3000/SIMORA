@@ -27,7 +27,7 @@ public class Evaluation {
     public fun evalConfigFileMerge(configFileNames: List<String>) {
         val stamp = Clock.System.now()
         val json = JsonParser().fileMergeToJson(configFileNames)
-        var outputdirectoryTmp = SimulationRun.defaultOutputDirectory + "/"
+        var outputdirectoryTmp = Config.defaultOutputDirectory + "/"
         for (n in configFileNames) {
             val a = n.lastIndexOf("/") + 1
             val b = n.lastIndexOf(".")

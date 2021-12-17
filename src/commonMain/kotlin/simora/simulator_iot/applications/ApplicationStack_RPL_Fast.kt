@@ -19,6 +19,7 @@ package simora.simulator_iot.applications
 
 import simora.simulator_core.ITimer
 import simora.simulator_core.PriorityQueue
+import simora.simulator_iot.Config
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
@@ -28,7 +29,6 @@ internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
     private val lateInitRoutingTable: Boolean,
-    private val usePriorityQueue: Boolean,
 ) : IApplicationStack_Rooter {
     init {
         child.setRouter(this)
@@ -95,7 +95,7 @@ internal class ApplicationStack_RPL_Fast(
             tinyMatrix[config.rootRouterAddress] = 0.0
             tinyMatrixNext[config.rootRouterAddress] = config.rootRouterAddress
 // dijkstra
-            if (usePriorityQueue) {
+            if (Config.usePriorityQueue) {
 // the runtime is theoretically faster, but this allocates a lot of temporary objects
                 val q = PriorityQueue<Int>()
                 q.insert(config.rootRouterAddress, 0)

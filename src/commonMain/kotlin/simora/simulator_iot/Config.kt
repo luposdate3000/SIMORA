@@ -15,20 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_core
-// https://rosettacode.org/wiki/Fibonacci_heap#Kotlin
-internal class PriorityQueueNode<V>(var value: V, var key: Long) {
-    var parent: PriorityQueueNode<V>? = null
-    var child: PriorityQueueNode<V>? = null
-    var prev: PriorityQueueNode<V>? = null
-    var next: PriorityQueueNode<V>? = null
-    var rank = 0
-    var mark = false
-
-    fun meld1(node: PriorityQueueNode<V>) {
-        this.prev?.next = node
-        node.prev = this.prev
-        node.next = this
-        this.prev = node
-    }
+package simora.simulator_iot
+internal object Config {
+    internal const val defaultOutputDirectory: String = "simulator_output/"
+    internal const val useDistanceLatLong: Boolean = false
+    internal const val usePriorityQueue: Boolean = false
 }
