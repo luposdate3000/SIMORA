@@ -27,6 +27,7 @@ internal class ApplicationStack_MulticastRouting(
     private val child: IApplicationStack_Actuator,
 ) : IApplicationStack_BothDirections {
     private lateinit var parent: IApplicationStack_Middleware
+    private var myQueue = mutableSetOf<Package_ApplicationStack_Multicast>()
 
     init {
         child.setRouter(this)
@@ -48,10 +49,11 @@ internal class ApplicationStack_MulticastRouting(
         parent = router
     }
 
-    private var myQueue = mutableSetOf<Package_ApplicationStack_Multicast>()
     private fun myFlush() {
 // indentify duplicates
-        for (p in myQueue) {
+        val queueCopy = myQueue
+        myQueue = mutableSetOf<Package_ApplicationStack_Multicast>()
+        for (p in queueCopy) {
             if (p.targets.size == 1) {
                 parent.send(p.targets[0], p.pck)
             } else {
@@ -107,7 +109,6 @@ internal class ApplicationStack_MulticastRouting(
 
     override fun send(destinationAddress: Int, pck: IPayload) {
         if (pck is IPayloadBinary) {
-            println("ApplicationStack_MulticastRouting.send IPayloadBinary")
 // add all possible elements to send queue
             val p = Package_ApplicationStack_Multicast(mutableListOf(destinationAddress), pck)
             val element = myQueue.find { it == p }
@@ -117,7 +118,6 @@ internal class ApplicationStack_MulticastRouting(
                 element.targets.add(destinationAddress)
             }
         } else {
-            println("ApplicationStack_MulticastRouting.send other $pck")
             parent.send(destinationAddress, pck)
         }
     }
