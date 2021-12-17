@@ -124,8 +124,7 @@ internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) 
         cutAndMeld(p)
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun cutAndMeld(x: PriorityQueueNode<V>) {
+    private fun cutAndMeld(x: PriorityQueueNode<V>) {
         cut(x)
         x.parent = null
         this.node?.meld1(x)

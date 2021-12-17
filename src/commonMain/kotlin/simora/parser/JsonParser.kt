@@ -20,8 +20,7 @@ package simora.parser
 import simora.shared.inline.File
 
 internal class JsonParser {
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readValueAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
+    private fun readValueAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         val i = readSpacesAt(data, off)
         while (i < data.length) {
             return when (data[i]) {
@@ -36,8 +35,7 @@ internal class JsonParser {
         return data.length to JsonParserObject(mutableMapOf())
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readMapAt(data: String, off: Int): Pair<Int, JsonParserObject> {
+    private fun readMapAt(data: String, off: Int): Pair<Int, JsonParserObject> {
         var i = off + 1
         val res = mutableMapOf<String, IJsonParserValue>()
         loop@ while (i < data.length) {
@@ -65,8 +63,7 @@ internal class JsonParser {
         throw Exception("object not closed I $off '${data[off]}' $data")
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readSpacesAt(data: String, off: Int): Int {
+    private fun readSpacesAt(data: String, off: Int): Int {
         var i = off
         while (i < data.length) {
             when (data[i]) {
@@ -79,8 +76,7 @@ internal class JsonParser {
         return i
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readArrayAt(data: String, off: Int): Pair<Int, JsonParserArray> {
+    private fun readArrayAt(data: String, off: Int): Pair<Int, JsonParserArray> {
         var i = off + 1
         val res = mutableListOf<IJsonParserValue>()
         loop@ while (i < data.length) {
@@ -102,8 +98,7 @@ internal class JsonParser {
         throw Exception("array not closed H $off '${data[off]}' $data")
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readNumberAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
+    private fun readNumberAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         var i = off
         while (i < data.length) {
             when (data[i]) {
@@ -139,8 +134,7 @@ internal class JsonParser {
         throw Exception("unknown numberformat at E $off '${data.substring(off, i)}' $data")
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readStringAt(data: String, off: Int): Pair<Int, JsonParserString> {
+    private fun readStringAt(data: String, off: Int): Pair<Int, JsonParserString> {
         var i = off + 1
         var backslashOpen = false
         while (i < data.length) {
@@ -166,8 +160,7 @@ internal class JsonParser {
         throw Exception("string not closed $off '${data[off]}' $data")
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun readBooleanAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
+    private fun readBooleanAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         when (data[off]) {
             't', 'T' -> {
                 if (data[off + 1] == 'r' || data[off + 1] == 'R') {
