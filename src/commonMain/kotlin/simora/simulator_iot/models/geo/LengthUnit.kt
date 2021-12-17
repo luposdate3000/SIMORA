@@ -29,22 +29,6 @@ internal enum class LengthUnit(
      */
     private val scaleFactor: Double
 ) {
-    /**
-     * Miles, using the scale factor 0.6213712 miles per kilometer.
-     */
-    MILE(0.6213712),
-
-    /**
-     * Nautical miles, using the scale factor 0.5399568 nautical miles per kilometer.
-     */
-    NAUTICAL_MILE(0.5399568),
-
-    /**
-     * Rods, using the scale factor 198.8387815 rods to the kilometer.
-     * Because your car gets forty rods to the hogshead and that's
-     * they way you likes it.
-     */
-    ROD(198.8387815),
 
     /**
      * Kilometers, the primary unit.

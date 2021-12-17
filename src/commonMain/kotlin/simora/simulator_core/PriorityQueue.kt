@@ -18,10 +18,10 @@
 package simora.simulator_core
 // https://rosettacode.org/wiki/Fibonacci_heap#Kotlin
 
-internal class PriorityQueue<V>(var node: PriorityQueueNode<V>? = null) {
+internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) {
 
     fun insert(v: V, k: Long): PriorityQueueNode<V> {
-        val x = PriorityQueueNode<V>(v, k)
+        val x = PriorityQueueNode(v, k)
         if (this.node == null) {
             x.next = x
             x.prev = x
@@ -33,22 +33,9 @@ internal class PriorityQueue<V>(var node: PriorityQueueNode<V>? = null) {
         return x
     }
 
-    fun union(other: PriorityQueue<V>) {
-        if (this.node == null) {
-            this.node = other.node
-        } else if (other.node != null) {
-            this.node!!.meld2(other.node!!)
-            if (other.node!!.key < this.node!!.key) this.node = other.node
-        }
-        other.node = null
-    }
-
-    fun minimum(): PriorityQueueNode<V>? = this.node
-
     fun extractMinValue(): V? = extractMin()?.value
-    fun extractMin(): PriorityQueueNode<V>? {
-        val min = this.node
-        if (min == null) return null
+    private fun extractMin(): PriorityQueueNode<V>? {
+        val min = this.node ?: return null
         val roots = mutableMapOf<Int, PriorityQueueNode<V>>()
 
         fun add(r: PriorityQueueNode<V>) {
@@ -115,24 +102,8 @@ internal class PriorityQueue<V>(var node: PriorityQueueNode<V>? = null) {
         return min
     }
 
-    fun decreaseKey(n: PriorityQueueNode<V>, value: V, key: Long) {
-        require(n.key> key) {
-            "In 'decreaseKey' new value greater than existing value"
-        }
-        n.value = value
-        n.key = key
-        if (n == this.node) return
-        val p = n.parent
-        if (p == null) {
-            if (key < this.node!!.key) this.node = n
-            return
-        }
-        cutAndMeld(n)
-    }
-
     private fun cut(x: PriorityQueueNode<V>) {
-        val p = x.parent
-        if (p == null) return
+        val p = x.parent ?: return
         p.rank--
         if (p.rank == 0) {
             p.child = null
@@ -153,27 +124,5 @@ internal class PriorityQueue<V>(var node: PriorityQueueNode<V>? = null) {
         cut(x)
         x.parent = null
         this.node?.meld1(x)
-    }
-
-    fun delete(n: PriorityQueueNode<V>) {
-        val p = n.parent
-        if (p == null) {
-            if (n == this.node) {
-                extractMin()
-                return
-            }
-            n.prev?.next = n.next
-            n.next?.prev = n.prev
-        } else {
-            cut(n)
-        }
-        var c = n.child
-        if (c == null) return
-        while (true) {
-            c!!.parent = null
-            c = c.next
-            if (c == n.child) break
-        }
-        this.node?.meld2(c!!)
     }
 }

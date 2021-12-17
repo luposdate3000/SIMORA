@@ -47,56 +47,6 @@ import kotlin.math.sqrt
  */
 internal object LatLngTool {
     /**
-     * Distance between two points.
-     *
-     * @param point1
-     * the first point.
-     * @param point2
-     * the second point.
-     * @param unit
-     * the unit of measure in which to receive the result.
-     * @return the distance in the chosen unit of measure.
-     */
-    internal fun distance(point1: LatLng, point2: LatLng, unit: LengthUnit): Double {
-        return distanceInRadians(point1, point2) * LatLngConfig.getEarthRadius(unit)
-    }
-
-    /**
-     *
-     *
-     * This "distance" function is mostly for internal use. Most users will
-     * simply rely upon [.distance]
-     *
-     *
-     *
-     *
-     * Yields the internal angle for an arc between two points on the surface of
-     * a sphere in radians. This angle is in the plane of the great circle
-     * connecting the two points measured from an axis through one of the points
-     * and the center of the Earth. Multiply this value by the sphere's radius
-     * to get the length of the arc.
-     *
-     *
-     * @param point1
-     * the first point.
-     * @param point2
-     * the second point.
-     * @return the internal angle for the arc connecting the two points in
-     * radians.
-     */
-    private fun distanceInRadians(point1: LatLng, point2: LatLng): Double {
-        val lat1R = toRadians(point1.getLatitude())
-        val lat2R = toRadians(point2.getLatitude())
-        val dLatR = abs(lat2R - lat1R)
-        val dLngR = abs(toRadians(point2.getLongitude() - point1.getLongitude()))
-        val a = sin(dLatR / 2) * sin(dLatR / 2) + (
-            cos(lat1R) * cos(lat2R) *
-                sin(dLngR / 2) * sin(dLngR / 2)
-            )
-        return 2 * atan2(sqrt(a), sqrt(1 - a))
-    }
-
-    /**
      * Converts an angle measured in degrees to an approximately
      * equivalent angle measured in radians.  The conversion from
      * degrees to radians is generally inexact.
@@ -141,5 +91,19 @@ internal object LatLngTool {
             longitudeResult = 180 + diff
         }
         return longitudeResult
+    }
+
+    internal fun getDistanceInMeters(latitudeA: Double, longitudeA: Double, latitudeB: Double, longitudeB: Double): Double {
+        val lat1R = toRadians(latitudeA)
+        val lat2R = toRadians(latitudeB)
+        val dLatR = abs(lat2R - lat1R)
+        val dLngR = abs(toRadians(longitudeB - longitudeA))
+        val a = sin(dLatR / 2) * sin(dLatR / 2) + (
+            cos(lat1R) * cos(lat2R) *
+                sin(dLngR / 2) * sin(dLngR / 2)
+            )
+        val x = 2 * atan2(sqrt(a), sqrt(1 - a))
+        val y = LatLngConfig.getEarthRadius(LengthUnit.METER)
+        return x * y
     }
 }

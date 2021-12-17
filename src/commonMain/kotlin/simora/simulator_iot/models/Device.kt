@@ -24,13 +24,13 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Rooter
-import simora.simulator_iot.models.geo.GeoLocation
 import simora.simulator_iot.models.net.LinkManager
 import simora.simulator_iot.models.net.NetworkPackage
 
 public class Device(
     private val simRun: SimulationRun,
-    internal var location: GeoLocation,
+    internal var latitude: Double,
+    internal var longitude: Double,
     public val address: Int,
     private val performance: Double,
     public val linkManager: LinkManager,
@@ -118,11 +118,11 @@ public class Device(
         var closestDevice: Device? = null
         var closestDistance = 0.0
         for (d in devicesWithFeature) {
+            val dist = simRun.getDistanceInMeters(this, d)
             if (closestDevice == null) {
                 closestDevice = d
-                closestDistance = d.location.getDistanceInMeters(location)
+                closestDistance = dist
             } else {
-                val dist = d.location.getDistanceInMeters(location)
                 if (dist < closestDistance) {
                     closestDevice = d
                     closestDistance = dist

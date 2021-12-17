@@ -94,7 +94,7 @@ internal class ApplicationStack_AllShortestPath(
                 val addrSrc = device.address
                 for (addrDest in device.linkManager.getNeighbours()) {
                     val idx = addrDest * size + addrSrc
-                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001
+                    val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001
                     if (cost < matrix[idx] || matrix[idx] <0.0) {
                         matrix[idx] = cost
                         matrixNext[idx] = addrDest

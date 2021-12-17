@@ -52,7 +52,7 @@ internal class ApplicationStack_MulticastRouting(
     private fun myFlush() {
 // indentify duplicates
         val queueCopy = myQueue
-        myQueue = mutableSetOf<Package_ApplicationStack_Multicast>()
+        myQueue = mutableSetOf()
         for (p in queueCopy) {
             if (p.targets.size == 1) {
                 parent.send(p.targets[0], p.pck)

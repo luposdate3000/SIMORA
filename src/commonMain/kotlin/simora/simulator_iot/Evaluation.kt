@@ -25,7 +25,7 @@ import kotlin.math.sqrt
 public class Evaluation {
 
     public fun evalConfigFileMerge(configFileNames: List<String>) {
-        var stamp = Clock.System.now()
+        val stamp = Clock.System.now()
         val json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = SimulationRun.defaultOutputDirectory + "/"
         for (n in configFileNames) {

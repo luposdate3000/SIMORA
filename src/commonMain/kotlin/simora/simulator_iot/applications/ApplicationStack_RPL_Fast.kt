@@ -28,6 +28,7 @@ internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
     private val lateInitRoutingTable: Boolean,
+    private val usePriorityQueue: Boolean,
 ) : IApplicationStack_Rooter {
     init {
         child.setRouter(this)
@@ -94,20 +95,54 @@ internal class ApplicationStack_RPL_Fast(
             tinyMatrix[config.rootRouterAddress] = 0.0
             tinyMatrixNext[config.rootRouterAddress] = config.rootRouterAddress
 // dijkstra
-            val q = PriorityQueue<Int>()
-            q.insert(config.rootRouterAddress, 0)
-            var addrSrc = q.extractMinValue()
-            while (addrSrc != null) {
-                val device = config.devices[addrSrc]
-                for (addrDest in device.linkManager.getNeighbours()) {
-                    val cost = device.location.getDistanceInMeters(config.devices[addrDest].location) + 0.0001 + tinyMatrix[addrSrc]
-                    if (cost < tinyMatrix[addrDest]) {
-                        tinyMatrix[addrDest] = cost
-                        tinyMatrixNext[addrDest] = addrSrc
-                        q.insert(addrDest, (cost * 1000.0).toLong())
+            if (usePriorityQueue) {
+// the runtime is theoretically faster, but this allocates a lot of temporary objects
+                val q = PriorityQueue<Int>()
+                q.insert(config.rootRouterAddress, 0)
+                var addrSrc = q.extractMinValue()
+                while (addrSrc != null) {
+                    val device = config.devices[addrSrc]
+                    for (addrDest in device.linkManager.getNeighbours()) {
+                        val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001 + tinyMatrix[addrSrc]
+                        if (cost < tinyMatrix[addrDest]) {
+                            tinyMatrix[addrDest] = cost
+                            tinyMatrixNext[addrDest] = addrSrc
+                            q.insert(addrDest, (cost * 1000.0).toLong())
+                        }
+                    }
+                    addrSrc = q.extractMinValue()
+                }
+            } else {
+// due to the array, here is NO garbage collection required. But the array is not sorted, such that it takes more time to search for the next entry
+                val queue = IntArray(size) { -1 }
+                queue[0] = config.rootRouterAddress
+                var queueSize = 1
+                for (i in 0 until size) {
+                    var queueIdx = 0
+                    var addrSrc = queue[queueIdx]
+                    var mincost = tinyMatrix[addrSrc]
+                    for (j in 0 until queueSize) {
+                        if (mincost > tinyMatrix[queue[j]]) {
+                            queueIdx = j
+                            addrSrc = queue[queueIdx]
+                            mincost = tinyMatrix[addrSrc]
+                        }
+                    }
+                    queueSize--
+                    queue[queueIdx] = queue[queueSize]
+                    queue[queueSize] = -1
+                    val device = config.devices[addrSrc]
+                    for (addrDest in device.linkManager.getNeighbours()) {
+                        val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001 + tinyMatrix[addrSrc]
+                        if (cost < tinyMatrix[addrDest]) {
+                            tinyMatrix[addrDest] = cost
+                            tinyMatrixNext[addrDest] = addrSrc
+                            if (!queue.contains(addrDest)) {
+                                queue[queueSize++] = addrDest
+                            }
+                        }
                     }
                 }
-                addrSrc = q.extractMinValue()
             }
             config.routingHelper = tinyMatrixNext
         }

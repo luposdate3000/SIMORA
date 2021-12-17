@@ -32,7 +32,6 @@ internal class Application_MailSenderIdentical(
     private val random: RandomGenerator,
     private val allReveivers: List<Int>,
     private val text_length_fixed: Int,
-    private val text_length_dynamic: Int,
     private val receiverCount: Int,
     private val useApplicationSideMulticast: Boolean,
 ) : IApplicationStack_Actuator, ITimer {
@@ -70,7 +69,7 @@ internal class Application_MailSenderIdentical(
             val reveiverList = (allReveivers + allReveivers).subList(startIndex, startIndex + count)
             val text = getRandomString(text_length_fixed)
             if (useApplicationSideMulticast) {
-                parent.send(ownAddress, Package_Application_MailGroupIdentical("$text", reveiverList.toSet()))
+                parent.send(ownAddress, Package_Application_MailGroupIdentical(text, reveiverList.toSet()))
             } else {
                 for (address in reveiverList) {
                     parent.send(address, Package_Application_Mail(text))

@@ -42,14 +42,14 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.models.geo.GeoLocation
+import simora.simulator_iot.models.geo.LatLngTool
 import simora.simulator_iot.models.net.LinkManager
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
-public class SimulationRun() {
+public class SimulationRun {
     internal companion object {
         internal const val defaultOutputDirectory: String = "simulator_output/"
     }
@@ -58,10 +58,10 @@ public class SimulationRun() {
     public var simMaxClock: Long = notInitializedClock
     public var maxClock: Long = Long.MAX_VALUE
     public var clock: Long = 0
-    internal val randGenerator = RandomGenerator()
+    private val randGenerator = RandomGenerator()
     internal val logger: Loggers = Loggers(mutableListOf())
     private var addedEventCounter: Int = 0
-    private var futureEvents: PriorityQueue<Event> = PriorityQueue<Event>()
+    private var futureEvents: PriorityQueue<Event> = PriorityQueue()
     internal var routingHelper: Any? = null
     private val factories = mutableMapOf<String, IApplication_Factory>()
     internal val features: MutableList<IApplicationFeature> = mutableListOf(RoutingFeature())
@@ -97,7 +97,7 @@ public class SimulationRun() {
         return false
     }
 
-    internal fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
+    private fun parse(json: JsonParserObject, fileName: String, autocorrect: Boolean = true) {
         this.json = json
         outputDirectory = json.getOrDefault("outputDirectory", defaultOutputDirectory) + "/"
         if (outputDirectory == "") {
@@ -153,6 +153,7 @@ public class SimulationRun() {
         createPattern(
             json.getOrEmptyArray("patterns"),
             null,
+            null,
             JsonParserObject(mutableMapOf()),
             null,
         )
@@ -180,7 +181,8 @@ public class SimulationRun() {
         jsonDevice.mergeWith(deviceType2.cloneJson())
         jsonDevice.mergeWith(jsonDeviceParam.cloneJson())
 // device json<<--
-        val location = GeoLocation(jsonDevice.getOrDefault("latitude", 0.0), jsonDevice.getOrDefault("longitude", 0.0))
+        val latitude = jsonDevice.getOrDefault("latitude", 0.0)
+        val longitude = jsonDevice.getOrDefault("longitude", 0.0)
 // applications-->>
         val applications = mutableListOf<IApplicationStack_Actuator>()
         val jsonApplicationsEffective = json!!.getOrEmptyObject("applications").cloneJson()
@@ -237,6 +239,7 @@ public class SimulationRun() {
                 multicastLayer,
                 this,
                 jsonRouting.getOrDefault("lateInitRoutingTable", false),
+                jsonRouting.getOrDefault("usePriorityQueue", true),
             )
             "RPL" -> ApplicationStack_RPL(
                 multicastLayer,
@@ -248,7 +251,7 @@ public class SimulationRun() {
         val linkTypes = getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
         val device = Device(
             this,
-            location,
+            latitude, longitude,
             ownAddress,
             jsonDevice.getOrDefault("performance", 100.0),
             LinkManager(linkTypes),
@@ -257,8 +260,8 @@ public class SimulationRun() {
             namedAddresses,
         )
         devices.add(device)
-        logger.addDevice(ownAddress, location.longitude, location.latitude)
-        createPattern(jsonDevice.getOrEmptyArray("patterns"), location, valuesPassThrough, device)
+        logger.addDevice(ownAddress, longitude, latitude)
+        createPattern(jsonDevice.getOrEmptyArray("patterns"), latitude, longitude, valuesPassThrough, device)
         return device
     }
 
@@ -272,14 +275,15 @@ public class SimulationRun() {
 
     private fun createPattern(
         patterns: JsonParserArray,
-        location: GeoLocation?,
+        latitude: Double?,
+        longitude: Double?,
         valuesPassThrough: JsonParserObject,
         parent: Device?
     ) {
         for (rand in patterns) {
             rand as JsonParserObject
-            val posLong = location?.longitude ?: rand.getOrDefault("longitude", 0.0)
-            val posLat = location?.latitude ?: rand.getOrDefault("latitude", 0.0)
+            val posLong = longitude ?: rand.getOrDefault("longitude", 0.0)
+            val posLat = latitude ?: rand.getOrDefault("latitude", 0.0)
             when (rand.getOrDefault("type", "random_fill")) {
                 "random_fill" -> {
                     val radius = rand.getOrDefault("radius", 0.1)
@@ -466,13 +470,13 @@ public class SimulationRun() {
         }
     }
     private fun getLinkByName(name: String): LinkType = sortedLinkTypes.first { it.name == name }
-    internal fun getSortedLinkTypeIndices(linkTypeNames: List<String>): IntArray = linkTypeNames.map { getLinkByName(it) }.map { sortedLinkTypes.indexOf(it) }.sorted().toIntArray()
+    private fun getSortedLinkTypeIndices(linkTypeNames: List<String>): IntArray = linkTypeNames.map { getLinkByName(it) }.map { sortedLinkTypes.indexOf(it) }.sorted().toIntArray()
 
-    internal fun setLinkTypes(types: Array<LinkType>) {
+    private fun setLinkTypes(types: Array<LinkType>) {
         sortedLinkTypes = types.sortedByDescending { it.dataRateInKbps }.toTypedArray()
     }
 
-    internal fun createAvailableLinks(devices: MutableList<Device>) {
+    private fun createAvailableLinks(devices: MutableList<Device>) {
         for (one in devices) {
             for (two in devices) {
                 if (!one.isStarNetworkChild && !two.isStarNetworkChild) {
@@ -501,9 +505,9 @@ public class SimulationRun() {
         }
     }
 
-    private fun getDistanceInMeters(one: Device, two: Device): Double = one.location.getDistanceInMeters(two.location)
+    internal fun getDistanceInMeters(one: Device, two: Device): Double = LatLngTool.getDistanceInMeters(one.latitude, one.longitude, two.latitude, two.longitude)
 
-    internal fun link(one: Device, two: Device, dataRate: Int) {
+    private fun link(one: Device, two: Device, dataRate: Int) {
         one.linkManager.addLink(two.address, dataRate)
         two.linkManager.addLink(one.address, dataRate)
     }

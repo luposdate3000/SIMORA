@@ -52,7 +52,6 @@ internal class ApplicationFactory_MailSenderIdentical : IApplication_Factory {
                     random,
                     mailReceiverFactory.allReceivers,
                     json.getOrDefault("text_length_fixed", 100),
-                    json.getOrDefault("text_length_dynamic", 10),
                     json.getOrDefault("receiverCount", 10),
                     json.getOrDefault("useApplicationSideMulticast", true),
                 )
