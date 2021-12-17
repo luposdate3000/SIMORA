@@ -36,7 +36,8 @@ internal class JSOutputStream(private val filename: String, append: Boolean) {
         }
     }
 
-    private fun reserveSpace(size: Int) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun reserveSpace(size: Int) {
         if (bufferSize + size > buffer.size) {
             var destSize = 1024
             while (destSize < size + bufferSize) {
@@ -48,46 +49,56 @@ internal class JSOutputStream(private val filename: String, append: Boolean) {
         }
     }
 
-    internal fun write(buf: ByteArray) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun write(buf: ByteArray) {
         write(buf, buf.size)
     }
 
-    internal fun write(buf: ByteArray, len: Int) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun write(buf: ByteArray, len: Int) {
         reserveSpace(len)
         buf.copyInto(buffer, bufferSize, 0, len)
         bufferSize += len
     }
 
-    internal fun close() {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun close() {
         val b = ByteArray(bufferSize)
         buffer.copyInto(b, 0, 0, bufferSize)
         ExternalModule_fs.inmemoryFs[filename] = b
     }
 
-    internal fun flush() {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun flush() {
     }
 
-    internal fun println(x: String) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun println(x: String) {
         print("$x\n")
     }
 
-    internal fun print(x: String) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun print(x: String) {
         write(x.encodeToByteArray())
     }
 
-    internal fun print(x: Boolean) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun print(x: Boolean) {
         print("$x")
     }
 
-    internal fun print(x: Int) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun print(x: Int) {
         print("$x")
     }
 
-    internal fun print(x: Double) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun print(x: Double) {
         print("$x")
     }
 
-    internal fun println() {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun println() {
         print("\n")
     }
 }

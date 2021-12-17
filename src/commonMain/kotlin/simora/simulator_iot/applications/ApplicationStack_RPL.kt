@@ -49,25 +49,29 @@ public class ApplicationStack_RPL(
         isRoot = true
     }
 
-    private fun sendUnRoutedPackage(hop: Int, data: IPayload) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun sendUnRoutedPackage(hop: Int, data: IPayload) {
         val pck = NetworkPackage(parent.address, hop, data)
         val delay = parent.getNetworkDelay(hop, pck)
         parent.assignToSimulation(hop, hop, pck, delay)
     }
 
-    private fun broadcastPackage_ApplicationStack_RPL_DIO() {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun broadcastPackage_ApplicationStack_RPL_DIO() {
         for (potentialChild in parent.linkManager.getNeighbours())
             if (potentialChild != preferredParent.address) {
                 sendPackage_ApplicationStack_RPL_DIO(potentialChild)
             }
     }
 
-    private fun sendPackage_ApplicationStack_RPL_DIO(destinationAddress: Int) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun sendPackage_ApplicationStack_RPL_DIO(destinationAddress: Int) {
         val dio = Package_ApplicationStack_RPL_DIO(rank)
         sendUnRoutedPackage(destinationAddress, dio)
     }
 
-    private fun hasDatabase(): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun hasDatabase(): Boolean {
         for (f in 0 until config.features.size) {
             if (config.features[f].getName().contains("Database") && config.hasFeature(parent, f)) {
                 return true
@@ -76,14 +80,16 @@ public class ApplicationStack_RPL(
         return false
     }
 
-    private fun sendPackage_ApplicationStack_RPL_DAO(destinationAddress: Int) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun sendPackage_ApplicationStack_RPL_DAO(destinationAddress: Int) {
         val destinations = routingTable.getDestinations()
         val nextDatabaseHops = routingTable.getNextFeatureHops(destinations)
         val dao = Package_ApplicationStack_RPL_DAO(true, destinations, hasDatabase(), nextDatabaseHops)
         sendUnRoutedPackage(destinationAddress, dao)
     }
 
-    private fun updateParent(newParent: ApplicationStack_RPL_Parent) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun updateParent(newParent: ApplicationStack_RPL_Parent) {
         if (hasParent()) {
             if (newParent.address == preferredParent.address) {
                 return
@@ -98,7 +104,8 @@ public class ApplicationStack_RPL(
         sendPackage_ApplicationStack_RPL_DAO(preferredParent.address)
     }
 
-    private fun updateApplicationStack_RPL_RoutingTable(hopAddress: Int, dao: Package_ApplicationStack_RPL_DAO): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun updateApplicationStack_RPL_RoutingTable(hopAddress: Int, dao: Package_ApplicationStack_RPL_DAO): Boolean {
         return if (dao.isPath) {
             if (dao.hopHasDatabase) {
                 routingTable.setDestinationsByDatabaseHop(hopAddress, dao.destinations)
@@ -110,12 +117,14 @@ public class ApplicationStack_RPL(
         }
     }
 
-    private fun objectiveFunction(pck: NetworkPackage): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun objectiveFunction(pck: NetworkPackage): Int {
         val otherRank = (pck.payload as Package_ApplicationStack_RPL_DIO).rank
         return otherRank + MinHopRankIncrease
     }
 
-    private fun hasParent(): Boolean =
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun hasParent(): Boolean =
         preferredParent.address != notInitializedAddress
 
     override fun startUpRouting() {
@@ -172,7 +181,8 @@ public class ApplicationStack_RPL(
         return null
     }
 
-    private fun getNextHop(destinationAddress: Int): Int = routingTable.getNextHop(destinationAddress)
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getNextHop(destinationAddress: Int): Int = routingTable.getNextHop(destinationAddress)
     override fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray {
         return routingTable.getNextFeatureHops(destinationAddresses)
     }

@@ -37,7 +37,8 @@ internal class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int)
     override fun shutDown() {
     }
 
-    private fun sendPackage(pck: Package_Application_ParkingSample) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun sendPackage(pck: Package_Application_ParkingSample) {
         val query = StringBuilder()
         query.appendLine("PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>")
         query.appendLine("PREFIX parking: <https://github.com/luposdate3000/parking#>")

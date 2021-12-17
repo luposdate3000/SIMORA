@@ -19,15 +19,18 @@ package simora.shared.js
 internal object ExternalModule_fs {
     internal val inmemoryFs = mutableMapOf<String, ByteArray>()
 
-    internal fun exists(filename: String): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun exists(filename: String): Boolean {
         return inmemoryFs[filename] != null
     }
 
-    internal fun mkdirs(@Suppress("UNUSED_PARAMETER") filename: String): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun mkdirs(@Suppress("UNUSED_PARAMETER") filename: String): Boolean {
         return true
     }
 
-    internal fun openOutputStream(filename: String, append: Boolean): JSOutputStream {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun openOutputStream(filename: String, append: Boolean): JSOutputStream {
         return JSOutputStream(filename, append)
     }
 }

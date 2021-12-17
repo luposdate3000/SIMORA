@@ -17,5 +17,6 @@
 package simora.simulator_iot
 
 internal expect object ReflectionHelper {
-    internal fun create(name: String): Any
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun create(name: String): Any
 }

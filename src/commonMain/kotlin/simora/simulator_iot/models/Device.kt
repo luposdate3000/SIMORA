@@ -39,10 +39,12 @@ public class Device(
     private val hostNameLookUpTable: MutableMap<String, Int>,
 ) {
     internal lateinit var simulation: SimulationRun
-
+    internal var isStarNetworkChild: Boolean = false
+    private lateinit var deviceStart: Instant
     private var isTerminated = false
 
-    internal fun processIncomingEvent(event: Event) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun processIncomingEvent(event: Event) {
         if (isTerminated) {
             return
         }
@@ -54,23 +56,23 @@ public class Device(
         }
     }
 
-    private fun scheduleEvent(destination: Device, data: Any, delay: Long) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun scheduleEvent(destination: Device, data: Any, delay: Long) {
         simulation.addEvent(delay, this, destination, data)
     }
 
-    internal fun setTimer(time: Long, callback: ITimer) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun setTimer(time: Long, callback: ITimer) {
         scheduleEvent(this, callback, time)
     }
-
-    internal var isStarNetworkChild: Boolean = false
-    private lateinit var deviceStart: Instant
 
     init {
         applicationStack.setDevice(this)
     }
 
     @OptIn(kotlin.time.ExperimentalTime::class)
-    private fun getProcessingDelay(): Long {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getProcessingDelay(): Long {
         if (isDeterministic) {
             return 1
         }
@@ -80,7 +82,8 @@ public class Device(
         return scaled.toLong()
     }
 
-    internal fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
         val processingDelay = getProcessingDelay()
         return if (destinationAddress == address) {
             processingDelay
@@ -90,27 +93,33 @@ public class Device(
         }
     }
 
-    internal fun onStartUp() {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun onStartUp() {
         deviceStart = Clock.System.now()
         applicationStack.startUp()
     }
-    internal fun onStartUpRouting() {
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun onStartUpRouting() {
         deviceStart = Clock.System.now()
         applicationStack.startUpRouting()
     }
 
-    private fun onEvent(data: Any) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun onEvent(data: Any) {
         deviceStart = Clock.System.now()
         val pck = data as NetworkPackage
         simRun.logger.onReceiveNetworkPackage(address, pck.payload)
         applicationStack.receive(pck)
     }
 
-    internal fun onShutDown() {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun onShutDown() {
         applicationStack.shutDown()
     }
 
-    internal fun closestDeviceWithFeature(name: String): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun closestDeviceWithFeature(name: String): Int {
         val devicesWithFeature = simRun.getAllDevicesForFeature(simRun.featureIdForName2(name)).toMutableList()
         if (devicesWithFeature.size == 0) {
             return -1
@@ -132,7 +141,8 @@ public class Device(
         return closestDevice!!.address
     }
 
-    internal fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
         val entity = simRun.getDeviceByAddress(hop)
         scheduleEvent(entity, pck, delay)
         simRun.logger.onSendNetworkPackage(address, dest, hop, pck.payload, delay)
@@ -142,7 +152,13 @@ public class Device(
     override fun hashCode(): Int = address
 
     override fun toString(): String = "Device(addr $address)"
-    internal fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
-    internal fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
-    public fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun registerTimer(durationInNanoSeconds: Long, entity: ITimer): Unit = setTimer(durationInNanoSeconds, entity)
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun resolveHostName(name: String): Int = hostNameLookUpTable[name]!!
+
+    @Suppress("NOTHING_TO_INLINE")
+    public inline fun getAllChildApplications(): Set<IApplicationStack_Actuator> = applicationStack.getAllChildApplications()
 }

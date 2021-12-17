@@ -17,7 +17,8 @@
 package simora.simulator_iot
 
 internal actual object ReflectionHelper {
-    internal actual fun create(name: String): Any {
+    @Suppress("NOTHING_TO_INLINE")
+    internal actual inline fun create(name: String): Any {
         return Class.forName(name).newInstance()
     }
 }

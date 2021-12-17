@@ -19,7 +19,8 @@ package simora
 
 import simora.simulator_iot.Evaluation
 
-internal fun mainfunc(args: List<String>) {
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun mainfunc(args: List<String>) {
     try {
         println("args $args")
         Evaluation().evalConfigFileMerge(args)

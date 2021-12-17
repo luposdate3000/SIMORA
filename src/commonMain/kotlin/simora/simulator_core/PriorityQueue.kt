@@ -20,7 +20,8 @@ package simora.simulator_core
 
 internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) {
 
-    fun insert(v: V, k: Long): PriorityQueueNode<V> {
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun insert(v: V, k: Long): PriorityQueueNode<V> {
         val x = PriorityQueueNode(v, k)
         if (this.node == null) {
             x.next = x
@@ -33,7 +34,9 @@ internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) 
         return x
     }
 
-    fun extractMinValue(): V? = extractMin()?.value
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun extractMinValue(): V? = extractMin()?.value
+
     private fun extractMin(): PriorityQueueNode<V>? {
         val min = this.node ?: return null
         val roots = mutableMapOf<Int, PriorityQueueNode<V>>()
@@ -102,7 +105,8 @@ internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) 
         return min
     }
 
-    private fun cut(x: PriorityQueueNode<V>) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun cut(x: PriorityQueueNode<V>) {
         val p = x.parent ?: return
         p.rank--
         if (p.rank == 0) {
@@ -120,7 +124,8 @@ internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) 
         cutAndMeld(p)
     }
 
-    private fun cutAndMeld(x: PriorityQueueNode<V>) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun cutAndMeld(x: PriorityQueueNode<V>) {
         cut(x)
         x.parent = null
         this.node?.meld1(x)

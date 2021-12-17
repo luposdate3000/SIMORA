@@ -49,7 +49,8 @@ internal class Application_MailSender(
         parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
     }
 
-    private fun getRandomString(length: Int): String {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getRandomString(length: Int): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length)
             .map { allowedChars.random() }

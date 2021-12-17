@@ -27,7 +27,8 @@ public class RandomGenerator {
         }
     private var random: Random = Random(seed)
 
-    internal fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getDouble(minInclusive: Double, maxInclusive: Double): Double {
         if (minInclusive == maxInclusive) {
             return minInclusive
         }
@@ -35,9 +36,11 @@ public class RandomGenerator {
         return random.nextDouble(minInclusive, maxExclusive)
     }
 
-    internal fun getLong(minInclusive: Long, maxInclusive: Long): Long =
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getLong(minInclusive: Long, maxInclusive: Long): Long =
         getDouble(minInclusive.toDouble(), maxInclusive.toDouble()).toLong()
 
-    internal fun getBoolean(probabilityOfTrue: Float): Boolean =
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getBoolean(probabilityOfTrue: Float): Boolean =
         random.nextFloat() < probabilityOfTrue
 }

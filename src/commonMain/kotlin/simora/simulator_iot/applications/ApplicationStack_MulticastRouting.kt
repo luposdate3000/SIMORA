@@ -49,7 +49,8 @@ internal class ApplicationStack_MulticastRouting(
         parent = router
     }
 
-    private fun myFlush() {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun myFlush() {
 // indentify duplicates
         val queueCopy = myQueue
         myQueue = mutableSetOf()

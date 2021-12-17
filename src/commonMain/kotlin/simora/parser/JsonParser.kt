@@ -20,7 +20,8 @@ package simora.parser
 import simora.shared.inline.File
 
 internal class JsonParser {
-    private fun readValueAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readValueAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         val i = readSpacesAt(data, off)
         while (i < data.length) {
             return when (data[i]) {
@@ -35,7 +36,8 @@ internal class JsonParser {
         return data.length to JsonParserObject(mutableMapOf())
     }
 
-    private fun readMapAt(data: String, off: Int): Pair<Int, JsonParserObject> {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readMapAt(data: String, off: Int): Pair<Int, JsonParserObject> {
         var i = off + 1
         val res = mutableMapOf<String, IJsonParserValue>()
         loop@ while (i < data.length) {
@@ -63,7 +65,8 @@ internal class JsonParser {
         throw Exception("object not closed I $off '${data[off]}' $data")
     }
 
-    private fun readSpacesAt(data: String, off: Int): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readSpacesAt(data: String, off: Int): Int {
         var i = off
         while (i < data.length) {
             when (data[i]) {
@@ -76,7 +79,8 @@ internal class JsonParser {
         return i
     }
 
-    private fun readArrayAt(data: String, off: Int): Pair<Int, JsonParserArray> {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readArrayAt(data: String, off: Int): Pair<Int, JsonParserArray> {
         var i = off + 1
         val res = mutableListOf<IJsonParserValue>()
         loop@ while (i < data.length) {
@@ -98,7 +102,8 @@ internal class JsonParser {
         throw Exception("array not closed H $off '${data[off]}' $data")
     }
 
-    private fun readNumberAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readNumberAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         var i = off
         while (i < data.length) {
             when (data[i]) {
@@ -134,7 +139,8 @@ internal class JsonParser {
         throw Exception("unknown numberformat at E $off '${data.substring(off, i)}' $data")
     }
 
-    private fun readStringAt(data: String, off: Int): Pair<Int, JsonParserString> {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readStringAt(data: String, off: Int): Pair<Int, JsonParserString> {
         var i = off + 1
         var backslashOpen = false
         while (i < data.length) {
@@ -160,7 +166,8 @@ internal class JsonParser {
         throw Exception("string not closed $off '${data[off]}' $data")
     }
 
-    private fun readBooleanAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun readBooleanAt(data: String, off: Int): Pair<Int, IJsonParserValue> {
         when (data[off]) {
             't', 'T' -> {
                 if (data[off + 1] == 'r' || data[off + 1] == 'R') {
@@ -186,11 +193,12 @@ internal class JsonParser {
         throw Exception("unknown char at F $off '${data[off]}' $data")
     }
 
-    internal fun jsonToString(data: IJsonParserValue, printDefaults: Boolean): String {
-        return jsonToString(data, "", printDefaults)
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun jsonToString(data: IJsonParserValue): String {
+        return jsonToString(data, "")
     }
 
-    private fun jsonToString(data: IJsonParserValue, indention: String, printDefaults: Boolean): String {
+    private fun jsonToString(data: IJsonParserValue, indention: String): String {
         val r = when (data) {
             is JsonParserObject -> {
                 if (data.isEmpty()) {
@@ -198,7 +206,7 @@ internal class JsonParser {
                 } else {
                     var res = "{\n"
                     for ((k, v) in data.toList().sortedBy { it.first }) {
-                        res += "$indention    \"$k\": ${jsonToString(v, "$indention    ", printDefaults)},\n"
+                        res += "$indention    \"$k\": ${jsonToString(v, "$indention    ")},\n"
                     }
                     "$res$indention}"
                 }
@@ -209,66 +217,44 @@ internal class JsonParser {
                 } else {
                     var res = "[\n"
                     for (e in data) {
-                        res += "$indention    ${jsonToString(e, "$indention    ", printDefaults)},\n"
+                        res += "$indention    ${jsonToString(e, "$indention    ")},\n"
                     }
                     "$res$indention]"
                 }
             }
             is JsonParserBoolean -> {
-                if (data.getDefault() == null || !printDefaults) {
-                    "${data.value}"
-                } else {
-                    "${data.value} /* '${data.getDefault()}' */"
-                }
+                "${data.value}"
             }
             is JsonParserInt -> {
-                if (data.getDefault() == null || !printDefaults) {
-                    "${data.value}"
-                } else {
-                    "${data.value} /* '${data.getDefault()}' */"
-                }
+                "${data.value}"
             }
             is JsonParserLong -> {
-                if (data.getDefault() == null || !printDefaults) {
-                    "${data.value}"
-                } else {
-                    "${data.value} /* '${data.getDefault()}' */"
-                }
+                "${data.value}"
             }
             is JsonParserDouble -> {
-                if (data.getDefault() == null || !printDefaults) {
-                    "${data.value}"
-                } else {
-                    "${data.value} /* '${data.getDefault()}' */"
-                }
+                "${data.value}"
             }
             is JsonParserString -> {
-                if (data.getDefault() == null || !printDefaults) {
-                    "\"${encodeString(data.value)}\""
-                } else {
-                    "\"${encodeString(data.value)}\" /* '${data.getDefault()}' */"
-                }
+                "\"${encodeString(data.value)}\""
             }
             else -> throw Exception("unknown JSON element G $data")
         }
-        return if (data.isAccessed() || !printDefaults) {
-            r
-        } else {
-            "$r /* unused */"
-        }
+        return r
     }
 
-    internal fun stringToJson(data: String): IJsonParserValue {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun stringToJson(data: String): IJsonParserValue {
         return readValueAt(data, 0).second
     }
 
-    private fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun fileToJson(fileName: String, autoformat: Boolean = true): IJsonParserValue {
         try {
             val fileStr = File(fileName).readAsString()
             val json = JsonParser().stringToJson(fileStr)
             if (autoformat) {
                 File(fileName).withOutputStream { out ->
-                    out.println(JsonParser().jsonToString(json, false))
+                    out.println(JsonParser().jsonToString(json))
                 }
             }
             return json
@@ -278,7 +264,8 @@ internal class JsonParser {
         }
     }
 
-    internal fun fileMergeToJson(fileNames: List<String>, autoformat: Boolean = true): JsonParserObject {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun fileMergeToJson(fileNames: List<String>, autoformat: Boolean = true): JsonParserObject {
         val res = JsonParserObject(mutableMapOf())
         for (fileName in fileNames) {
             try {
@@ -290,7 +277,8 @@ internal class JsonParser {
         return res
     }
 
-    private fun encodeString(s: String): String {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun encodeString(s: String): String {
         return s
             .replace("\\", "\\\\")
             .replace("\t", "\\t")
@@ -299,7 +287,8 @@ internal class JsonParser {
             .replace("\"", "\\\"")
     }
 
-    private fun decodeString(s: String): String {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun decodeString(s: String): String {
         return s
             .replace("\\\"", "\"")
             .replace("\\n", "\n")

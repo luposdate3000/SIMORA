@@ -81,7 +81,9 @@ internal class LoggerMeasure : ILogger {
     private val packageSize = mutableListOf<Double>()
     private val packageSizeAggregated = mutableListOf<Double>()
     private val packageSizeSelfMessage = mutableListOf<Double>()
-    internal fun getDataAggregated(): DoubleArray {
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getDataAggregated(): DoubleArray {
         val res = mutableListOf<Double>()
         for (d in data) {
             res.add(d)
@@ -104,7 +106,8 @@ internal class LoggerMeasure : ILogger {
         return res.toDoubleArray()
     }
 
-    internal fun getHeadersAggregated(): Array<String> {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getHeadersAggregated(): Array<String> {
         val res = mutableListOf<String>()
         for (h in headers) {
             res.add(h)
@@ -142,7 +145,8 @@ internal class LoggerMeasure : ILogger {
         }
     }
 
-    private fun onSendNetworkPackageInternal(src: Int, dest: Int, hop: Int, pck: IPayload) {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun onSendNetworkPackageInternal(src: Int, dest: Int, hop: Int, pck: IPayload) {
         val topic = pck.getTopic()
         var id = packageByTopic[topic]
         val size = pck.getSizeInBytes().toDouble()

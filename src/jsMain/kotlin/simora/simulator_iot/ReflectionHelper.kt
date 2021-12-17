@@ -17,7 +17,8 @@
 package simora.simulator_iot
 
 internal actual object ReflectionHelper {
-    actual fun create(name: String): Any {
+    @Suppress("NOTHING_TO_INLINE")
+    actual inline fun create(name: String): Any {
         return eval("new $name()") as Any
     }
 }

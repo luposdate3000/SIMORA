@@ -17,7 +17,7 @@
 
 package simora.simulator_iot.applications
 
-public class ApplicationStack_RPL_RoutingTable(
+internal class ApplicationStack_RPL_RoutingTable(
     private val ownAddress: Int,
     private val addressSpace: Int,
     private val hasDatabase: Boolean
@@ -29,9 +29,10 @@ public class ApplicationStack_RPL_RoutingTable(
 
     private var destinationCounter: Int = 0
 
-    public var fallbackHop: Int = ownAddress
+    internal var fallbackHop: Int = ownAddress
 
-    private fun updateHop(destinationAddress: Int, nextHopAddress: Int, nextDatabaseHopAddress: Int): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun updateHop(destinationAddress: Int, nextHopAddress: Int, nextDatabaseHopAddress: Int): Boolean {
         var updated = false
         initializeEntries()
         if (nextHops[destinationAddress] == -1) {
@@ -46,7 +47,8 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    private fun initializeEntries() {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun initializeEntries() {
         if (nextHops.isEmpty()) {
             nextHops = IntArray(addressSpace) { -1 }
         }
@@ -60,7 +62,8 @@ public class ApplicationStack_RPL_RoutingTable(
         }
     }
 
-    public fun getNextHop(destinationAddress: Int): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getNextHop(destinationAddress: Int): Int {
         if (destinationAddress < nextHops.size) {
             val res = nextHops[destinationAddress]
             if (res != -1) {
@@ -70,17 +73,20 @@ public class ApplicationStack_RPL_RoutingTable(
         return fallbackHop
     }
 
-    private fun getNextFeatureHop(destinationAddress: Int): Int =
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getNextFeatureHop(destinationAddress: Int): Int =
         if (destinationAddress < nextDatabaseHops.size) {
             nextDatabaseHops[destinationAddress]
         } else {
             -1 // tell the caller that we dont know it
         }
 
-    internal fun getNextFeatureHops(destinationAddresses: IntArray): IntArray =
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getNextFeatureHops(destinationAddresses: IntArray): IntArray =
         IntArray(destinationAddresses.size) { getNextFeatureHop(destinationAddresses[it]) }
 
-    internal fun removeDestinationsByHop(hop: Int): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun removeDestinationsByHop(hop: Int): Boolean {
         var updated = false
         if (hop != ownAddress) {
             for ((index, value) in nextHops.withIndex())
@@ -95,7 +101,8 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    internal fun setDestinationsByHop(hop: Int, destinations: IntArray, existingDatabaseHops: IntArray): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun setDestinationsByHop(hop: Int, destinations: IntArray, existingDatabaseHops: IntArray): Boolean {
         var updated = updateHop(hop, hop, -1)
         for ((index, dest) in destinations.withIndex()) {
             val flag = updateHop(dest, hop, existingDatabaseHops[index])
@@ -104,7 +111,8 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    internal fun setDestinationsByDatabaseHop(hop: Int, destinations: IntArray): Boolean {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun setDestinationsByDatabaseHop(hop: Int, destinations: IntArray): Boolean {
         var updated = updateHop(hop, hop, hop)
         for (dest in destinations) {
             val flag = updateHop(dest, hop, hop)
@@ -113,7 +121,8 @@ public class ApplicationStack_RPL_RoutingTable(
         return updated
     }
 
-    public fun getDestinations(): IntArray {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getDestinations(): IntArray {
         val destinations = IntArray(destinationCounter)
         var destIndex = 0
         for ((index, value) in nextHops.withIndex())

@@ -20,11 +20,13 @@ internal class JSInputStream internal constructor(filename: String) {
     private var pos = 0
     private val buffer: ByteArray = ExternalModule_fs.inmemoryFs[filename]!!
 
-    internal fun readByte(): Byte {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun readByte(): Byte {
         return buffer[pos++]
     }
 
-    internal fun read(buf: ByteArray, off: Int, len: Int): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun read(buf: ByteArray, off: Int, len: Int): Int {
         var l = len + off
         if (len + off > buffer.size) {
             l = buffer.size
@@ -35,22 +37,26 @@ internal class JSInputStream internal constructor(filename: String) {
         return l - off
     }
 
-    internal fun read(buf: ByteArray, len: Int): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun read(buf: ByteArray, len: Int): Int {
         val l = read(buf, pos, len)
         pos += l
         return l
     }
 
-    internal fun read(buf: ByteArray): Int {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun read(buf: ByteArray): Int {
         val l = read(buf, pos, buf.size)
         pos += l
         return l
     }
 
-    internal fun close() {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun close() {
     }
 
-    internal fun readLine(): String? {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun readLine(): String? {
 // TODO this may break on utf-8
         val buf = mutableListOf<Byte>()
         try {

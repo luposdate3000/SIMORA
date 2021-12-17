@@ -54,7 +54,7 @@ public class Evaluation {
         println("outputdirectory=$outputdirectory")
         File(outputdirectory).mkdirs()
         File("$outputdirectory.generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
-            out.println(JsonParser().jsonToString(json, false))
+            out.println(JsonParser().jsonToString(json))
         }
         val measurements = mutableListOf<LoggerMeasure>()
         json.getOrEmptyObject("logging").getOrEmptyObject("simora.simulator_iot.LoggerMeasure")["enabled"] = true
@@ -115,7 +115,7 @@ public class Evaluation {
             appendLineToFile("deviationPercent.csv", { firstLogger.getHeadersAggregated().toList().joinToString(",") }, dataDevp.toList().joinToString(","))
         }
         File("$outputdirectory.generated.used.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
-            out.println(JsonParser().jsonToString(json, true))
+            out.println(JsonParser().jsonToString(json))
         }
     }
 }

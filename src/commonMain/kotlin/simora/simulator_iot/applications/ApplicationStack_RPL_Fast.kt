@@ -87,7 +87,9 @@ internal class ApplicationStack_RPL_Fast(
     override fun resolveHostName(name: String): Int = parent.resolveHostName(name)
     override fun shutDown() = child.shutDown()
     override fun addChildApplication(child: IApplicationStack_Actuator): Unit = (this.child as IApplicationStack_Middleware).addChildApplication(child)
-    private fun calculateConfigRoutingHelper() {
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
             val size = config.devices.size
             val tinyMatrix = DoubleArray(size) { Double.MAX_VALUE }
@@ -154,6 +156,7 @@ internal class ApplicationStack_RPL_Fast(
             initRoutingTable()
         }
     }
+
     private fun initRoutingTable() {
         if (!isRoutingTableInitialized) {
             val address = parent.address

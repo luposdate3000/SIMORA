@@ -27,7 +27,8 @@ public class LinkManager(
     private var link_Addresses = mutableListOf<Int>()
     private var link_dataRateInKbps = mutableListOf<Int>()
 
-    internal fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getTransmissionDelay(destinationAddress: Int, numberOfBytesToSend: Int): Long {
         val idx = link_Addresses.indexOf(destinationAddress)
         if (idx <0) {
             println("getTransmissionDelay .. $destinationAddress")
@@ -37,10 +38,13 @@ public class LinkManager(
         return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
 
-    internal fun hasLink(otherDevice: Device): Boolean = link_Addresses.indexOf(otherDevice.address) >= 0
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun hasLink(otherDevice: Device): Boolean = link_Addresses.indexOf(otherDevice.address) >= 0
 
     public fun getNeighbours(): List<Int> = link_Addresses
-    internal fun addLink(
+
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun addLink(
         addr: Int,
         dataRateInKbps: Int,
     ) {

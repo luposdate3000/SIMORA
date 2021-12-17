@@ -25,7 +25,8 @@ internal class PriorityQueueNode<V>(var value: V, var key: Long) {
     var rank = 0
     var mark = false
 
-    fun meld1(node: PriorityQueueNode<V>) {
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun meld1(node: PriorityQueueNode<V>) {
         this.prev?.next = node
         node.prev = this.prev
         node.next = this

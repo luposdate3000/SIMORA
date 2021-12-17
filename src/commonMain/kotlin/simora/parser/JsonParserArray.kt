@@ -18,10 +18,6 @@
 package simora.parser
 
 internal class JsonParserArray(private val array: MutableList<IJsonParserValue>) : Iterable<IJsonParserValue>, IJsonParserValue {
-    private var accessed0 = false
-    override fun setAccessed() {
-        accessed0 = true
-    }
 
     override fun cloneJson(): JsonParserArray {
         val res = JsonParserArray(mutableListOf())
@@ -31,7 +27,6 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         return res
     }
 
-    override fun isAccessed(): Boolean = accessed0
     internal fun mergeWith(other: JsonParserArray) {
         var k = 0
         while (k < array.size && k < other.array.size) {
@@ -50,20 +45,17 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         }
     }
 
-    internal fun isEmpty(): Boolean = array.isEmpty()
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun isEmpty(): Boolean = array.isEmpty()
 
-    internal operator fun get(i: Int): IJsonParserValue {
-        setAccessed()
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline operator fun get(i: Int): IJsonParserValue {
         val res = array[i]
-        res.setAccessed()
         return res
     }
 
-    override operator fun iterator(): Iterator<IJsonParserValue> {
-        setAccessed()
-        for (a in array) {
-            a.setAccessed()
-        }
+    @Suppress("NOTHING_TO_INLINE")
+    override inline operator fun iterator(): Iterator<IJsonParserValue> {
         return array.iterator()
     }
 }

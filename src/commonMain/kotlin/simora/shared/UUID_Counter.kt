@@ -18,7 +18,8 @@ package simora.shared
 import kotlin.native.concurrent.ThreadLocal
 @ThreadLocal
 internal object UUID_Counter {
-    private var uuid = 0L
+    internal var uuid = 0L
 
-    internal fun getNextUUID(): Long = uuid++
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun getNextUUID(): Long = uuid++
 }

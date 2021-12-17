@@ -160,7 +160,7 @@ public class SimulationRun {
 // assign all dynamic links <<<---
         if (autocorrect) {
             File(fileName).withOutputStream { out ->
-                out.println(JsonParser().jsonToString(json, false))
+                out.println(JsonParser().jsonToString(json))
             }
         }
     }
