@@ -26,7 +26,7 @@ internal class Package_ApplicationStack_Multicast(
     internal val pck: IPayloadBinary,
 ) : IPayloadLayer {
     override fun getSizeInBytes(): Int = pck.getSizeInBytes() + 4 * targets.size + 4
-    override fun getTopic(): String = pck.getTopic()
+    override fun getTopic(): String = "Multicast"
     override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes()
         .contentEquals(other.pck.getBytes())
 

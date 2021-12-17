@@ -107,6 +107,7 @@ internal class ApplicationStack_MulticastRouting(
 
     override fun send(destinationAddress: Int, pck: IPayload) {
         if (pck is IPayloadBinary) {
+            println("ApplicationStack_MulticastRouting.send IPayloadBinary")
 // add all possible elements to send queue
             val p = Package_ApplicationStack_Multicast(mutableListOf(destinationAddress), pck)
             val element = myQueue.find { it == p }
@@ -116,6 +117,7 @@ internal class ApplicationStack_MulticastRouting(
                 element.targets.add(destinationAddress)
             }
         } else {
+            println("ApplicationStack_MulticastRouting.send other $pck")
             parent.send(destinationAddress, pck)
         }
     }

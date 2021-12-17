@@ -210,23 +210,23 @@ public class SimulationRun() {
                 )
             )
         }
-        val applicationStack = ApplicationStack_Sequence(
+        val applicationStack = ApplicationStack_CatchSelfMessages(
             ownAddress,
-            ApplicationStack_CatchSelfMessages(
-                ownAddress,
-                ApplicationStack_MultipleChilds(applications.map { ApplicationStack_Logger(ownAddress, logger, it) }.toTypedArray()),
-            )
+            ApplicationStack_MultipleChilds(applications.map { ApplicationStack_Logger(ownAddress, logger, it) }.toTypedArray()),
         )
 // applications<<--
         val jsonRouting = json!!.getOrEmptyObject("routing")
         val multicastLayer = ApplicationStack_MergeMessages(
-            when (jsonRouting.getOrDefault("multicast", "None")) {
-                "None" -> ApplicationStack_MulticastNone(applicationStack)
-                "ApplicationSide", "Simple" -> ApplicationStack_MulticastSimple(applicationStack)
-                "StateOfTheArt", "Routing" -> ApplicationStack_MulticastRouting(false, featureIDRouting, ownAddress, applicationStack)
-                "RoutingAndApplication" -> ApplicationStack_MulticastRouting(true, featureIDRouting, ownAddress, applicationStack)
-                else -> TODO("unknown multicast implementation '${jsonRouting.getOrDefault("multicast", "None")}'")
-            }
+            ApplicationStack_Sequence(
+                ownAddress,
+                when (jsonRouting.getOrDefault("multicast", "None")) {
+                    "None" -> ApplicationStack_MulticastNone(applicationStack)
+                    "ApplicationSide", "Simple" -> ApplicationStack_MulticastSimple(applicationStack)
+                    "StateOfTheArt", "Routing" -> ApplicationStack_MulticastRouting(false, featureIDRouting, ownAddress, applicationStack)
+                    "RoutingAndApplication" -> ApplicationStack_MulticastRouting(true, featureIDRouting, ownAddress, applicationStack)
+                    else -> TODO("unknown multicast implementation '${jsonRouting.getOrDefault("multicast", "None")}'")
+                }
+            )
         )
         val router = when (jsonRouting.getOrDefault("protocol", "RPL")) {
             "AllShortestPath" -> ApplicationStack_AllShortestPath(
