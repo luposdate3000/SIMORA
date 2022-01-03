@@ -7,6 +7,10 @@ var i = 2
 var radius = 0.0025
 while (i < limit) {
     for (j in 0 until 2) {
+var repeatSimulationCount=128/i
+if(repeatSimulationCount<1){
+repeatSimulationCount=1
+}
         File("Strong${i.toString().padStart(limitLength,'0')}.json").printWriter().use { out ->
             out.println("{")
             out.println("    \"fixedDevice\": {")
@@ -26,6 +30,7 @@ while (i < limit) {
             out.println("            ],")
             out.println("        },")
             out.println("    },")
+            out.println("    \"repeatSimulationCount\":$repeatSimulationCount,")
             out.println("}")
         }
         i = i * 2
