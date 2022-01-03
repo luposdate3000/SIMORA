@@ -1,5 +1,7 @@
 #!/usr/bin/env kotlin
 import java.io.File
+//val fileToUse="measurement.csv"
+val fileToUse="average.csv"
 
 val argumentNames = mutableListOf<String>()
 val rows = mutableListOf<MutableList<String>>()
@@ -43,7 +45,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
         } catch (e: Throwable) {
         }
         try {
-            File(filename + "/measurement.csv").forEachLine { line ->
+            File(filename + "/${fileToUse}").forEachLine { line ->
                 val l = line.split(",")
                 val h = headers
                 if (h == null) {
