@@ -6,9 +6,9 @@ c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" 
 # compare scalability
 c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
 s="./resources/scenarios/personalMail.json"
-for r in "./resources/routing/ApplicationRPLFastLate.json" "./resources/routing/ApplicationRPLFast.json" "./resources/routing/ApplicationRPL.json"
-do
 for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
+do
+for r in "./resources/routing/ApplicationRPLFastLate.json" "./resources/routing/ApplicationRPLFast.json" "./resources/routing/ApplicationRPL.json"
 do
 echo
 pkill java -9

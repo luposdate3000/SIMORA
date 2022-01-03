@@ -209,7 +209,7 @@ internal class LoggerMeasure : ILogger {
     override fun onStopSimulation() { // phase 5
         val stamp = Clock.System.now()
         data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal] - data[StatSimulationStartupDurationReal] - data[StatSimulationStartupRoutingDurationReal]
-        data[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0)
+        data[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0)+data[StatSimulationStartupConfigDurationReal]
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {

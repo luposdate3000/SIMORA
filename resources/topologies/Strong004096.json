@@ -1,0 +1,20 @@
+{
+    "fixedDevice": {
+        "CentralTower": {
+            "applications": {},
+            "deviceType": "CentralTower",
+            "latitude": 53.83759450606049,
+            "longitude": 10.702377248379614,
+            "patterns": [
+                {
+                    "count": 4095,
+                    "deviceType": "EdgeDevice",
+                    "mode": "count",
+                    "radius": 0.08,
+                    "type": "full",
+                },
+            ],
+        },
+    },
+    "repeatSimulationCount": 1,
+}
