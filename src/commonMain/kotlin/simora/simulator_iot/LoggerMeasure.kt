@@ -38,6 +38,7 @@ internal class LoggerMeasure : ILogger {
         private val StatSimulationStartupDurationReal: Int = StatCounter++
         private val StatSimulationShutdownDurationReal: Int = StatCounter++
         private val StatSimulationDurationReal: Int = StatCounter++
+        private val StatSimulationTotalDurationReal: Int = StatCounter++
 
         private val StatSimulationStartupRoutingDurationVirtual: Int = StatCounter++
         private val StatSimulationDurationVirtual: Int = StatCounter++
@@ -61,6 +62,7 @@ internal class LoggerMeasure : ILogger {
             StatSimulationStartupDurationReal -> "simulation startup duration real (Seconds)"
             StatSimulationShutdownDurationReal -> "simulation shutdown duration real (Seconds)"
             StatSimulationDurationReal -> "simulation duration real (Seconds)"
+            StatSimulationTotalDurationReal -> "simulation total duration real (Seconds)"
 
             StatSimulationStartupRoutingDurationVirtual -> "simulation startup duration routing virtual (Seconds)"
             StatSimulationDurationVirtual -> "simulation duration virtual (Seconds)"
@@ -207,6 +209,7 @@ internal class LoggerMeasure : ILogger {
     override fun onStopSimulation() { // phase 5
         val stamp = Clock.System.now()
         data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal] - data[StatSimulationStartupDurationReal] - data[StatSimulationStartupRoutingDurationReal]
+        data[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0)
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {

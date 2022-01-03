@@ -1,6 +1,43 @@
 #!/bin/bash
 ./benchmark_sumary.main.kts > summary.csv
-cat summary.csv | grep scalability | grep ApplicationRPLFastLate | sed "s/.*Strong0*//g" | sed "s/,/-/" | sed "s/,.*//g" | sed "s/-/,/g" | sort -n > plot_scalability1.csv
-cat summary.csv | grep scalability | grep ApplicationRPLFast | sed "s/.*Strong0*//g" | sed "s/,/-/" | sed "s/,.*//g" | sed "s/-/,/g" | sort -n > plot_scalability2.csv
-cat summary.csv | grep scalability | grep ApplicationRPL | sed "s/.*Strong0*//g" | sed "s/,/-/" | sed "s/,.*//g" | sed "s/-/,/g" | sort -n > plot_scalability3.csv
+
+ctr=1
+CRouting=1
+CX=1
+CBoxMin=1
+CWhiskerMin=1
+CWhiskerHigh=1
+CBoxHigh=1
+for i in $(head summary.csv -n 1|sed "s/ /-/g" | sed "s/,/ /g") ; do
+    if [ $i == "routing" ] ; then
+	CRouting=$(cat summary.csv | grep -e scalability -e benchmark_case | cut -d ',' -f$ctr | tr "\n" ",")
+    fi
+    if [ $i == "topology" ] ; then
+        CX=$(cat summary.csv | grep -e scalability -e benchmark_case | cut -d ',' -f$ctr | tr "\n" "," | sed "s/Strong0*//g")
+    fi
+    if [ $i == "simulation-total-duration-real-(Seconds)Q1" ] ; then
+        CBoxMin=$(cat summary.csv | grep -e scalability -e benchmark_case | cut -d ',' -f$ctr | tr "\n" ",")
+    fi
+    if [ $i == "simulation-total-duration-real-(Seconds)Min" ] ; then
+        CWhiskerMin=$(cat summary.csv | grep -e scalability -e benchmark_case | cut -d ',' -f$ctr | tr "\n" ",")
+    fi
+    if [ $i == "simulation-total-duration-real-(Seconds)Max" ] ; then
+        CWhiskerHigh=$(cat summary.csv | grep -e scalability -e benchmark_case | cut -d ',' -f$ctr | tr "\n" ",")
+    fi
+    if [ $i == "simulation-total-duration-real-(Seconds)Q3" ] ; then
+        CBoxHigh=$(cat summary.csv | grep -e scalability -e benchmark_case | cut -d ',' -f$ctr | tr "\n" ",")
+    fi
+    ctr=$((ctr + 1))
+done
+echo $CRouting > tmp.csv
+echo $CX >> tmp.csv
+echo $CBoxMin >> tmp.csv
+echo $CWhiskerMin >> tmp.csv
+echo $CWhiskerHigh >> tmp.csv
+echo $CBoxHigh >> tmp.csv
+csvtool transpose tmp.csv | grep -w ApplicationRPLFastLate > plot_scalability1.csv
+csvtool transpose tmp.csv | grep -w ApplicationRPLFast > plot_scalability2.csv
+csvtool transpose tmp.csv | grep -w ApplicationRPL > plot_scalability3.csv
+#	x  box_min  whisker_min  whisker_high  box_high
 ./plot_scalability.gnuplot
+rm tmp.csv
