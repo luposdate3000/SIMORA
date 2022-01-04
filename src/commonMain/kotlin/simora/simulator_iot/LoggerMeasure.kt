@@ -198,7 +198,9 @@ internal class LoggerMeasure : ILogger {
     override fun onStartUp() { // phase 3
         val stamp = Clock.System.now()
         data[StatSimulationStartupDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal]
-        data[StatNetworkLinkCounter] = simRun.linkManager.getLinkCount().toDouble()
+        val linkCount = simRun.linkManager.getLinkCount().toDouble()
+        val deviceCount = data[StatNumberOfDevices]
+        data[StatNetworkLinkCounter] = linkCount
     }
     override fun onShutDown() { // phase 4
         val stamp = Clock.System.now()
