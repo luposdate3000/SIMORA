@@ -72,7 +72,7 @@ internal class Application_MailSender(
             val text = getRandomString(text_length_fixed)
             val names = reveiverList.associateWith { getRandomString(text_length_dynamic) }
             if (useApplicationSideMulticast) {
-                parent.send(ownAddress, Package_Application_MailGroup("§$text", names))
+                parent.send(ownAddress, Package_Application_MailGroup(text, names))
             } else {
                 for ((address, name) in names) {
                     parent.send(address, Package_Application_Mail(name + text))

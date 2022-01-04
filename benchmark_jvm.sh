@@ -26,7 +26,7 @@ then
 r="./resources/routing/ApplicationRPLFastLate.json"
 for s in $(find ./resources/scenarios/ -name *.json | sort)
 do
-for t in $(find ./resources/topologies/ -name *.json | grep 64 | sort)
+for t in $(find ./resources/topologies/ -name *.json | grep 128 | sort)
 do
 echo
 pkill java -9
@@ -38,7 +38,7 @@ done
 fi
 
 # compare routing
-t="./resources/topologies/Uniform64.json"
+t="./resources/topologies/Uniform128.json"
 #for s in $(find ./resources/scenarios/ -name *.json | sort)
 for s in ./resources/scenarios/personalMail.json
 do

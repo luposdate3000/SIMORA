@@ -10,7 +10,7 @@
                 "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSender": {
                     "maxSamples": 100,
                     "rateInSec": 2,
-                    "receiverCount": 500,
+                    "receiverCount": 100,
                     "sendStartClockInSec": 1000,
                     "text_length_dynamic": 10,
                     "text_length_fixed": 100,

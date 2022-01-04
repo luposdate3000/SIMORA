@@ -57,7 +57,7 @@ internal class Application_MailDistributor(
                 for ((target, mapping) in packets) {
                     if (mapping.size == 1) {
                         val x = mapping.toList().first()
-                        parent.send(x.first, Package_Application_Mail(pck.text.replace("§", x.second)))
+                        parent.send(x.first, Package_Application_Mail(x.second+pck.text))
                     } else {
                         parent.send(target, Package_Application_MailGroup(pck.text, mapping))
                     }
