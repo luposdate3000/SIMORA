@@ -2,7 +2,8 @@
 ./gradlew build
 c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
 
-
+if false
+then
 # compare scalability
 c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
 s="./resources/scenarios/personalMail.json"
@@ -17,8 +18,10 @@ x=$(/usr/bin/time -o tmp -v $c scalability.json $r $s $t | grep simulator_output
 mv tmp "$x/time"
 done
 done
+fi
 
-
+if false
+then
 # compare topologies
 r="./resources/routing/ApplicationRPLFastLate.json"
 for s in $(find ./resources/scenarios/ -name *.json | sort)
@@ -32,12 +35,14 @@ x=$(/usr/bin/time -o tmp -v $c topologies.json $r $s $t | grep simulator_output 
 mv tmp "$x/time"
 done
 done
-
+fi
 
 # compare routing
 t="./resources/topologies/Uniform64.json"
-for s in $(find ./resources/scenarios/ -name *.json | sort)
+#for s in $(find ./resources/scenarios/ -name *.json | sort)
+for s in ./resources/scenarios/personalMail.json
 do
+#for r in $(find ./resources/routing/ -name *.json | sort)
 for r in $(find ./resources/routing/ -name *.json | sort)
 do
 echo

@@ -60,27 +60,27 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
             if (h != null) {
                 val row = mutableMapOf<String, String>()
                 row.putAll(baseRow)
-                    val timeUsed = (baseRow["system time (Seconds)"]!!.toDouble() / lines.size.toDouble()).toString()
-                    row["system time (Seconds)"] = timeUsed
-                    val s = if (h.size < lines[0].size) h.size else lines[0].size
-                    for (i in 0 until s) {
-val values=mutableListOf<Double>()
-                        for (l in lines) {
-values.add(l[i].toDouble())
-                        }
-val valueAvg=values.sum()/values.size
-val valueMin=values.first()
-val valueMax=values.last()
-val valueMedian=values[values.size/2]
-val valueQ1=values[values.size/4]
-val valueQ3=values[values.size*3/4]
-//https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/box-whisker-plots/a/box-plot-review
-row[h[i]] = valueAvg.toString()
-row[h[i]+"Min"]= valueMin.toString()
-row[h[i]+"Max"]= valueMax.toString()
-row[h[i]+"Q1"]= valueQ1.toString()
-row[h[i]+"Q3"]= valueQ3.toString()
+                val timeUsed = (baseRow["system time (Seconds)"]!!.toDouble() / lines.size.toDouble()).toString()
+                row["system time (Seconds)"] = timeUsed
+                val s = if (h.size < lines[0].size) h.size else lines[0].size
+                for (i in 0 until s) {
+                    val values = mutableListOf<Double>()
+                    for (l in lines) {
+                        values.add(l[i].toDouble())
                     }
+                    val valueAvg = values.sum() / values.size
+                    val valueMin = values.first()
+                    val valueMax = values.last()
+                    val valueMedian = values[values.size / 2]
+                    val valueQ1 = values[values.size / 4]
+                    val valueQ3 = values[values.size * 3 / 4]
+//https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/box-whisker-plots/a/box-plot-review
+                    row[h[i]] = valueAvg.toString()
+                    row[h[i] + "Min"] = valueMin.toString()
+                    row[h[i] + "Max"] = valueMax.toString()
+                    row[h[i] + "Q1"] = valueQ1.toString()
+                    row[h[i] + "Q3"] = valueQ3.toString()
+                }
                 addRow(row)
             }
         } catch (e: Throwable) {
