@@ -71,7 +71,7 @@ public class LinkManagerMatrix(
                 matrixRate[idx] = dataRateInKbps.toDouble()
             }
         }
-        val idx2 = addrSrc * size + addrDest //inverse link
+        val idx2 = addrSrc * size + addrDest // inverse link
         if (dataRateInKbps> matrixRate[idx2]) {
             if (cost < matrix[idx2]) {
                 linkCounter++

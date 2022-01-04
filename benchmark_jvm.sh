@@ -72,8 +72,7 @@ then
 m="./resources/multicast/Application.json"
 c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
 s="./resources/scenarios/personalMail.json"
-#for tt in 2 4 8 16 32 64 128 256 512 1024 2048
-for tt in x
+for tt in 2 4 8 16 32 64 128 256 512 1024 2048 4096
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/ASP.json ./resources/routing/RPLFast.json ./resources/routing/RPLFastLate.json ./resources/routing/RPL.json
@@ -85,8 +84,7 @@ x=$(/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t | grep simulator_out
 mv tmp "$x/time"
 done
 done
-#for tt in 4096
-for tt in x
+for tt in 8192
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFast.json ./resources/routing/RPLFastLate.json ./resources/routing/RPL.json
@@ -98,7 +96,7 @@ x=$(/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t | grep simulator_out
 mv tmp "$x/time"
 done
 done
-for tt in 8192 16384 32768 65536 131072 262144
+for tt in 16384 32768 65536 131072 262144
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFastLate.json ./resources/routing/RPL.json

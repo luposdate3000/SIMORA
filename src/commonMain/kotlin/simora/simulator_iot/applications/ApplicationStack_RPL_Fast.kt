@@ -16,7 +16,6 @@
  */
 
 package simora.simulator_iot.applications
-
 import simora.simulator_core.ITimer
 import simora.simulator_core.PriorityQueue
 import simora.simulator_iot.Config
@@ -24,8 +23,8 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.LinkManagerList
+import kotlin.jvm.JvmField
 import simora.simulator_iot.models.net.NetworkPackage
-
 internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
@@ -96,7 +95,6 @@ internal class ApplicationStack_RPL_Fast(
             val size = config.devices.size
             val tinyMatrix = DoubleArray(size) { Double.MAX_VALUE }
             val tinyMatrixNext = IntArray(size) { -1 }
-            val canAddToQueue = IntArray(size) { 1 }
             tinyMatrix[config.rootRouterAddress] = 0.0
             tinyMatrixNext[config.rootRouterAddress] = config.rootRouterAddress
 // dijkstra
@@ -117,26 +115,16 @@ internal class ApplicationStack_RPL_Fast(
                     }
                     addrSrc = q.extractMinValue()
                 }
-            } else {
-// due to the array, here is NO garbage collection required. But the array is not sorted, such that it takes more time to search for the next entry
+            } else  {
+// due to the array, here is NO garbage collection required. Array is sorted using binary search insert
+                val canAddToQueue = IntArray(size) { 1 }
                 val queue = IntArray(size) { -1 }
                 queue[0] = config.rootRouterAddress
                 canAddToQueue[config.rootRouterAddress] = 0
-                var queueSize = 1
-                for (i in 0 until size) {
-                    var queueIdx = 0
-                    var addrSrc = queue[queueIdx]
-                    var mincost = tinyMatrix[addrSrc]
-                    for (j in 0 until queueSize) {
-                        if (mincost > tinyMatrix[queue[j]]) {
-                            queueIdx = j
-                            addrSrc = queue[queueIdx]
-                            mincost = tinyMatrix[addrSrc]
-                        }
-                    }
-                    queueSize--
-                    queue[queueIdx] = queue[queueSize]
-                    queue[queueSize] = -1
+                var queueLeft = 0 // inclusive
+                var queueRight = 0 // inclusive
+                while (queueLeft <= queueRight) {
+                    var addrSrc = queue[queueLeft++]
                     val device = config.devices[addrSrc]
                     for (addrDest in linkManager.getNeighbours(addrSrc)) {
                         val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001 + tinyMatrix[addrSrc]
@@ -144,7 +132,27 @@ internal class ApplicationStack_RPL_Fast(
                             tinyMatrix[addrDest] = cost
                             tinyMatrixNext[addrDest] = addrSrc
                             if (canAddToQueue[addrDest] == 1) {
-                                queue[queueSize++] = addrDest
+                                var l = queueLeft
+                                var r = queueRight
+                                while (l < r) {
+                                    val m = (l + r) / 2
+                                    val c = tinyMatrix[queue[m]]
+                                    if (c <cost) {
+                                        l = m + 1
+                                    } else if (c> cost) {
+                                        r = m - 1
+                                    } else {
+                                        l = m
+                                        r = m
+                                    }
+                                }
+                                var j = queueRight
+                                while (j >= l) {
+                                    queue[j + 1] = queue[j]
+                                    j--
+                                }
+                                queueRight++
+                                queue[l] = addrDest
                                 canAddToQueue[addrDest] = 0
                             }
                         }
@@ -152,6 +160,7 @@ internal class ApplicationStack_RPL_Fast(
                 }
             }
             config.routingHelper = tinyMatrixNext
+featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toIntArray() }
         }
     }
 
@@ -167,8 +176,8 @@ internal class ApplicationStack_RPL_Fast(
             val address = parent.address
             val size = config.devices.size
             val helper = config.routingHelper as IntArray
-            routingTable = IntArray(size) { helper[address] }
-            val featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toIntArray() }
+val helperAddress=helper[address]
+            routingTable = IntArray(size) { helperAddress }
             routingTableFeatureHops = Array(config.features.size) { IntArray(size) { address } }
             fun treeDown(hop: Int, node: Int) {
                 routingTable[hop] = node
@@ -229,6 +238,9 @@ internal class ApplicationStack_RPL_Fast(
             isRoutingTableInitialized = true
         }
     }
+internal companion object {
+internal var featuredDevices:Array<IntArray> =Array(0){IntArray(0)}
+}
     override fun startUp() {
         child.startUp()
     }
