@@ -22,8 +22,8 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.LinkManagerMatrix
-import kotlin.jvm.JvmField
 import simora.simulator_iot.models.net.NetworkPackage
+import kotlin.jvm.JvmField
 internal class ApplicationStack_AllShortestPath(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
@@ -103,7 +103,7 @@ internal class ApplicationStack_AllShortestPath(
                 }
             }
             config.routingHelper = matrixNext
-devicesWithFeatures = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toSet()}
+            devicesWithFeatures = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toSet() }
         }
     }
 
@@ -136,9 +136,9 @@ devicesWithFeatures = Array(config.features.size) { feature -> config.getAllDevi
             }
         }
     }
-internal companion object {
-@JvmField internal var devicesWithFeatures = Array(0) {setOf<Int>()}
-}
+    internal companion object {
+        @JvmField internal var devicesWithFeatures = Array(0) { setOf<Int>() }
+    }
     override fun startUp() {
         child.startUp()
     }

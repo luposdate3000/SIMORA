@@ -23,8 +23,8 @@ import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.LinkManagerList
-import kotlin.jvm.JvmField
 import simora.simulator_iot.models.net.NetworkPackage
+import kotlin.jvm.JvmField
 internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
@@ -115,7 +115,7 @@ internal class ApplicationStack_RPL_Fast(
                     }
                     addrSrc = q.extractMinValue()
                 }
-            } else  {
+            } else {
 // due to the array, here is NO garbage collection required. Array is sorted using binary search insert
                 val canAddToQueue = IntArray(size) { 1 }
                 val queue = IntArray(size) { -1 }
@@ -160,7 +160,7 @@ internal class ApplicationStack_RPL_Fast(
                 }
             }
             config.routingHelper = tinyMatrixNext
-featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toIntArray() }
+            featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesForFeature(feature).map { it.address }.toIntArray() }
         }
     }
 
@@ -176,7 +176,7 @@ featuredDevices = Array(config.features.size) { feature -> config.getAllDevicesF
             val address = parent.address
             val size = config.devices.size
             val helper = config.routingHelper as IntArray
-val helperAddress=helper[address]
+            val helperAddress = helper[address]
             routingTable = IntArray(size) { helperAddress }
             routingTableFeatureHops = Array(config.features.size) { IntArray(size) { address } }
             fun treeDown(hop: Int, node: Int) {
@@ -238,9 +238,9 @@ val helperAddress=helper[address]
             isRoutingTableInitialized = true
         }
     }
-internal companion object {
-@JvmField internal var featuredDevices:Array<IntArray> =Array(0){IntArray(0)}
-}
+    internal companion object {
+        @JvmField internal var featuredDevices: Array<IntArray> = Array(0) { IntArray(0) }
+    }
     override fun startUp() {
         child.startUp()
     }
