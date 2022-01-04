@@ -161,7 +161,7 @@ public class SimulationRun {
             l as JsonParserObject
             val a = getDeviceByName(l.getOrDefault("fixedDeviceA", ""))
             val b = getDeviceByName(l.getOrDefault("fixedDeviceB", ""))
-            link(a, b, l.getOrDefault("dataRateInKbps", 0))
+            linkManagerWrite.addLink(a.address, b.address, l.getOrDefault("dataRateInKbps", 0))
         }
 // assign all static links <<<---
         createPattern(
@@ -341,11 +341,11 @@ public class SimulationRun {
                         if (firstDevice == null) {
                             firstDevice = d
                         } else {
-                            link(d, lastDevice!!, rand.getOrDefault("dataRateInKbps", 1000))
+                            linkManagerWrite.addLink(d.address, lastDevice!!.address, rand.getOrDefault("dataRateInKbps", 1000))
                         }
                         lastDevice = d
                     }
-                    link(firstDevice!!, lastDevice!!, rand.getOrDefault("dataRateInKbps", 1000))
+                    linkManagerWrite.addLink(firstDevice!!.address, lastDevice!!.address, rand.getOrDefault("dataRateInKbps", 1000))
                 }
                 "full" -> {
                     val radius = rand.getOrDefault("radius", 0.1)
@@ -369,7 +369,7 @@ public class SimulationRun {
                     }
                     for (i in 0 until localDevices.size) {
                         for (j in i + 1 until localDevices.size) {
-                            link(localDevices[i], localDevices[j], rand.getOrDefault("dataRateInKbps", 1000))
+                            linkManagerWrite.addLink(localDevices[i].address, localDevices[j].address, rand.getOrDefault("dataRateInKbps", 1000))
                         }
                     }
                 }
@@ -504,7 +504,7 @@ public class SimulationRun {
     }
 
     private fun linkIfPossible(one: Device, two: Device) {
-        if (one != two && !linkManagerWrite.hasLink(one.address, two.address)) {
+        if (one != two) {
             val distance = getDistanceInMeters(one, two)
             val oneIndices = linkManagerWrite.getSupportedLinkTypes(one.address)
             val twoIndices = linkManagerWrite.getSupportedLinkTypes(two.address)
@@ -513,7 +513,6 @@ public class SimulationRun {
                     if (i == i2) {
                         if (distance <= sortedLinkTypes[i].rangeInMeters) {
                             linkManagerWrite.addLink(one.address, two.address, sortedLinkTypes[i].dataRateInKbps)
-                            linkManagerWrite.addLink(two.address, one.address, sortedLinkTypes[i].dataRateInKbps)
                             return
                         }
                     }
@@ -535,10 +534,5 @@ public class SimulationRun {
             val y = two.longitude - one.longitude
             return sqrt(x * x + y * y)
         }
-    }
-
-    private fun link(one: Device, two: Device, dataRate: Int) {
-        linkManagerWrite.addLink(one.address, two.address, dataRate)
-        linkManagerWrite.addLink(two.address, one.address, dataRate)
     }
 }

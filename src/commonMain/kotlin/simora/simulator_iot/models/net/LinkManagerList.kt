@@ -33,27 +33,32 @@ public class LinkManagerList : ILinkManagerWrite {
         supportedLinkTypes[addr] = data
     }
     override fun getSupportedLinkTypes(addr: Int): IntArray = supportedLinkTypes[addr]
-    override fun getTransmissionDelay(sourceAddress: Int, destinationAddress: Int, numberOfBytesToSend: Int): Long {
-        val idx = link_Addresses[sourceAddress].indexOf(destinationAddress)
+    override fun getTransmissionDelay(addrSrc: Int, addrDest: Int, numberOfBytesToSend: Int): Long {
+        val idx = link_Addresses[addrSrc].indexOf(addrDest)
         if (idx <0) {
-            println("getTransmissionDelay .. $destinationAddress")
+            println("getTransmissionDelay .. $addrDest")
         }
         val kiloBits = numberOfBytesToSend.toDouble() / 125
-        val seconds = kiloBits / link_dataRateInKbps[sourceAddress][idx]
+        val seconds = kiloBits / link_dataRateInKbps[addrSrc][idx]
         return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
 
-    override fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean = link_Addresses[sourceAddress].indexOf(otherDevice) >= 0
+    internal fun getNeighbours(addrSrc: Int): List<Int> = link_Addresses[addrSrc]
 
-    internal fun getNeighbours(sourceAddress: Int): List<Int> = link_Addresses[sourceAddress]
-
-    override fun addLink(sourceAddress: Int, addr: Int, dataRateInKbps: Int,) {
-        val idx = link_Addresses[sourceAddress].indexOf(addr)
+    override fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,) {
+        val idx = link_Addresses[addrSrc].indexOf(addrDest)
         if (idx <0) {
-            link_Addresses[sourceAddress].add(addr)
-            link_dataRateInKbps[sourceAddress].add(dataRateInKbps.toDouble())
+            link_Addresses[addrSrc].add(addrDest)
+            link_dataRateInKbps[addrSrc].add(dataRateInKbps.toDouble())
         } else {
-            link_dataRateInKbps[sourceAddress][idx] = dataRateInKbps.toDouble()
+            link_dataRateInKbps[addrSrc][idx] = dataRateInKbps.toDouble()
+        }
+        val idx2 = link_Addresses[addrDest].indexOf(addrSrc)
+        if (idx2 <0) {
+            link_Addresses[addrDest].add(addrSrc)
+            link_dataRateInKbps[addrDest].add(dataRateInKbps.toDouble())
+        } else {
+            link_dataRateInKbps[addrDest][idx2] = dataRateInKbps.toDouble()
         }
     }
 }

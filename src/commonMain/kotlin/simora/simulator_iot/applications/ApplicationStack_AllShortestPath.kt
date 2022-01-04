@@ -93,11 +93,9 @@ internal class ApplicationStack_AllShortestPath(
                         val idx = j * size + i
                         val idx1 = k * size + i
                         val idx2 = j * size + k
-                        if (matrix[idx] <0.0) {
-                            matrix[idx] = matrix[idx1] + matrix[idx2]
-                            matrixNext[idx] = matrixNext[idx1]
-                        } else if (matrix[idx] > matrix[idx1] + matrix[idx2]) {
-                            matrix[idx] = matrix[idx1] + matrix[idx2]
+                        val s = matrix[idx1] + matrix[idx2]
+                        if (matrix[idx] > s) {
+                            matrix[idx] = s
                             matrixNext[idx] = matrixNext[idx1]
                         }
                     }
