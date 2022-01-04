@@ -28,9 +28,10 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
         val baseRow = mutableMapOf<String, String>()
         baseRow["platform"] = x[0]
         baseRow["benchmark_case"] = x[1]
-        baseRow["routing"] = x[2]
-        baseRow["scenario"] = x[3]
-        baseRow["topology"] = x[4]
+        baseRow["multicast"] = x[2]
+        baseRow["routing"] = x[3]
+        baseRow["scenario"] = x[4]
+        baseRow["topology"] = x[5]
         try {
             File(filename + "/time").forEachLine { line ->
                 if (line.contains("User time (seconds)")) {

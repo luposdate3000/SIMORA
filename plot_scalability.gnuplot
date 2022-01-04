@@ -10,4 +10,5 @@ set logscale x 2
 set logscale y 10
 plot 'plot_scalability1.csv' using 1:2 with lines title 'RPL init on demand using global knowledge', \
      'plot_scalability2.csv' using 1:2 with lines title 'RPL using global knowledge', \
-     'plot_scalability3.csv' using 1:2 with lines title 'RPL default setup'
+     'plot_scalability3.csv' using 1:2 with lines title 'RPL default setup', \
+     'plot_scalability4.csv' using 1:2 with lines title 'ASP default setup'
