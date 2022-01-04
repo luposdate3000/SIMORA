@@ -239,7 +239,7 @@ val helperAddress=helper[address]
         }
     }
 internal companion object {
-internal var featuredDevices:Array<IntArray> =Array(0){IntArray(0)}
+@JvmField internal var featuredDevices:Array<IntArray> =Array(0){IntArray(0)}
 }
     override fun startUp() {
         child.startUp()
