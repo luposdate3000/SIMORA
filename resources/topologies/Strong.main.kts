@@ -2,7 +2,7 @@
 import java.io.File
 import kotlin.math.log
 import kotlin.math.sqrt
-val limit = 30000
+val limit = 300000
 val limitLength=limit.toString().length+1
 var i = 2
 while (i < limit) {

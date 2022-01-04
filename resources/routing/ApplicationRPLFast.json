@@ -1,7 +1,0 @@
-{
-    "routing": {
-        "lateInitRoutingTable": false,
-        "multicast": "ApplicationSide",
-        "protocol": "RPL_Fast",
-    },
-}
