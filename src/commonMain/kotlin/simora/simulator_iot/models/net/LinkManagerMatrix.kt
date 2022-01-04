@@ -19,12 +19,12 @@ package simora.simulator_iot.models.net
 
 import kotlin.math.roundToLong
 
-public class LinkManagerRPL : ILinkManager {
+public class LinkManagerMatrix : ILinkManagerWrite {
     private var supportedLinkTypes = mutableListOf<IntArray>()
     private var link_Addresses = mutableListOf<MutableList<Int>>()
     private var link_dataRateInKbps = mutableListOf<MutableList<Double>>()
-    internal fun getLinkCount(): Int = link_Addresses.sumOf { it.size }
-    internal fun setSupportedLinkTypes(addr: Int, data: IntArray) {
+    override fun getLinkCount(): Int = link_Addresses.sumOf { it.size }
+    override fun setSupportedLinkTypes(addr: Int, data: IntArray) {
         if (supportedLinkTypes.size <= addr) {
             supportedLinkTypes.add(IntArray(0))
             link_Addresses.add(mutableListOf())
@@ -32,8 +32,8 @@ public class LinkManagerRPL : ILinkManager {
         }
         supportedLinkTypes[addr] = data
     }
-    internal fun getSupportedLinkTypes(addr: Int): IntArray = supportedLinkTypes[addr]
-    internal fun getTransmissionDelay(sourceAddress: Int, destinationAddress: Int, numberOfBytesToSend: Int): Long {
+    override fun getSupportedLinkTypes(addr: Int): IntArray = supportedLinkTypes[addr]
+    override fun getTransmissionDelay(sourceAddress: Int, destinationAddress: Int, numberOfBytesToSend: Int): Long {
         val idx = link_Addresses[sourceAddress].indexOf(destinationAddress)
         if (idx <0) {
             println("getTransmissionDelay .. $destinationAddress")
@@ -43,15 +43,11 @@ public class LinkManagerRPL : ILinkManager {
         return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
 
-    internal fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean = link_Addresses[sourceAddress].indexOf(otherDevice) >= 0
+    override fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean = link_Addresses[sourceAddress].indexOf(otherDevice) >= 0
 
-    public fun getNeighbours(sourceAddress: Int): List<Int> = link_Addresses[sourceAddress]
+    override fun getNeighbours(sourceAddress: Int): List<Int> = link_Addresses[sourceAddress]
 
-    internal fun addLink(
-        sourceAddress: Int,
-        addr: Int,
-        dataRateInKbps: Int,
-    ) {
+    override fun addLink(sourceAddress: Int, addr: Int, dataRateInKbps: Int,) {
         val idx = link_Addresses[sourceAddress].indexOf(addr)
         if (idx <0) {
             link_Addresses[sourceAddress].add(addr)

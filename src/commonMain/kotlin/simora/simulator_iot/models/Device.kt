@@ -24,6 +24,7 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Rooter
+import simora.simulator_iot.models.net.ILinkManagerWrite
 import simora.simulator_iot.models.net.NetworkPackage
 
 public class Device(
@@ -82,11 +83,12 @@ public class Device(
 
     @Suppress("NOTHING_TO_INLINE")
     internal inline fun getNetworkDelay(destinationAddress: Int, pck: NetworkPackage): Long {
+        val linkManager = simRun.linkManager as ILinkManagerWrite
         val processingDelay = getProcessingDelay()
         return if (destinationAddress == address) {
             processingDelay
         } else {
-            val transmissionDelay = simRun.linkManager.getTransmissionDelay(address, destinationAddress, pck.getSizeInBytes())
+            val transmissionDelay = linkManager.getTransmissionDelay(address, destinationAddress, pck.getSizeInBytes())
             transmissionDelay + processingDelay
         }
     }

@@ -22,6 +22,7 @@ import simora.simulator_iot.ILogger
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
+import simora.simulator_iot.models.net.LinkManagerList
 import simora.simulator_iot.models.net.NetworkPackage
 
 public class ApplicationStack_RPL(
@@ -58,7 +59,8 @@ public class ApplicationStack_RPL(
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun broadcastPackage_ApplicationStack_RPL_DIO() {
-        for (potentialChild in config.linkManager.getNeighbours(parent.address))
+        val linkManager = config.linkManager as LinkManagerList
+        for (potentialChild in linkManager.getNeighbours(parent.address))
             if (potentialChild != preferredParent.address) {
                 sendPackage_ApplicationStack_RPL_DIO(potentialChild)
             }

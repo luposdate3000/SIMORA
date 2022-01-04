@@ -17,6 +17,11 @@
 
 package simora.simulator_iot.models.net
 
-public interface ILinkManager {
-    public fun getLinkCount(): Int
+public interface ILinkManagerWrite : ILinkManager {
+    public fun getTransmissionDelay(sourceAddress: Int, destinationAddress: Int, numberOfBytesToSend: Int): Long
+    public fun setSupportedLinkTypes(addr: Int, data: IntArray)
+    public fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean
+    public fun addLink(sourceAddress: Int, addr: Int, dataRateInKbps: Int,)
+    public fun getSupportedLinkTypes(addr: Int): IntArray
+    public fun getNeighbours(sourceAddress: Int): List<Int>
 }

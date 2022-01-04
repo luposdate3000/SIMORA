@@ -42,7 +42,10 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.models.net.LinkManagerRPL
+import simora.simulator_iot.models.net.ILinkManager
+import simora.simulator_iot.models.net.ILinkManagerWrite
+import simora.simulator_iot.models.net.LinkManagerList
+import simora.simulator_iot.models.net.LinkManagerMatrix
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -51,7 +54,8 @@ import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
 public class SimulationRun {
-    public var linkManager: LinkManagerRPL = LinkManagerRPL()
+    private var linkManagerWrite: ILinkManagerWrite = LinkManagerList()
+    public var linkManager: ILinkManager = linkManagerWrite
     internal var startConfigurationStamp: Instant = Clock.System.now()
     public var notInitializedClock: Long = -1
     public var simMaxClock: Long = notInitializedClock
@@ -126,6 +130,17 @@ public class SimulationRun {
             }.toList().toTypedArray()
         )
 // load all link types <<<---
+// initialize linkmanager --->>>
+        val jsonRouting = json!!.getOrEmptyObject("routing")
+        val routerType = jsonRouting.getOrDefault("protocol", "RPL")
+        linkManagerWrite = when (routerType) {
+            "AllShortestPath" -> LinkManagerList()
+            "RPL_Fast" -> LinkManagerMatrix()
+            "RPL" -> LinkManagerList()
+            else -> TODO("unknown routing.protocol '${jsonRouting.getOrDefault("protocol", "RPL")}'")
+        }
+        linkManager = linkManagerWrite
+// initialize linkmanager <<<---
         for ((name, fixedDevice) in json.getOrEmptyObject("fixedDevice")) {
             fixedDevice as JsonParserObject
             val created = createDevice(
@@ -229,24 +244,28 @@ public class SimulationRun {
                 }
             )
         )
-        val router = when (jsonRouting.getOrDefault("protocol", "RPL")) {
-            "AllShortestPath" -> ApplicationStack_AllShortestPath(
-                multicastLayer,
-                this,
-            )
-            "RPL_Fast" -> ApplicationStack_RPL_Fast(
-                multicastLayer,
-                this,
-                jsonRouting.getOrDefault("lateInitRoutingTable", false),
-            )
-            "RPL" -> ApplicationStack_RPL(
-                multicastLayer,
-                logger,
-                this,
-            )
+        val routerType = jsonRouting.getOrDefault("protocol", "RPL")
+        val router = when (routerType) {
+            "AllShortestPath" ->
+                ApplicationStack_AllShortestPath(
+                    multicastLayer,
+                    this,
+                )
+            "RPL_Fast" ->
+                ApplicationStack_RPL_Fast(
+                    multicastLayer,
+                    this,
+                    jsonRouting.getOrDefault("lateInitRoutingTable", false),
+                )
+            "RPL" ->
+                ApplicationStack_RPL(
+                    multicastLayer,
+                    logger,
+                    this,
+                )
             else -> TODO("unknown routing.protocol '${jsonRouting.getOrDefault("protocol", "RPL")}'")
         }
-        linkManager.setSupportedLinkTypes(ownAddress, getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList()))
+        linkManagerWrite.setSupportedLinkTypes(ownAddress, getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList()))
         val device = Device(
             this,
             latitude,
@@ -485,16 +504,16 @@ public class SimulationRun {
     }
 
     private fun linkIfPossible(one: Device, two: Device) {
-        if (one != two && !linkManager.hasLink(one.address, two.address)) {
+        if (one != two && !linkManagerWrite.hasLink(one.address, two.address)) {
             val distance = getDistanceInMeters(one, two)
-            val oneIndices = linkManager.getSupportedLinkTypes(one.address)
-            val twoIndices = linkManager.getSupportedLinkTypes(two.address)
+            val oneIndices = linkManagerWrite.getSupportedLinkTypes(one.address)
+            val twoIndices = linkManagerWrite.getSupportedLinkTypes(two.address)
             loop@ for (i in oneIndices) {
                 for (i2 in twoIndices) {
                     if (i == i2) {
                         if (distance <= sortedLinkTypes[i].rangeInMeters) {
-                            linkManager.addLink(one.address, two.address, sortedLinkTypes[i].dataRateInKbps)
-                            linkManager.addLink(two.address, one.address, sortedLinkTypes[i].dataRateInKbps)
+                            linkManagerWrite.addLink(one.address, two.address, sortedLinkTypes[i].dataRateInKbps)
+                            linkManagerWrite.addLink(two.address, one.address, sortedLinkTypes[i].dataRateInKbps)
                             return
                         }
                     }
@@ -519,7 +538,7 @@ public class SimulationRun {
     }
 
     private fun link(one: Device, two: Device, dataRate: Int) {
-        linkManager.addLink(one.address, two.address, dataRate)
-        linkManager.addLink(two.address, one.address, dataRate)
+        linkManagerWrite.addLink(one.address, two.address, dataRate)
+        linkManagerWrite.addLink(two.address, one.address, dataRate)
     }
 }

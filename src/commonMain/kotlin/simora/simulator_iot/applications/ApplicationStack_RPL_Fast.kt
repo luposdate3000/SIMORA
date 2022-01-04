@@ -23,6 +23,7 @@ import simora.simulator_iot.Config
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
+import simora.simulator_iot.models.net.LinkManagerMatrix
 import simora.simulator_iot.models.net.NetworkPackage
 
 internal class ApplicationStack_RPL_Fast(
@@ -91,6 +92,7 @@ internal class ApplicationStack_RPL_Fast(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
+            val linkManager = config.linkManager as LinkManagerMatrix
             val size = config.devices.size
             val tinyMatrix = DoubleArray(size) { Double.MAX_VALUE }
             val tinyMatrixNext = IntArray(size) { -1 }
@@ -104,7 +106,7 @@ internal class ApplicationStack_RPL_Fast(
                 var addrSrc = q.extractMinValue()
                 while (addrSrc != null) {
                     val device = config.devices[addrSrc]
-                    for (addrDest in config.linkManager.getNeighbours(addrSrc)) {
+                    for (addrDest in linkManager.getNeighbours(addrSrc)) {
                         val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001 + tinyMatrix[addrSrc]
                         if (cost < tinyMatrix[addrDest]) {
                             tinyMatrix[addrDest] = cost
@@ -134,7 +136,7 @@ internal class ApplicationStack_RPL_Fast(
                     queue[queueIdx] = queue[queueSize]
                     queue[queueSize] = -1
                     val device = config.devices[addrSrc]
-                    for (addrDest in config.linkManager.getNeighbours(addrSrc)) {
+                    for (addrDest in linkManager.getNeighbours(addrSrc)) {
                         val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001 + tinyMatrix[addrSrc]
                         if (cost < tinyMatrix[addrDest]) {
                             tinyMatrix[addrDest] = cost

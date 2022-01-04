@@ -21,8 +21,8 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
+import simora.simulator_iot.models.net.LinkManagerList
 import simora.simulator_iot.models.net.NetworkPackage
-
 internal class ApplicationStack_AllShortestPath(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
@@ -82,6 +82,7 @@ internal class ApplicationStack_AllShortestPath(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
+            val linkManager = config.linkManager as LinkManagerList
             val size = config.devices.size
             val matrix = DoubleArray(size * size) { -1.0 }
             val matrixNext = IntArray(size * size) { -1 }
@@ -94,7 +95,7 @@ internal class ApplicationStack_AllShortestPath(
 // matrix direct connections
             for (device in config.devices) {
                 val addrSrc = device.address
-                for (addrDest in config.linkManager.getNeighbours(addrSrc)) {
+                for (addrDest in linkManager.getNeighbours(addrSrc)) {
                     val idx = addrDest * size + addrSrc
                     val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001
                     if (cost < matrix[idx] || matrix[idx] <0.0) {
