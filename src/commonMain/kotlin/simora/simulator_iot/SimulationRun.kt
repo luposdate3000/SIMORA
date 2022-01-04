@@ -42,7 +42,7 @@ import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.models.net.LinkManager
+import simora.simulator_iot.models.net.LinkManagerRPL
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -51,6 +51,7 @@ import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
 public class SimulationRun {
+    public var linkManager: LinkManagerRPL = LinkManagerRPL()
     internal var startConfigurationStamp: Instant = Clock.System.now()
     public var notInitializedClock: Long = -1
     public var simMaxClock: Long = notInitializedClock
@@ -245,13 +246,13 @@ public class SimulationRun {
             )
             else -> TODO("unknown routing.protocol '${jsonRouting.getOrDefault("protocol", "RPL")}'")
         }
-        val linkTypes = getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList())
+        linkManager.setSupportedLinkTypes(ownAddress, getSortedLinkTypeIndices(jsonDevice.getOrEmptyArray("supportedLinkTypes").map { (it as JsonParserString).value }.toMutableList()))
         val device = Device(
             this,
-            latitude, longitude,
+            latitude,
+            longitude,
             ownAddress,
             jsonDevice.getOrDefault("performance", 100.0),
-            LinkManager(linkTypes),
             json!!.getOrDefault("deterministic", true),
             router,
             namedAddresses,
@@ -484,16 +485,16 @@ public class SimulationRun {
     }
 
     private fun linkIfPossible(one: Device, two: Device) {
-        if (one != two && !one.linkManager.hasLink(two)) {
+        if (one != two && !linkManager.hasLink(one.address, two.address)) {
             val distance = getDistanceInMeters(one, two)
-            val oneIndices = one.linkManager.supportedLinkTypes
-            val twoIndices = two.linkManager.supportedLinkTypes
+            val oneIndices = linkManager.getSupportedLinkTypes(one.address)
+            val twoIndices = linkManager.getSupportedLinkTypes(two.address)
             loop@ for (i in oneIndices) {
                 for (i2 in twoIndices) {
                     if (i == i2) {
                         if (distance <= sortedLinkTypes[i].rangeInMeters) {
-                            one.linkManager.addLink(two.address, sortedLinkTypes[i].dataRateInKbps)
-                            two.linkManager.addLink(one.address, sortedLinkTypes[i].dataRateInKbps)
+                            linkManager.addLink(one.address, two.address, sortedLinkTypes[i].dataRateInKbps)
+                            linkManager.addLink(two.address, one.address, sortedLinkTypes[i].dataRateInKbps)
                             return
                         }
                     }
@@ -509,7 +510,7 @@ public class SimulationRun {
             val dLatR = abs(lat2R - lat1R)
             val dLngR = abs((two.longitude - one.longitude) / 180.0 * PI)
             val a = sin(dLatR / 2) * sin(dLatR / 2) + (cos(lat1R) * cos(lat2R) * sin(dLngR / 2) * sin(dLngR / 2))
-            return 2 * atan2(sqrt(a), sqrt(1 - a))*6371009
+            return 2 * atan2(sqrt(a), sqrt(1 - a)) * 6371009
         } else {
             val x = two.latitude - one.latitude
             val y = two.longitude - one.longitude
@@ -518,7 +519,7 @@ public class SimulationRun {
     }
 
     private fun link(one: Device, two: Device, dataRate: Int) {
-        one.linkManager.addLink(two.address, dataRate)
-        two.linkManager.addLink(one.address, dataRate)
+        linkManager.addLink(one.address, two.address, dataRate)
+        linkManager.addLink(two.address, one.address, dataRate)
     }
 }

@@ -24,7 +24,6 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Rooter
-import simora.simulator_iot.models.net.LinkManager
 import simora.simulator_iot.models.net.NetworkPackage
 
 public class Device(
@@ -33,7 +32,6 @@ public class Device(
     internal var longitude: Double,
     public val address: Int,
     private val performance: Double,
-    public val linkManager: LinkManager,
     private val isDeterministic: Boolean,
     public val applicationStack: IApplicationStack_Rooter,
     private val hostNameLookUpTable: MutableMap<String, Int>,
@@ -88,7 +86,7 @@ public class Device(
         return if (destinationAddress == address) {
             processingDelay
         } else {
-            val transmissionDelay = linkManager.getTransmissionDelay(destinationAddress, pck.getSizeInBytes())
+            val transmissionDelay = simRun.linkManager.getTransmissionDelay(address, destinationAddress, pck.getSizeInBytes())
             transmissionDelay + processingDelay
         }
     }

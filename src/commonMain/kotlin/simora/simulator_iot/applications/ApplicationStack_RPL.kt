@@ -58,7 +58,7 @@ public class ApplicationStack_RPL(
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun broadcastPackage_ApplicationStack_RPL_DIO() {
-        for (potentialChild in parent.linkManager.getNeighbours())
+        for (potentialChild in config.linkManager.getNeighbours(parent.address))
             if (potentialChild != preferredParent.address) {
                 sendPackage_ApplicationStack_RPL_DIO(potentialChild)
             }

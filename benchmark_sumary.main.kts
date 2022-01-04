@@ -2,7 +2,7 @@
 import java.io.File
 
 val fileToUse = "measurement.csv"
-//val fileToUse="average.csv"
+// val fileToUse="average.csv"
 
 val argumentNames = mutableListOf<String>()
 val rows = mutableListOf<MutableList<String>>()
@@ -47,7 +47,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
         }
         try {
             var lines = mutableListOf<List<String>>()
-            File(filename + "/${fileToUse}").forEachLine { line ->
+            File(filename + "/$fileToUse").forEachLine { line ->
                 val l = line.split(",")
                 val h = headers
                 if (h == null) {
@@ -74,7 +74,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
                     val valueMedian = values[values.size / 2]
                     val valueQ1 = values[values.size / 4]
                     val valueQ3 = values[values.size * 3 / 4]
-//https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/box-whisker-plots/a/box-plot-review
+// https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/box-whisker-plots/a/box-plot-review
                     row[h[i]] = valueAvg.toString()
                     row[h[i] + "Min"] = valueMin.toString()
                     row[h[i] + "Max"] = valueMax.toString()

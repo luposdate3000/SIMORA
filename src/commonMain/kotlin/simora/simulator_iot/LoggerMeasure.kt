@@ -198,7 +198,7 @@ internal class LoggerMeasure : ILogger {
     override fun onStartUp() { // phase 3
         val stamp = Clock.System.now()
         data[StatSimulationStartupDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal]
-        data[StatNetworkLinkCounter] = simRun.devices.sumOf { d -> d.linkManager.getNeighbours().filter { it > d.address }.size }.toDouble()
+        data[StatNetworkLinkCounter] = simRun.linkManager.getLinkCount().toDouble()
     }
     override fun onShutDown() { // phase 4
         val stamp = Clock.System.now()
@@ -209,7 +209,7 @@ internal class LoggerMeasure : ILogger {
     override fun onStopSimulation() { // phase 5
         val stamp = Clock.System.now()
         data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal] - data[StatSimulationStartupDurationReal] - data[StatSimulationStartupRoutingDurationReal]
-        data[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0)+data[StatSimulationStartupConfigDurationReal]
+        data[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) + data[StatSimulationStartupConfigDurationReal]
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {
