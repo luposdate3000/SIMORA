@@ -23,7 +23,7 @@ import simora.simulator_iot.Config
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.models.net.LinkManagerMatrix
+import simora.simulator_iot.models.net.LinkManagerList
 import simora.simulator_iot.models.net.NetworkPackage
 
 internal class ApplicationStack_RPL_Fast(
@@ -92,10 +92,11 @@ internal class ApplicationStack_RPL_Fast(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
-            val linkManager = config.linkManager as LinkManagerMatrix
+            val linkManager = config.linkManager as LinkManagerList
             val size = config.devices.size
             val tinyMatrix = DoubleArray(size) { Double.MAX_VALUE }
             val tinyMatrixNext = IntArray(size) { -1 }
+            val canAddToQueue = IntArray(size) { 1 }
             tinyMatrix[config.rootRouterAddress] = 0.0
             tinyMatrixNext[config.rootRouterAddress] = config.rootRouterAddress
 // dijkstra
@@ -120,6 +121,7 @@ internal class ApplicationStack_RPL_Fast(
 // due to the array, here is NO garbage collection required. But the array is not sorted, such that it takes more time to search for the next entry
                 val queue = IntArray(size) { -1 }
                 queue[0] = config.rootRouterAddress
+                canAddToQueue[config.rootRouterAddress] = 0
                 var queueSize = 1
                 for (i in 0 until size) {
                     var queueIdx = 0
@@ -141,8 +143,9 @@ internal class ApplicationStack_RPL_Fast(
                         if (cost < tinyMatrix[addrDest]) {
                             tinyMatrix[addrDest] = cost
                             tinyMatrixNext[addrDest] = addrSrc
-                            if (!queue.contains(addrDest)) {
+                            if (canAddToQueue[addrDest] == 1) {
                                 queue[queueSize++] = addrDest
+                                canAddToQueue[addrDest] = 0
                             }
                         }
                     }

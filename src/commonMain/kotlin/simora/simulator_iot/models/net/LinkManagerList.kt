@@ -45,7 +45,7 @@ public class LinkManagerList : ILinkManagerWrite {
 
     override fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean = link_Addresses[sourceAddress].indexOf(otherDevice) >= 0
 
-    override fun getNeighbours(sourceAddress: Int): List<Int> = link_Addresses[sourceAddress]
+    internal fun getNeighbours(sourceAddress: Int): List<Int> = link_Addresses[sourceAddress]
 
     override fun addLink(sourceAddress: Int, addr: Int, dataRateInKbps: Int,) {
         val idx = link_Addresses[sourceAddress].indexOf(addr)

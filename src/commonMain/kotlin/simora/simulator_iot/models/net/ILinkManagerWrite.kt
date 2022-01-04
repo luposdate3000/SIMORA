@@ -23,5 +23,4 @@ public interface ILinkManagerWrite : ILinkManager {
     public fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean
     public fun addLink(sourceAddress: Int, addr: Int, dataRateInKbps: Int,)
     public fun getSupportedLinkTypes(addr: Int): IntArray
-    public fun getNeighbours(sourceAddress: Int): List<Int>
 }

@@ -21,7 +21,7 @@ import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
 import simora.simulator_iot.models.Device
-import simora.simulator_iot.models.net.LinkManagerList
+import simora.simulator_iot.models.net.LinkManagerMatrix
 import simora.simulator_iot.models.net.NetworkPackage
 internal class ApplicationStack_AllShortestPath(
     private val child: IApplicationStack_Actuator,
@@ -82,28 +82,10 @@ internal class ApplicationStack_AllShortestPath(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun calculateConfigRoutingHelper() {
         if (config.routingHelper == null) {
-            val linkManager = config.linkManager as LinkManagerList
+            val linkManager = config.linkManager as LinkManagerMatrix
             val size = config.devices.size
-            val matrix = DoubleArray(size * size) { -1.0 }
-            val matrixNext = IntArray(size * size) { -1 }
-// matrix self links
-            for (i in 0 until size) {
-                val idx = i * size + i
-                matrix[idx] = 0.0
-                matrixNext[idx] = i
-            }
-// matrix direct connections
-            for (device in config.devices) {
-                val addrSrc = device.address
-                for (addrDest in linkManager.getNeighbours(addrSrc)) {
-                    val idx = addrDest * size + addrSrc
-                    val cost = config.getDistanceInMeters(device, config.devices[addrDest]) + 0.0001
-                    if (cost < matrix[idx] || matrix[idx] <0.0) {
-                        matrix[idx] = cost
-                        matrixNext[idx] = addrDest
-                    }
-                }
-            }
+            val matrix = linkManager.matrix
+            val matrixNext = linkManager.matrixNext
 // floydWarshal
             for (k in 0 until size) {
                 for (i in 0 until size) {

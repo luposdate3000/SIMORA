@@ -134,8 +134,8 @@ public class SimulationRun {
         val jsonRouting = json!!.getOrEmptyObject("routing")
         val routerType = jsonRouting.getOrDefault("protocol", "RPL")
         linkManagerWrite = when (routerType) {
-            "AllShortestPath" -> LinkManagerList()
-            "RPL_Fast" -> LinkManagerMatrix()
+            "AllShortestPath" -> LinkManagerMatrix(this)
+            "RPL_Fast" -> LinkManagerList()
             "RPL" -> LinkManagerList()
             else -> TODO("unknown routing.protocol '${jsonRouting.getOrDefault("protocol", "RPL")}'")
         }

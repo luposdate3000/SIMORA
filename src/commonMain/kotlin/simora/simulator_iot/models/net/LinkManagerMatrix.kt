@@ -16,44 +16,60 @@
  */
 
 package simora.simulator_iot.models.net
-
+import simora.simulator_iot.SimulationRun
 import kotlin.math.roundToLong
 
-public class LinkManagerMatrix : ILinkManagerWrite {
+public class LinkManagerMatrix(
+    private var config: SimulationRun,
+) : ILinkManagerWrite {
+    private var size = 0
     private var supportedLinkTypes = mutableListOf<IntArray>()
-    private var link_Addresses = mutableListOf<MutableList<Int>>()
-    private var link_dataRateInKbps = mutableListOf<MutableList<Double>>()
-    override fun getLinkCount(): Int = link_Addresses.sumOf { it.size }
+    internal var matrix = DoubleArray(0)
+    internal var matrixNext = IntArray(0)
+    private var matrixRate = DoubleArray(0)
+    private var canAddDevices = true
+    private var linkCounter = 0
+
+    override fun getLinkCount(): Int = linkCounter
     override fun setSupportedLinkTypes(addr: Int, data: IntArray) {
+        if (!canAddDevices) {
+            TODO()
+        }
         if (supportedLinkTypes.size <= addr) {
             supportedLinkTypes.add(IntArray(0))
-            link_Addresses.add(mutableListOf())
-            link_dataRateInKbps.add(mutableListOf())
         }
         supportedLinkTypes[addr] = data
     }
     override fun getSupportedLinkTypes(addr: Int): IntArray = supportedLinkTypes[addr]
-    override fun getTransmissionDelay(sourceAddress: Int, destinationAddress: Int, numberOfBytesToSend: Int): Long {
-        val idx = link_Addresses[sourceAddress].indexOf(destinationAddress)
-        if (idx <0) {
-            println("getTransmissionDelay .. $destinationAddress")
-        }
+    override fun getTransmissionDelay(addrSrc: Int, addrDest: Int, numberOfBytesToSend: Int): Long {
         val kiloBits = numberOfBytesToSend.toDouble() / 125
-        val seconds = kiloBits / link_dataRateInKbps[sourceAddress][idx]
+        val seconds = kiloBits / matrixRate[addrDest * size + addrSrc]
         return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
 
-    override fun hasLink(sourceAddress: Int, otherDevice: Int): Boolean = link_Addresses[sourceAddress].indexOf(otherDevice) >= 0
+    override fun hasLink(addrSrc: Int, addrDest: Int): Boolean = matrixNext[addrDest * size + addrSrc] >= 0
 
-    override fun getNeighbours(sourceAddress: Int): List<Int> = link_Addresses[sourceAddress]
-
-    override fun addLink(sourceAddress: Int, addr: Int, dataRateInKbps: Int,) {
-        val idx = link_Addresses[sourceAddress].indexOf(addr)
-        if (idx <0) {
-            link_Addresses[sourceAddress].add(addr)
-            link_dataRateInKbps[sourceAddress].add(dataRateInKbps.toDouble())
-        } else {
-            link_dataRateInKbps[sourceAddress][idx] = dataRateInKbps.toDouble()
+    override fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,) {
+        if (canAddDevices) {
+            canAddDevices = false
+            size = supportedLinkTypes.size
+            matrix = DoubleArray(size * size) { -1.0 }
+            matrixNext = IntArray(size * size) { -1 }
+            matrixRate = DoubleArray(size * size) { 0.0 }
+            for (i in 0 until size) {
+                val idx = i * size + i
+                matrix[idx] = 0.0
+                matrixNext[idx] = i
+                matrixRate[idx] = -1.0
+            }
+        }
+        val idx = addrDest * size + addrSrc
+        val cost = config.getDistanceInMeters(config.devices[addrSrc], config.devices[addrDest]) + 0.0001
+        if (cost < matrix[idx] || matrix[idx] <0.0) {
+            linkCounter++
+            matrix[idx] = cost
+            matrixNext[idx] = addrDest
+            matrixRate[idx] = dataRateInKbps.toDouble()
         }
     }
 }
