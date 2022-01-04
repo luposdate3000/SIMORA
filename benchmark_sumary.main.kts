@@ -21,6 +21,7 @@ fun addRow(row: Map<String, String>) {
 }
 
 for (f in File("simulator_output").walk().maxDepth(1)) {
+try{
     val filename = f.toString()
     if (filename != "simulator_output") {
         val x = filename.substring(filename.lastIndexOf("/") + 2).split("_")
@@ -87,6 +88,8 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
         } catch (e: Throwable) {
         }
     }
+} catch (e: Throwable) {
+        }
 }
 
 println(argumentNames.joinToString(","))
