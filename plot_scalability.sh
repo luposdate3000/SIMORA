@@ -45,9 +45,7 @@ echo $CRouting > tmp.csv
 echo $CX >> tmp.csv
 echo $CAvg >> tmp.csv
 csvtool transpose tmp.csv | grep -w RPLFastLate | sed "s/RPLFastLate,//g" | sort -n > plot_scalability1.csv
-csvtool transpose tmp.csv | grep -w RPLFast | sed "s/RPLFast,//g" | sort -n > plot_scalability2.csv
-csvtool transpose tmp.csv | grep -w RPL | sed "s/RPL,//g" | sort -n > plot_scalability3.csv
-csvtool transpose tmp.csv | grep -w ASP | sed "s/ASP,//g" | sort -n > plot_scalability4.csv
+csvtool transpose tmp.csv | grep -w ASP | sed "s/ASP,//g" | sort -n > plot_scalability2.csv
 #	x  box_min  whisker_min  whisker_high  box_high
 ./plot_scalability.gnuplot
 rm tmp.csv
