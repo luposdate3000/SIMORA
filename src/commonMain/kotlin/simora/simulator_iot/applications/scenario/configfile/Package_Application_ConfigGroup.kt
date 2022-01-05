@@ -26,14 +26,14 @@ internal class Package_Application_ConfigGroup(
     internal val groups: List<Package_Application_ConfigGroup_GroupPart>,
 ) : IPayload {
     override fun getSizeInBytes(): Int {
-var res=text_global.length+1 //the global text (zero terminated)
+var res=text_global.length //the global text
 res+=4 //variable to specify length of list
 for (g in groups){
-res+=g.first.length+1 //the group shared text (zero terminated)
+res+=g.first.length //the group shared text
 res+=4//variable to specify size of individuals
 for((k,v) in g.second){
 res+=4//size of individual address
-res+=v.length+1 // individual text (zero terminated)
+res+=v.length // individual text
 }
 }
 return res

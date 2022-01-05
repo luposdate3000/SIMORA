@@ -53,7 +53,7 @@ internal class Application_MailSender(
     private inline fun getRandomString(length: Int): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length)
-            .map { allowedChars.random() }
+            .map { allowedChars.random(random) }
             .joinToString("")
     }
 
