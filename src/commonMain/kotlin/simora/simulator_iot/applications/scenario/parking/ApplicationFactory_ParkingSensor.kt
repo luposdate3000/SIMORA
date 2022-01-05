@@ -20,7 +20,7 @@ package simora.simulator_iot.applications.scenario.parking
 import simora.parser.IJsonParserValue
 import simora.parser.JsonParserObject
 import simora.simulator_iot.ILogger
-import simora.simulator_iot.RandomGenerator
+import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
@@ -30,7 +30,7 @@ internal class ApplicationFactory_ParkingSensor : IApplication_Factory {
         features.add(ApplicationFactory_ParkingSensorFeature())
     }
 
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: RandomGenerator, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
+    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: Random, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
         json as JsonParserObject
         if (json.getOrDefault("enabled", true)) {
             return listOf(

@@ -1,0 +1,65 @@
+{
+    "applications": {
+        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigDistributor": {},
+        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigReceiver": {},
+    },
+    "deterministic": true,
+    "deviceType": {
+        "CentralTower": {
+            "applications": {
+                "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigSender": {
+                    "maxSamples": 2,
+                    "rateInSec": 2,
+                    "receiverCount": 20,
+                    "sendStartClockInSec": 1000,
+                    "text_length_dynamic": 10,
+                    "text_length_fixed": 100,
+                    "useApplicationSideMulticast": true,
+                },
+            },
+            "performance": 100.0,
+            "supportedLinkTypes": [
+                "WPAN",
+                "WLAN",
+            ],
+        },
+        "EdgeDevice": {
+            "performance": 100.0,
+            "supportedLinkTypes": [
+                "WPAN",
+                "WLAN",
+            ],
+        },
+        "MeshHop": {
+            "performance": 100.0,
+            "supportedLinkTypes": [
+                "WLAN",
+            ],
+        },
+        "SensorDevice": {
+            "performance": 100.0,
+            "supportedLinkTypes": [
+                "WPAN",
+            ],
+        },
+    },
+    "linkType": {
+        "WLAN": {
+            "dataRateInKbps": 25000,
+            "rangeInMeters": 150,
+        },
+        "WPAN": {
+            "dataRateInKbps": 25000,
+            "rangeInMeters": 60,
+        },
+    },
+    "logging": {
+        "simora.simulator_iot.LoggerMeasure": {
+            "enabled": true,
+        },
+        "simora.simulator_iot.LoggerStdout": {
+            "enabled": false,
+        },
+    },
+    "rootRouter": "CentralTower",
+}

@@ -20,7 +20,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.RandomGenerator
+import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
@@ -29,7 +29,7 @@ internal class Application_MailSender(
     private val sendRateInSec: Int,
     private val maxNumber: Int,
     private val ownAddress: Int,
-    private val random: RandomGenerator,
+    private val random: Random,
     private val allReveivers: List<Int>,
     private val text_length_fixed: Int,
     private val text_length_dynamic: Int,
@@ -46,7 +46,7 @@ internal class Application_MailSender(
 
     override fun startUp() {
         startUpTimeStamp = Clock.System.now()
-        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.nextLong(0L ,sendingVarianceInSec.toLong() * 1000000000L), this)
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -79,7 +79,7 @@ internal class Application_MailSender(
                 }
             }
             parent.flush()
-            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L ,sendingVarianceInSec.toLong() * 1000000000L), this)
         }
     }
 }

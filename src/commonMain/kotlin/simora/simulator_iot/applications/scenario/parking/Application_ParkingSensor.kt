@@ -24,7 +24,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.RandomGenerator
+import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
@@ -33,7 +33,7 @@ internal class Application_ParkingSensor(
     private val sendRateInSec: Int,
     private val maxNumber: Int,
     private val ownAddress: Int,
-    private val random: RandomGenerator,
+    private val random: Random,
     private val area: Int,
     private val spotInArea: Int,
 ) : IApplicationStack_Actuator, ITimer {
@@ -48,7 +48,7 @@ internal class Application_ParkingSensor(
 
     override fun startUp() {
         startUpTimeStamp = Clock.System.now()
-        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         receiver = parent.closestDeviceWithFeature("Database")
     }
 
@@ -64,13 +64,13 @@ internal class Application_ParkingSensor(
                 Package_Application_ParkingSample(
                     sensorID = ownAddress,
                     sampleTime = sampleTime,
-                    isOccupied = random.getBoolean(0.5f),
+                    isOccupied = random.nextBoolean(),
                     area = area,
                     spotInArea = spotInArea,
                 )
             )
             parent.flush()
-            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         }
     }
 }

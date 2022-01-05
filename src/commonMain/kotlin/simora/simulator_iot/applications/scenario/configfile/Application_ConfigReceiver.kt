@@ -14,26 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package simora.simulator_iot.applications.scenario.configfile
 
-package simora.simulator_iot.applications.scenario.parking
-
-import simora.parser.IJsonParserValue
-import simora.parser.JsonParserObject
-import simora.simulator_iot.ILogger
-import kotlin.random.Random
-import simora.simulator_iot.applications.IApplicationFeature
+import simora.simulator_iot.IPayload
 import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplication_Factory
+import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-internal class ApplicationFactory_ReceiveParkingSample : IApplication_Factory {
-    override fun registerFeatures(features: MutableList<IApplicationFeature>) {}
-    override fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: Random, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator> {
-        json as JsonParserObject
-        if (json.getOrDefault("enabled", true)) {
-            return listOf(
-                Application_ReceiveParkingSample(ownAddress)
-            )
+internal class Application_ConfigReceiver : IApplicationStack_Actuator {
+    private lateinit var parent: IApplicationStack_Middleware
+    override fun setRouter(router: IApplicationStack_Middleware) {
+        parent = router
+    }
+
+    override fun startUp() {
+    }
+
+    override fun shutDown() {
+    }
+
+    override fun receive(pck: IPayload): IPayload? {
+        return if (pck is Package_Application_Config) {
+            null
+        } else {
+            pck
         }
-        return listOf()
     }
 }

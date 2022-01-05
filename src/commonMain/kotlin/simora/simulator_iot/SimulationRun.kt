@@ -48,6 +48,7 @@ import simora.simulator_iot.models.net.LinkManagerList
 import simora.simulator_iot.models.net.LinkManagerMatrix
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.random.Random
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.round
@@ -61,7 +62,7 @@ public class SimulationRun {
     public var simMaxClock: Long = notInitializedClock
     public var maxClock: Long = Long.MAX_VALUE
     public var clock: Long = 0
-    private val randGenerator = RandomGenerator()
+    private val randGenerator = Random(0)
     internal val logger: Loggers = Loggers(mutableListOf())
     private var addedEventCounter: Int = 0
     private var futureEvents: PriorityQueue<Event> = PriorityQueue()
@@ -413,8 +414,8 @@ public class SimulationRun {
     }
 
     private fun randomCoords(r: Double): Pair<Double, Double> {
-        var a = randGenerator.getDouble(0.0, 1.0)
-        var b = randGenerator.getDouble(0.0, 1.0)
+        var a = randGenerator.nextDouble(0.0, 1.0)
+        var b = randGenerator.nextDouble(0.0, 1.0)
         if (b < a) {
             val c = b
             b = a

@@ -15,13 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_iot.applications
+package simora.simulator_iot.applications.scenario.configfile
 
-import simora.parser.IJsonParserValue
-import simora.simulator_iot.ILogger
-import kotlin.random.Random
+import simora.simulator_iot.IPayloadBinary
 
-public interface IApplication_Factory {
-    public fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: Random, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator>
-    public fun registerFeatures(features: MutableList<IApplicationFeature>)
+internal class Package_Application_Config(
+    private val text: String,
+) : IPayloadBinary {
+    override fun getSizeInBytes(): Int = text.length
+    override fun getTopic(): String = "Config"
+    override fun getBytes(): ByteArray = text.encodeToByteArray()
 }

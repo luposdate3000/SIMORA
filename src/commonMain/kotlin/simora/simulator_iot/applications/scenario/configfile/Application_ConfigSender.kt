@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package simora.simulator_iot.applications.scenario.mailinglist
+package simora.simulator_iot.applications.scenario.configfile
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -24,15 +24,13 @@ import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-internal class Application_MailSenderIdentical(
+internal class Application_ConfigSender(
     private val startClockInSec: Int,
     private val sendRateInSec: Int,
     private val maxNumber: Int,
     private val ownAddress: Int,
     private val random: Random,
     private val allReveivers: List<Int>,
-    private val text_length_fixed: Int,
-    private val receiverCount: Int,
     private val useApplicationSideMulticast: Boolean,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
@@ -45,7 +43,7 @@ internal class Application_MailSenderIdentical(
 
     override fun startUp() {
         startUpTimeStamp = Clock.System.now()
-        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -69,15 +67,16 @@ internal class Application_MailSenderIdentical(
             }
             val reveiverList = (allReveivers + allReveivers).subList(startIndex, startIndex + count)
             val text = getRandomString(text_length_fixed)
+            val names = reveiverList.associateWith { getRandomString(text_length_dynamic) }
             if (useApplicationSideMulticast) {
-                parent.send(ownAddress, Package_Application_MailGroupIdentical(text, reveiverList.toSet()))
+                parent.send(ownAddress, Package_Application_ConfigGroup(text, names))
             } else {
-                for (address in reveiverList) {
-                    parent.send(address, Package_Application_Mail(text))
+                for ((address, name) in names) {
+                    parent.send(address, Package_Application_Config(name + text))
                 }
             }
             parent.flush()
-            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.getLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         }
     }
 }
