@@ -78,10 +78,10 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
                         val valueQ3 = values[values.size * 3 / 4]
 // https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/box-whisker-plots/a/box-plot-review
                         row[h[i]] = valueAvg.toString()
-                        row[h[i] + "Min"] = valueMin.toString()
-                        row[h[i] + "Max"] = valueMax.toString()
-                        row[h[i] + "Q1"] = valueQ1.toString()
-                        row[h[i] + "Q3"] = valueQ3.toString()
+//                        row[h[i] + "Min"] = valueMin.toString()
+//                        row[h[i] + "Max"] = valueMax.toString()
+//                        row[h[i] + "Q1"] = valueQ1.toString()
+//                        row[h[i] + "Q3"] = valueQ3.toString()
                     }
                     addRow(row)
                 }

@@ -84,7 +84,7 @@ x=$(/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t | grep simulator_out
 mv tmp "$x/time"
 done
 done
-for tt in 8192
+for tt in 8192 16384 32768
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFast.json ./resources/routing/RPLFastLate.json ./resources/routing/RPL.json
@@ -96,7 +96,7 @@ x=$(/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t | grep simulator_out
 mv tmp "$x/time"
 done
 done
-for tt in 16384 32768 65536 131072 262144
+for tt in 65536 131072 262144
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFastLate.json ./resources/routing/RPL.json
