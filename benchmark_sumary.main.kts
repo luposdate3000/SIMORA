@@ -168,7 +168,10 @@ File("plot_routing_abs.csv").printWriter().use { out ->
         for (z in 0 until topologyMap.size) {
             val idx1 = (z * scenarioMap.size + y) * routingMap.size + x1
             val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
-            row = "$row,\shortstack{{${plot_routing[idx1]}\\\\${plot_routing[idx2]}}"
+val v1=((plot_routing[idx1]*100.0/1024.0).toInt()/100.0).toDouble()
+val v2=((plot_routing[idx2]*100.0/1024.0).toInt()/100.0).toDouble()
+//            row = "$row,aaa${v1}bbb${v2}ccc"
+row = "$row,\\\\shortstack{${plot_routing[idx1]}\\\\\\\\${plot_routing[idx2]}}"
         }
         out.println(row)
     }
