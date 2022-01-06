@@ -1,7 +1,7 @@
 #!/bin/bash
 ./gradlew jvmjar
 m="./resources/multicast/Application.json"
-c='java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json'
+c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr '\n' ':'):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
 #c='./build/bin/linuxX64/releaseExecutable/simora.kexe linux.json'
 
 cmpTopologies=true

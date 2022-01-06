@@ -56,46 +56,48 @@ internal class Application_ConfigSender(
     override fun shutDown() {}
     override fun receive(pck: IPayload): IPayload = pck
     override fun onTimerExpired(clock: Long) {
-        if (eventCounter < maxNumber || maxNumber == -1) {
-            eventCounter++
+        try {
+            if (eventCounter < maxNumber || maxNumber == -1) {
+                eventCounter++
 // 1. constants
-            val sizeGlobal = 128
-            val sizeGroup = 64
-            val sizeDevice = 32
-            val targetGroups = 4
-            val targetDevicesPerGroup = 8
+                val sizeGlobal = 128
+                val sizeGroup = 64
+                val sizeDevice = 32
+                val targetGroups = 4
+                val targetDevicesPerGroup = 8
 
 // 2. generate list of receiver devices
-            val targetsTmp = allReveivers.toIntArray()
-            targetsTmp.shuffle(random)
-            val targets = targetsTmp.copyOfRange(0, targetGroups * targetDevicesPerGroup)
+                val targetsTmp = allReveivers.toSet().toIntArray()
+                targetsTmp.shuffle(random)
+                val targets = targetsTmp.copyOfRange(0, targetGroups * targetDevicesPerGroup)
 
 // 3. generate data
-            val data = Package_Application_ConfigMulticast(
-                getRandomString(sizeGlobal),
-                List(targetGroups) { groupID ->
-                    getRandomString(sizeGroup) to List(targetDevicesPerGroup) { deviceID ->
-                        targets[groupID * targetGroups + deviceID] to getRandomString(sizeDevice)
-                    }.toMap()
-                }
-            )
-// 4. send it
-            if (useApplicationSideUnicast) {
-                for (g in data.groups) {
-                    for ((k, v) in g.second) {
-                        parent.send(k, Package_Application_ConfigUnicast(data.text_global + g.first + v))
+                val data = Package_Application_ConfigMulticast(
+                    getRandomString(sizeGlobal),
+                    List(targetGroups) { groupID ->
+                        getRandomString(sizeGroup) to List(targetDevicesPerGroup) { deviceID ->
+                            targets[groupID * targetDevicesPerGroup + deviceID] to getRandomString(sizeDevice)
+                        }.toMap()
                     }
+                )
+// 4. send it
+                if (useApplicationSideUnicast) {
+                    for (g in data.groups) {
+                        for ((k, v) in g.second) {
+                            parent.send(k, Package_Application_ConfigUnicast(data.text_global + g.first + v))
+                        }
+                    }
+                } else if (useApplicationSideMulticast) {
+                    parent.send(ownAddress, data)
+                } else if (useApplicationSideBroadcast) {
+                    parent.send(ownAddress, Package_Application_ConfigBroadcast(targets, data.text_global + data.groups.map { it.first + it.second.values.map { it }.joinToString("") }.joinToString("")))
+                } else {
+                    TODO()
                 }
-            } else if (useApplicationSideMulticast) {
-                parent.send(ownAddress, data)
-            } else if (useApplicationSideBroadcast) {
-                println(data.text_global + data.groups.map { it.first + it.second.values.map { it }.joinToString("") }.joinToString(""))
-                parent.send(ownAddress, Package_Application_ConfigBroadcast(targets, data.text_global + data.groups.map { it.first + it.second.values.map { it }.joinToString("") }.joinToString("")))
-            } else {
-                TODO()
+                parent.flush()
+                parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
             }
-            parent.flush()
-            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
+        } catch (e: Throwable) {
         }
     }
 }
