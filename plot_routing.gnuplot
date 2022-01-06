@@ -9,6 +9,6 @@ set cbrange [0:100]
 set palette model RGB
 set logscale cb
 set palette defined 
-set palette defined (0 "white", 100 "red")
+#set palette defined (0 "white", 100 "red")
 plot 'plot_routing.csv' matrix rowheaders columnheaders using 1:2:3 with image, \
-     'plot_routing_abs.csv' matrix rowheaders columnheaders using 1:2:3 with labels
+     'plot_routing_abs.csv' matrix rowheaders columnheaders using 1:2:(sprintf('%.2f', $3)) with labels
