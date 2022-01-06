@@ -150,11 +150,12 @@ File("plot_routing.csv").printWriter().use { out ->
     val x2 = routingMap.indexOf("RPLFast")
     out.println("," + topologyMap.joinToString().replace("128", ""))
     for (y in 0 until scenarioMap.size) {
-        var row = scenarioMap[y].replace("iotconfiguration", "")
+        var row = scenarioMap[y].replace("iotconfiguration", "").replaceFirstChar { it.uppercaseChar() }
         for (z in 0 until topologyMap.size) {
             val idx1 = (z * scenarioMap.size + y) * routingMap.size + x1
             val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
-            row = "$row,${(plot_routing[idx1]+plot_routing[idx2]) / plot_routing_max*100.0}"
+//            row = "$row,${(plot_routing[idx1]+plot_routing[idx2]) / plot_routing_max*100.0}"
+            row = "$row,${(plot_routing[idx1]+plot_routing[idx2])/2048.0}"
         }
         out.println(row)
     }
@@ -166,7 +167,7 @@ var ctr=0
     val x2 = routingMap.indexOf("RPLFast")
     out.println("," + topologyMap.joinToString().replace("128", ""))
     for (y in 0 until scenarioMap.size) {
-        var row = scenarioMap[y].replace("iotconfiguration", "")
+        var row = scenarioMap[y].replace("iotconfiguration", "").replaceFirstChar { it.uppercaseChar() }
         for (z in 0 until topologyMap.size) {
             val idx1 = (z * scenarioMap.size + y) * routingMap.size + x1
             val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
