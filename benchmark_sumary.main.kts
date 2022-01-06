@@ -91,8 +91,36 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
     } catch (e: Throwable) {
     }
 }
-
-println(argumentNames.joinToString(","))
+File("summary.csv").printWriter().use { out ->
+    out.println(argumentNames.joinToString(","))
+    for (r in rows) {
+        out.println(r.joinToString(",") + ",".repeat(argumentNames.size - r.size))
+    }
+}
+val plot_scalability1 = mutableMapOf<Int, Double>()
+val plot_scalability2 = mutableMapOf<Int, Double>()
+val routingID = argumentNames.indexOf("routing")
+val topologyID = argumentNames.indexOf("topology")
+val durationID = argumentNames.indexOf("simulation total duration real (Seconds)")
 for (r in rows) {
-    println(r.joinToString(",") + ",".repeat(argumentNames.size - r.size))
+    if (r[routingID] == "RPLFastLate" && r[topologyID].startsWith("Strong")) {
+        val x = r[topologyID].substring("Strong".length).toInt()
+        val y = r[durationID].toDouble()
+        plot_scalability1[x] = y
+    }
+    if (r[routingID] == "ASP" && r[topologyID].startsWith("Strong")) {
+        val x = r[topologyID].substring("Strong".length).toInt()
+        val y = r[durationID].toDouble()
+        plot_scalability2[x] = y
+    }
+}
+File("plot_scalability1.csv").printWriter().use { out ->
+    for (k in plot_scalability1.keys.sorted()) {
+        out.println("$k,${plot_scalability1[k]}")
+    }
+}
+File("plot_scalability2.csv").printWriter().use { out ->
+for (k in plot_scalability2.keys.sorted()) {
+        out.println("$k,${plot_scalability2[k]}")
+    }
 }
