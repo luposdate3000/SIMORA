@@ -27,18 +27,40 @@ public class LinkManagerMatrix(
     internal var matrix = DoubleArray(0)
     internal var matrixNext = IntArray(0)
     private var matrixRate = DoubleArray(0)
-    private var canAddDevices = true
+    private var noLinksAddedRightNow = true
     private var linkCounter = 0
 
     override fun getLinkCount(): Int = linkCounter
     override fun setSupportedLinkTypes(addr: Int, data: IntArray) {
-        if (!canAddDevices) {
-            TODO()
-        }
         if (supportedLinkTypes.size <= addr) {
             supportedLinkTypes.add(IntArray(0))
         }
         supportedLinkTypes[addr] = data
+        if (!noLinksAddedRightNow) {
+            val oldSize = size
+            val oldMatrix = matrix
+            val oldMatrixNext = matrixNext
+            val oldMatrixRate = matrixRate
+            size = supportedLinkTypes.size
+            matrix = DoubleArray(size * size) { 999999999999.0 }
+            matrixNext = IntArray(size * size) { -1 }
+            matrixRate = DoubleArray(size * size) { 0.0 }
+            for (i in 0 until size) {
+                val idx = i * size + i
+                matrix[idx] = 0.0
+                matrixNext[idx] = i
+                matrixRate[idx] = -1.0
+            }
+            for (x in 0 until oldSize) {
+                for (y in 0 until oldSize) {
+                    val idxOld = y * oldSize + x
+                    val idxNew = y * size + x
+                    matrix[idxNew] = oldMatrix[idxOld]
+                    matrixNext[idxNew] = oldMatrixNext[idxOld]
+                    matrixRate[idxNew] = oldMatrixRate[idxOld]
+                }
+            }
+        }
     }
     override fun getSupportedLinkTypes(addr: Int): IntArray = supportedLinkTypes[addr]
     override fun getTransmissionDelay(addrSrc: Int, addrDest: Int, numberOfBytesToSend: Int): Long {
@@ -48,8 +70,8 @@ public class LinkManagerMatrix(
     }
 
     override fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,) {
-        if (canAddDevices) {
-            canAddDevices = false
+        if (noLinksAddedRightNow) {
+            noLinksAddedRightNow = false
             size = supportedLinkTypes.size
             matrix = DoubleArray(size * size) { 999999999999.0 }
             matrixNext = IntArray(size * size) { -1 }

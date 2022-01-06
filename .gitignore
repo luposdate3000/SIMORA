@@ -52,3 +52,6 @@ plot_routing_asp.eps
 plot_routing_asp.tex
 plot_routing_rpl.eps
 plot_routing_rpl.tex
+*.csv
+*.tex
+*.eps
