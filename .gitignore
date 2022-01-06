@@ -46,3 +46,9 @@ plot_scalability4.csv
 plot_scalability.eps
 plot_scalability.tex
 summary.csv
+plot_routing_asp.csv
+plot_routing_rpl.csv
+plot_routing_asp.eps
+plot_routing_asp.tex
+plot_routing_rpl.eps
+plot_routing_rpl.tex
