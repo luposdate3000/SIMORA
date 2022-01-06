@@ -1,7 +1,8 @@
 #!/bin/bash
 ./gradlew jvmjar
-c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json"
-#c="./build/bin/linuxX64/releaseExecutable/simora.kexe linux.json"
+m="./resources/multicast/Application.json"
+c='java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr "\n" ":"):./build/libs/simora-jvm-0.0.1.jar simora.MainKt jvm.json'
+#c='./build/bin/linuxX64/releaseExecutable/simora.kexe linux.json'
 
 cmpTopologies=true
 cmpRoutingAndMulticast=true
@@ -10,9 +11,8 @@ cmpScalability=true
 if $cmpTopologies
 then
 # compare topologies
-m="./resources/multicast/Application.json"
 r="./resources/routing/RPLFastLate.json"
-for s in $(find ./resources/scenarios/ -name *.json | sort)
+for s in $(find ./resources/scenarios/ -name iotconfiguration*.json | sort)
 do
 for t in $(find ./resources/topologies/ -name *.json | grep 128 | sort)
 do
@@ -30,10 +30,7 @@ if $cmpRoutingAndMulticast
 then
 # compare routing and multicast
 t="./resources/topologies/Uniform128.json"
-for s in $(find ./resources/scenarios/ -name *.json | sort)
-#for s in ./resources/scenarios/personalMail.json
-do
-for m in $(find ./resources/multicast/ -name *.json | sort)
+for s in $(find ./resources/scenarios/ -name iotconfiguration*.json | sort)
 do
 for r in ./resources/routing/ASP.json ./resources/routing/RPLFastLate.json
 do
@@ -44,15 +41,13 @@ x=$(/usr/bin/time -o tmp -v $c routing.json $m $r $s $t | grep simulator_output 
 mv tmp "$x/time"
 done
 done
-done
 fi
 
 
 if $cmpScalability
 then
 # compare scalability optimized
-m="./resources/multicast/Application.json"
-s="./resources/scenarios/personalMail.json"
+s="./resources/scenarios/iotconfigurationunicast.json"
 #for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
 for tt in 2 4 8 16 32 64 128 256 512 1024 2048 4096
 do

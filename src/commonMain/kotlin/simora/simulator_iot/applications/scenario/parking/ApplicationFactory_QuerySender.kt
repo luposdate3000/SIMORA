@@ -21,10 +21,10 @@ import simora.parser.IJsonParserValue
 import simora.parser.JsonParserArray
 import simora.parser.JsonParserObject
 import simora.simulator_iot.ILogger
-import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
+import kotlin.random.Random
 
 internal class ApplicationFactory_QuerySender : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {}

@@ -22,6 +22,7 @@ import simora.simulator_iot.applications.IApplicationStack_Middleware
 
 internal class Application_ConfigDistributor(
     private val mailDistributorFlag: Int,
+    private val address: Int,
 ) : IApplicationStack_Actuator {
     private lateinit var parent: IApplicationStack_Middleware
     override fun setRouter(router: IApplicationStack_Middleware) {
@@ -36,58 +37,75 @@ internal class Application_ConfigDistributor(
 
     override fun receive(pck: IPayload): IPayload? {
         when (pck) {
-            is Package_Application_ConfigGroup -> {
-                val destinations = pck.replacements.keys.toSet().toIntArray()
+            is Package_Application_ConfigBroadcast -> {
+// calculate next hops
+                val destinations = pck.targets
                 val hops = parent.getNextFeatureHops(destinations, mailDistributorFlag)
                 for (i in hops.indices) {
                     if (hops[i] == -1) {
                         hops[i] = destinations[i]
                     }
                 }
-                val packets = mutableMapOf<Int, MutableMap<Int, String>>()
-                for ((target, name) in pck.replacements) {
-                    val hop = hops[destinations.indexOf(target)]
-                    var p = packets[hop]
-                    if (p == null) {
-                        p = mutableMapOf()
-                        packets[hop] = p
+// send broadcast towards next hops
+                for (h in hops.toSet()) {
+                    var targets = mutableListOf<Int>()
+                    for (i in 0 until destinations.size) {
+                        if (hops[i] == h) {
+                            targets.add(destinations[i])
+                        }
                     }
-                    p[target] = name
-                }
-                for ((target, mapping) in packets) {
-                    if (mapping.size == 1) {
-                        val x = mapping.toList().first()
-                        parent.send(x.first, Package_Application_Config(x.second + pck.text))
+                    if (h == address) {
+                        if (targets.size != 1) {
+                            TODO("error somewhere")
+                        }
+                        parent.send(h, Package_Application_ConfigUnicast(pck.text_global))
                     } else {
-                        parent.send(target, Package_Application_ConfigGroup(pck.text, mapping))
+                        parent.send(h, Package_Application_ConfigBroadcast(targets.toIntArray(), pck.text_global))
                     }
                 }
                 return null
             }
-            is Package_Application_ConfigGroupIdentical -> {
-                val destinations = pck.targets.toIntArray()
+            is Package_Application_ConfigMulticast -> {
+                val destinations = pck.groups.map { it.second.keys }.flatten().toSet().toIntArray()
                 val hops = parent.getNextFeatureHops(destinations, mailDistributorFlag)
                 for (i in hops.indices) {
                     if (hops[i] == -1) {
                         hops[i] = destinations[i]
                     }
                 }
-                val packets = mutableMapOf<Int, MutableSet<Int>>()
-                for (target in pck.targets) {
-                    val hop = hops[destinations.indexOf(target)]
-                    var p = packets[hop]
-                    if (p == null) {
-                        p = mutableSetOf()
-                        packets[hop] = p
+                val groups = mutableMapOf<Int, MutableList<Pair<String, Map<Int, String>>>>()
+                for (g in pck.groups) {
+                    val parts = mutableMapOf<Int, MutableMap<Int, String>>()
+// group members by hop
+                    for ((k, v) in g.second) {
+                        val h = hops[destinations.indexOf(k)]
+                        var p = parts[h]
+                        if (p == null) {
+                            p = mutableMapOf()
+                            parts[h] = p
+                        }
+                        p[k] = v
                     }
-                    p.add(target)
+// append group to global list ... grouped by hop.
+                    for ((h, p) in parts) {
+                        var g2 = groups[h]
+                        if (g2 == null) {
+                            g2 = mutableListOf()
+                            groups[h] = g2
+                        }
+                        g2.add(g.first to p)
+                    }
                 }
-                for ((target, mapping) in packets) {
-                    if (mapping.size == 1) {
-                        val x = mapping.toList().first()
-                        parent.send(x, Package_Application_Config(pck.text))
+// iterate over the message grouped by next hop, and send it
+                for ((hop, group) in groups) {
+                    if (group.map { it.second.size }.sum() == 1) {
+                        for (g in group) {
+                            for ((k, v) in g.second) {
+                                parent.send(hop, Package_Application_ConfigUnicast(pck.text_global + g.first + v))
+                            }
+                        }
                     } else {
-                        parent.send(target, Package_Application_ConfigGroupIdentical(pck.text, mapping))
+                        parent.send(hop, Package_Application_ConfigMulticast(pck.text_global, group))
                     }
                 }
                 return null

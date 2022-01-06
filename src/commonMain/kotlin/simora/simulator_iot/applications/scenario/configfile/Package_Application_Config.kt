@@ -19,7 +19,7 @@ package simora.simulator_iot.applications.scenario.configfile
 
 import simora.simulator_iot.IPayloadBinary
 
-internal class Package_Application_Config(
+internal class Package_Application_ConfigUnicast(
     private val text: String,
 ) : IPayloadBinary {
     override fun getSizeInBytes(): Int = text.length

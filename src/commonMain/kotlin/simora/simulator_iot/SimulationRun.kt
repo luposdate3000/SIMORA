@@ -48,12 +48,12 @@ import simora.simulator_iot.models.net.LinkManagerList
 import simora.simulator_iot.models.net.LinkManagerMatrix
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.random.Random
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.random.Random
 public class SimulationRun {
     private var linkManagerWrite: ILinkManagerWrite = LinkManagerList()
     public var linkManager: ILinkManager = linkManagerWrite

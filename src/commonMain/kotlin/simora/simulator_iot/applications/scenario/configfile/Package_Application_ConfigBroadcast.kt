@@ -14,29 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package simora.simulator_iot.applications.scenario.configfile
 
 import simora.simulator_iot.IPayload
-import simora.simulator_iot.applications.IApplicationStack_Actuator
-import simora.simulator_iot.applications.IApplicationStack_Middleware
 
-internal class Application_ConfigReceiver : IApplicationStack_Actuator {
-    private lateinit var parent: IApplicationStack_Middleware
-    override fun setRouter(router: IApplicationStack_Middleware) {
-        parent = router
-    }
-
-    override fun startUp() {
-    }
-
-    override fun shutDown() {
-    }
-
-    override fun receive(pck: IPayload): IPayload? {
-        return if (pck is Package_Application_ConfigUnicast) {
-            null
-        } else {
-            pck
-        }
-    }
+internal class Package_Application_ConfigBroadcast(
+    internal val targets: IntArray,
+    internal val text_global: String,
+) : IPayload {
+    override fun getSizeInBytes(): Int = text_global.length + targets.size * 4 + 4
+    override fun getTopic(): String = "ConfigGroup"
 }

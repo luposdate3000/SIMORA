@@ -19,24 +19,25 @@ package simora.simulator_iot.applications.scenario.configfile
 
 import simora.simulator_iot.IPayload
 
-internal typealias Package_Application_ConfigGroup_IndividualParts = Map<Int, String> //mapping of individual address -> individual text
-internal typealias Package_Application_ConfigGroup_GroupPart = Pair<String,Package_Application_ConfigGroup_IndividualParts> //group shared text + individuals
-internal class Package_Application_ConfigGroup(
+internal typealias Package_Application_ConfigMulticast_IndividualParts = Map<Int, String> // mapping of individual address -> individual text
+internal typealias Package_Application_ConfigMulticast_GroupPart = Pair<String, Package_Application_ConfigMulticast_IndividualParts> // group shared text + individuals
+internal typealias Package_Application_ConfigMulticast_Group = List<Package_Application_ConfigMulticast_GroupPart>
+internal class Package_Application_ConfigMulticast(
     internal val text_global: String,
-    internal val groups: List<Package_Application_ConfigGroup_GroupPart>,
+    internal val groups: Package_Application_ConfigMulticast_Group,
 ) : IPayload {
     override fun getSizeInBytes(): Int {
-var res=text_global.length //the global text
-res+=4 //variable to specify length of list
-for (g in groups){
-res+=g.first.length //the group shared text
-res+=4//variable to specify size of individuals
-for((k,v) in g.second){
-res+=4//size of individual address
-res+=v.length // individual text
-}
-}
-return res
-}
+        var res = text_global.length // the global text
+        res += 4 // variable to specify length of list
+        for (g in groups) {
+            res += g.first.length // the group shared text
+            res += 4 // variable to specify size of individuals
+            for ((k, v) in g.second) {
+                res += 4 // size of individual address
+                res += v.length // individual text
+            }
+        }
+        return res
+    }
     override fun getTopic(): String = "ConfigGroup"
 }

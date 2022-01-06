@@ -20,10 +20,10 @@ package simora.simulator_iot.applications.scenario.configfile
 import simora.parser.IJsonParserValue
 import simora.parser.JsonParserObject
 import simora.simulator_iot.ILogger
-import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
+import kotlin.random.Random
 
 internal class ApplicationFactory_ConfigDistributor : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
@@ -34,7 +34,8 @@ internal class ApplicationFactory_ConfigDistributor : IApplication_Factory {
         if (json.getOrDefault("enabled", true)) {
             return listOf(
                 Application_ConfigDistributor(
-                    0
+                    0,
+                    ownAddress,
                 )
             )
         }

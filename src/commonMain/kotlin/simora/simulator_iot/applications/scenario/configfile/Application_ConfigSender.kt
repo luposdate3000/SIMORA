@@ -20,9 +20,9 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
-import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
+import kotlin.random.Random
 
 internal class Application_ConfigSender(
     private val startClockInSec: Int,
@@ -31,13 +31,15 @@ internal class Application_ConfigSender(
     private val ownAddress: Int,
     private val random: Random,
     private val allReveivers: List<Int>,
+    private val useApplicationSideUnicast: Boolean,
     private val useApplicationSideMulticast: Boolean,
+    private val useApplicationSideBroadcast: Boolean,
 ) : IApplicationStack_Actuator, ITimer {
     private lateinit var parent: IApplicationStack_Middleware
     private lateinit var startUpTimeStamp: Instant
     private var sendingVarianceInSec = 10
     private var eventCounter = 0
-private val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    private val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
 
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router
@@ -49,42 +51,48 @@ private val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun getRandomString(length: Int): String =Array(length)            { allowedChars.random(random) }            .joinToString("")
+    private inline fun getRandomString(length: Int): String = Array(length) { allowedChars.random(random) }.joinToString("")
 
     override fun shutDown() {}
     override fun receive(pck: IPayload): IPayload = pck
     override fun onTimerExpired(clock: Long) {
         if (eventCounter < maxNumber || maxNumber == -1) {
             eventCounter++
-//1. constants
-val sizeGlobal=128
-val sizeGroup=64
-val sizeDevice=32
-val targetGroups=4
-val targetDevicesPerGroup=8
+// 1. constants
+            val sizeGlobal = 128
+            val sizeGroup = 64
+            val sizeDevice = 32
+            val targetGroups = 4
+            val targetDevicesPerGroup = 8
 
-//2. generate list of receiver devices
-val targetsTmp=allReveivers.toIntArray()
-targetsTmp.shuffle(random)
-val targets=targetsTmp.copyOfRange(0,targetGroups*targetDevicesPerGroup)
+// 2. generate list of receiver devices
+            val targetsTmp = allReveivers.toIntArray()
+            targetsTmp.shuffle(random)
+            val targets = targetsTmp.copyOfRange(0, targetGroups * targetDevicesPerGroup)
 
-//3. generate data
-val data= Package_Application_ConfigGroup(getRandomString(sizeGlobal) , List(targetGroups){groupID->
-getRandomString(sizeGroup) to List(targetDevicesPerGroup){deviceID->
-targets[groupID*targetGroups+deviceID] to getRandomString(sizeDevice)
-}.toMap()
-}
-)
-
-//4. send it
-            if (useApplicationSideMulticast) {
+// 3. generate data
+            val data = Package_Application_ConfigMulticast(
+                getRandomString(sizeGlobal),
+                List(targetGroups) { groupID ->
+                    getRandomString(sizeGroup) to List(targetDevicesPerGroup) { deviceID ->
+                        targets[groupID * targetGroups + deviceID] to getRandomString(sizeDevice)
+                    }.toMap()
+                }
+            )
+// 4. send it
+            if (useApplicationSideUnicast) {
+                for (g in data.groups) {
+                    for ((k, v) in g.second) {
+                        parent.send(k, Package_Application_ConfigUnicast(data.text_global + g.first + v))
+                    }
+                }
+            } else if (useApplicationSideMulticast) {
                 parent.send(ownAddress, data)
+            } else if (useApplicationSideBroadcast) {
+                println(data.text_global + data.groups.map { it.first + it.second.values.map { it }.joinToString("") }.joinToString(""))
+                parent.send(ownAddress, Package_Application_ConfigBroadcast(targets, data.text_global + data.groups.map { it.first + it.second.values.map { it }.joinToString("") }.joinToString("")))
             } else {
-for(g in data.groups){
-for((k,v) in g.second){
-parent.send(k,Package_Application_Config(data.text_global+g.first+v))
-}
-}
+                TODO()
             }
             parent.flush()
             parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)

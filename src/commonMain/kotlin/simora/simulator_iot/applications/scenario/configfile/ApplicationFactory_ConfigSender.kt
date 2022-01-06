@@ -20,10 +20,10 @@ package simora.simulator_iot.applications.scenario.configfile
 import simora.parser.IJsonParserValue
 import simora.parser.JsonParserObject
 import simora.simulator_iot.ILogger
-import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationFeature
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplication_Factory
+import kotlin.random.Random
 
 internal class ApplicationFactory_ConfigSender : IApplication_Factory {
     override fun registerFeatures(features: MutableList<IApplicationFeature>) {
@@ -51,7 +51,9 @@ internal class ApplicationFactory_ConfigSender : IApplication_Factory {
                     ownAddress,
                     random,
                     mailReceiverFactory.allReceivers,
-                    json.getOrDefault("useApplicationSideMulticast", true),
+                    json.getOrDefault("useApplicationSideUnicast", false),
+                    json.getOrDefault("useApplicationSideMulticast", false),
+                    json.getOrDefault("useApplicationSideBroadcast", false),
                 )
             )
         }

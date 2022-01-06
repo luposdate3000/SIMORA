@@ -20,9 +20,9 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
-import kotlin.random.Random
 import simora.simulator_iot.applications.IApplicationStack_Actuator
 import simora.simulator_iot.applications.IApplicationStack_Middleware
+import kotlin.random.Random
 
 internal class Application_MailSender(
     private val startClockInSec: Int,
@@ -46,7 +46,7 @@ internal class Application_MailSender(
 
     override fun startUp() {
         startUpTimeStamp = Clock.System.now()
-        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.nextLong(0L ,sendingVarianceInSec.toLong() * 1000000000L), this)
+        parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -79,7 +79,7 @@ internal class Application_MailSender(
                 }
             }
             parent.flush()
-            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L ,sendingVarianceInSec.toLong() * 1000000000L), this)
+            parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         }
     }
 }
