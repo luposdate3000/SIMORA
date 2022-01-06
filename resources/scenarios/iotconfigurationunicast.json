@@ -2,19 +2,17 @@
     "applications": {
         "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigDistributor": {},
         "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigReceiver": {},
+        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigSender": {
+            "maxSamples": 1,
+            "rateInSec": 2,
+            "sendStartClockInSec": 1000,
+            "useApplicationSideUnicast": true,
+        },
     },
     "deterministic": true,
     "deviceType": {
         "CentralTower": {
-            "applications": {
-                "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigSender": {
-                    "maxSamples": 100,
-                    "rateInSec": 2,
-                    "receiverCount": 20,
-                    "sendStartClockInSec": 1000,
-                    "useApplicationSideUnicast": true,
-                },
-            },
+            "applications": {},
             "performance": 100.0,
             "supportedLinkTypes": [
                 "WPAN",

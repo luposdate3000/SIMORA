@@ -23,6 +23,6 @@ internal class Package_Application_ConfigUnicast(
     private val text: String,
 ) : IPayloadBinary {
     override fun getSizeInBytes(): Int = text.length
-    override fun getTopic(): String = "Config"
+    override fun getTopic(): String = "ConfigUnicast"
     override fun getBytes(): ByteArray = text.encodeToByteArray()
 }

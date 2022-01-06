@@ -47,7 +47,7 @@ fi
 if $cmpScalability
 then
 # compare scalability optimized
-s="./resources/scenarios/iotconfigurationunicast.json"
+s="./resources/scenarios/none.json"
 #for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
 for tt in 2 4 8 16 32 64 128 256 512 1024 2048 4096
 do

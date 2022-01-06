@@ -24,5 +24,5 @@ internal class Package_Application_ConfigBroadcast(
     internal val text_global: String,
 ) : IPayload {
     override fun getSizeInBytes(): Int = text_global.length + targets.size * 4 + 4
-    override fun getTopic(): String = "ConfigGroup"
+    override fun getTopic(): String = "ConfigBroadcast"
 }

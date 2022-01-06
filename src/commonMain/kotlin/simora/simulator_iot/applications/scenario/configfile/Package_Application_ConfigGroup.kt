@@ -39,5 +39,5 @@ internal class Package_Application_ConfigMulticast(
         }
         return res
     }
-    override fun getTopic(): String = "ConfigGroup"
+    override fun getTopic(): String = "ConfigMulticast"
 }
