@@ -21,7 +21,6 @@ pkill java -9
 echo $c routing.json $m $r $s $t
 /usr/bin/time -o tmp -v $c routing.json $m $r $s $t > tmp2
 x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
-cat tmp2 | grep "the counter"
 mv tmp "$x/time"
 done
 done
@@ -44,7 +43,6 @@ pkill java -9
 echo $c scalability.json $m $r $s $t
 /usr/bin/time -o tmp -v $c scalability.json $m $r $s $t > tmp2
 x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
-cat tmp2 | grep "the counter"
 mv tmp "$x/time"
 done
 done
@@ -58,7 +56,6 @@ pkill java -9
 echo $c scalability.json $m $r $s $t
 /usr/bin/time -o tmp -v $c scalability.json $m $r $s $t > tmp2
 x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
-cat tmp2 | grep "the counter"
 mv tmp "$x/time"
 done
 done
