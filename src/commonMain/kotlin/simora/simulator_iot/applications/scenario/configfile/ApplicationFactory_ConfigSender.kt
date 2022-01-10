@@ -52,6 +52,7 @@ internal class ApplicationFactory_ConfigSender : IApplication_Factory {
                     random,
                     mailReceiverFactory.allReceivers,
                     json.getOrDefault("useApplicationSideUnicast", false),
+                    json.getOrDefault("useApplicationSideMulticastStateOfTheArt", false),
                     json.getOrDefault("useApplicationSideMulticast", false),
                     json.getOrDefault("useApplicationSideBroadcast", false),
                 )

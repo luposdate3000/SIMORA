@@ -5,7 +5,7 @@ c="java -Xmx100g -Xms100g -cp $(cat ./build/external_jvm_dependencies | tr '\n' 
 #c='./build/bin/linuxX64/releaseExecutable/simora.kexe linux.json'
 
 cmpRoutingAndMulticastAndTopologies=true
-cmpScalability=true
+cmpScalability=false
 
 if $cmpRoutingAndMulticastAndTopologies
 then
@@ -19,7 +19,9 @@ do
 echo
 pkill java -9
 echo $c routing.json $m $r $s $t
-x=$(/usr/bin/time -o tmp -v $c routing.json $m $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+/usr/bin/time -o tmp -v $c routing.json $m $r $s $t > tmp2
+x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
+cat tmp2 | grep "the counter"
 mv tmp "$x/time"
 done
 done
@@ -40,7 +42,9 @@ do
 echo
 pkill java -9
 echo $c scalability.json $m $r $s $t
-x=$(/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t > tmp2
+x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
+cat tmp2 | grep "the counter"
 mv tmp "$x/time"
 done
 done
@@ -52,8 +56,11 @@ do
 echo
 pkill java -9
 echo $c scalability.json $m $r $s $t
-x=$(/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t | grep simulator_output | sed "s/.*outputdirectory=//g")
+/usr/bin/time -o tmp -v $c scalability.json $m $r $s $t > tmp2
+x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
+cat tmp2 | grep "the counter"
 mv tmp "$x/time"
 done
 done
 fi
+rm tmp2

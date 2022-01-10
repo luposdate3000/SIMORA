@@ -32,6 +32,7 @@ internal class Application_ConfigSender(
     private val random: Random,
     private val allReveivers: List<Int>,
     private val useApplicationSideUnicast: Boolean,
+    private val useApplicationSideMulticastStateOfTheArt: Boolean,
     private val useApplicationSideMulticast: Boolean,
     private val useApplicationSideBroadcast: Boolean,
 ) : IApplicationStack_Actuator, ITimer {
@@ -85,6 +86,14 @@ internal class Application_ConfigSender(
                     for (g in data.groups) {
                         for ((k, v) in g.second) {
                             parent.send(k, Package_Application_ConfigUnicast(data.text_global + g.first + v))
+                        }
+                    }
+                } else if (useApplicationSideMulticastStateOfTheArt) {
+                    parent.send(ownAddress, Package_Application_ConfigBroadcast(targets, data.text_global))
+                    for (g in data.groups) {
+                        parent.send(ownAddress, Package_Application_ConfigBroadcast(g.second.keys.toIntArray(), g.first))
+                        for ((k, v) in g.second) {
+                            parent.send(k, Package_Application_ConfigUnicast(v))
                         }
                     }
                 } else if (useApplicationSideMulticast) {
