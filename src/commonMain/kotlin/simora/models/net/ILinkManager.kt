@@ -19,4 +19,5 @@ package simora.models.net
 
 public interface ILinkManager {
     public fun getLinkCount(): Int
+    public fun getNeighbours(addrSrc: Int): List<Int>
 }

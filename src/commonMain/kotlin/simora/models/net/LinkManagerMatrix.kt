@@ -22,6 +22,7 @@ import kotlin.math.roundToLong
 public class LinkManagerMatrix(
     private var config: SimulationRun,
 ) : ILinkManagerWrite {
+    private val largeDouble = 999999999999.0
     private var size = 0
     private var supportedLinkTypes = mutableListOf<IntArray>()
     internal var matrix = DoubleArray(0)
@@ -29,7 +30,18 @@ public class LinkManagerMatrix(
     private var matrixRate = DoubleArray(0)
     private var noLinksAddedRightNow = true
     private var linkCounter = 0
-
+    override fun getNeighbours(addrSrc: Int): List<Int> {
+        var res = mutableListOf<Int>()
+        for (addrDest in 0 until size) {
+            if (addrDest != addrSrc) {
+                val idx = addrDest * size + addrSrc
+                if (matrix[idx] <largeDouble) {
+                    res.add(addrDest)
+                }
+            }
+        }
+        return res
+    }
     override fun getLinkCount(): Int = linkCounter
     override fun setSupportedLinkTypes(addr: Int, data: IntArray) {
         if (supportedLinkTypes.size <= addr) {
@@ -73,7 +85,7 @@ public class LinkManagerMatrix(
         if (noLinksAddedRightNow) {
             noLinksAddedRightNow = false
             size = supportedLinkTypes.size
-            matrix = DoubleArray(size * size) { 999999999999.0 }
+            matrix = DoubleArray(size * size) { largeDouble }
             matrixNext = IntArray(size * size) { -1 }
             matrixRate = DoubleArray(size * size) { 0.0 }
             for (i in 0 until size) {

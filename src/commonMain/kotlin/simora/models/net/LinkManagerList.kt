@@ -43,7 +43,7 @@ public class LinkManagerList : ILinkManagerWrite {
         return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
 
-    internal fun getNeighbours(addrSrc: Int): List<Int> = link_Addresses[addrSrc]
+    override fun getNeighbours(addrSrc: Int): List<Int> = link_Addresses[addrSrc]
 
     override fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,) {
         val idx = link_Addresses[addrSrc].indexOf(addrDest)
