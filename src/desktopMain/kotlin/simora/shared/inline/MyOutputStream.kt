@@ -16,9 +16,12 @@
  */
 package simora.shared.inline
 
-import kotlinx.cinterop.refTo
 import kotlinx.cinterop.CPointer
-import platform.posix.*
+import kotlinx.cinterop.refTo
+import platform.posix.FILE
+import platform.posix.fclose
+import platform.posix.fflush
+import platform.posix.fwrite
 import simora.shared.IMyOutputStream
 
 internal actual class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOutputStream {

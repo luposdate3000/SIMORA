@@ -16,9 +16,11 @@
  */
 package simora.shared.inline
 
-import kotlinx.cinterop.refTo
 import kotlinx.cinterop.CPointer
-import platform.posix.*
+import kotlinx.cinterop.refTo
+import platform.posix.FILE
+import platform.posix.fclose
+import platform.posix.fread
 import simora.shared.IMyInputStream
 
 internal actual class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
