@@ -100,7 +100,7 @@ internal class Application_ConfigDistributor(
                 for ((hop, group) in groups) {
                     if (group.map { it.second.size }.sum() == 1) {
                         for (g in group) {
-                            for ((k, v) in g.second) {
+                            for (v in g.second.values) {
                                 parent.send(hop, Package_Application_ConfigUnicast(pck.text_global + g.first + v))
                             }
                         }

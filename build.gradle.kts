@@ -31,7 +31,6 @@ kotlin {
     metadata {
         compilations.forEach {
             it.kotlinOptions {
-                freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
                 freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
                 freeCompilerArgs += "-Xnew-inference"
                 freeCompilerArgs += "-Xinline-classes"
@@ -43,7 +42,6 @@ kotlin {
             compilations.forEach {
                 it.kotlinOptions {
                     jvmTarget = "1.8"
-                    freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
                     freeCompilerArgs += "-Xno-param-assertions"
                     freeCompilerArgs += "-Xnew-inference"
                     freeCompilerArgs += "-Xno-receiver-assertions"
@@ -56,7 +54,6 @@ kotlin {
         linuxX64("linuxX64") {
             compilations.forEach {
                 it.kotlinOptions {
-                    freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
                     freeCompilerArgs += "-Xnew-inference"
                 }
             }
@@ -76,7 +73,6 @@ kotlin {
             browser {
                 compilations.forEach {
                     it.kotlinOptions {
-                        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
                         freeCompilerArgs += "-Xnew-inference"
                     }
                 }

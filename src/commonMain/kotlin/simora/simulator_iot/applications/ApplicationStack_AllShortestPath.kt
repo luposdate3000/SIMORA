@@ -20,6 +20,7 @@ package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
+import kotlin.native.concurrent.ThreadLocal
 import simora.simulator_iot.models.Device
 import simora.simulator_iot.models.net.LinkManagerMatrix
 import simora.simulator_iot.models.net.NetworkPackage
@@ -136,6 +137,7 @@ internal class ApplicationStack_AllShortestPath(
             }
         }
     }
+@ThreadLocal
     internal companion object {
         @JvmField internal var devicesWithFeatures = Array(0) { setOf<Int>() }
     }

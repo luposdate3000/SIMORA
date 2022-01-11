@@ -18,6 +18,7 @@
 package simora.simulator_iot.applications
 import simora.simulator_core.ITimer
 import simora.simulator_core.PriorityQueue
+import kotlin.native.concurrent.ThreadLocal
 import simora.simulator_iot.Config
 import simora.simulator_iot.IPayload
 import simora.simulator_iot.SimulationRun
@@ -238,6 +239,7 @@ internal class ApplicationStack_RPL_Fast(
             isRoutingTableInitialized = true
         }
     }
+@ThreadLocal
     internal companion object {
         @JvmField internal var featuredDevices: Array<IntArray> = Array(0) { IntArray(0) }
     }

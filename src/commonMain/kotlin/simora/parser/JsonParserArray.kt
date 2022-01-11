@@ -54,8 +54,7 @@ internal class JsonParserArray(private val array: MutableList<IJsonParserValue>)
         return res
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    override inline operator fun iterator(): Iterator<IJsonParserValue> {
+    override operator fun iterator(): Iterator<IJsonParserValue> {
         return array.iterator()
     }
 }

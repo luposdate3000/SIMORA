@@ -32,7 +32,7 @@ internal class Package_Application_ConfigMulticast(
         for (g in groups) {
             res += g.first.length // the group shared text
             res += 4 // variable to specify size of individuals
-            for ((k, v) in g.second) {
+            for (v in g.second.values) {
                 res += 4 // size of individual address
                 res += v.length // individual text
             }

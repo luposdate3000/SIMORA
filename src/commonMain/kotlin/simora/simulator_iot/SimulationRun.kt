@@ -132,7 +132,7 @@ public class SimulationRun {
         )
 // load all link types <<<---
 // initialize linkmanager --->>>
-        val jsonRouting = json!!.getOrEmptyObject("routing")
+        val jsonRouting = json.getOrEmptyObject("routing")
         val routerType = jsonRouting.getOrDefault("protocol", "RPL")
         linkManagerWrite = when (routerType) {
             "AllShortestPath" -> LinkManagerMatrix(this)
