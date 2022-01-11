@@ -94,7 +94,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
 val plot_scalability1 = mutableMapOf<Int, Double>()
 val plot_scalability2 = mutableMapOf<Int, Double>()
 val routingID = argumentNames.indexOf("routing")
-val packageCountID=argumentNames.indexOf("number of sent packages")
+val packageCountID = argumentNames.indexOf("number of sent packages")
 val topologyID = argumentNames.indexOf("topology")
 val scenarioID = argumentNames.indexOf("scenario")
 val durationID = argumentNames.indexOf("simulation total duration real (Seconds)")
@@ -118,7 +118,7 @@ File("summary.csv").printWriter().use { out ->
                 var v = r[trafficID].toDouble()
                 var idx = (z * scenarioMap.size + y) * routingMap.size + x
                 plot_routing[idx] = v
-plot_routing_ctr[idx] = r[packageCountID].toDouble().toInt()
+                plot_routing_ctr[idx] = r[packageCountID].toDouble().toInt()
                 if (plot_routing_max < v) {
                     plot_routing_max = v
                 }
@@ -175,10 +175,10 @@ File("plot_routing_abs.map").printWriter().use { outMap ->
                 val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
                 val v1 = (plot_routing[idx1] / 1024.0).toInt()
                 val v2 = (plot_routing[idx2] / 1024.0).toInt()
-val v1b=plot_routing_ctr[idx1]/1000
-val v2b=plot_routing_ctr[idx2]/1000
+                val v1b = plot_routing_ctr[idx1] / 1000
+                val v2b = plot_routing_ctr[idx2] / 1000
                 val c = ctr++
-                outMap.println("$c.00:\\\\shortstack{${v1} ($v1b)\\\\\\\\${v2} ($v2b)}")
+                outMap.println("$c.00:\\\\shortstack{$v1 ($v1b)\\\\\\\\$v2 ($v2b)}")
                 row = "$row,$c.00"
             }
             out.println(row)
