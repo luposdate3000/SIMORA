@@ -10,7 +10,7 @@
                     "count": 127,
                     "deviceType": "EdgeDevice",
                     "mode": "count",
-                    "radius": 0.02,
+                    "radius": 500,
                     "type": "full",
                 },
             ],

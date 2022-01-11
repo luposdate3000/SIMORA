@@ -7,14 +7,14 @@
             "longitude": 10.702377248379614,
             "patterns": [
                 {
-                    "density": 2.0E-6,
+                    "count": 127,
                     "deviceType": "MeshHop",
-                    "mode": "density",
-                    "radius": 0.02,
+                    "mode": "count",
+                    "radius": 500,
                     "type": "random_fill",
                 },
                 {
-                    "count": 63,
+                    "count": 127,
                     "deviceType": "EdgeDevice",
                     "mode": "count",
                     "patterns": [
@@ -23,12 +23,12 @@
                             "deviceType": "SensorDevice",
                             "mode": "count",
                             "provideCounterAs": "spotInArea",
-                            "radius": 5.0E-4,
+                            "radius": 50,
                             "type": "random_fill",
                         },
                     ],
                     "provideCounterAs": "area",
-                    "radius": 0.02,
+                    "radius": 500,
                     "type": "random_fill",
                 },
             ],
