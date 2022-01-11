@@ -44,8 +44,6 @@ import simora.parser.JsonParserArray
 import simora.parser.JsonParserObject
 import simora.parser.JsonParserString
 import simora.shared.inline.File
-import simora.simulator_core.Event
-import simora.simulator_core.PriorityQueue
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -123,11 +121,7 @@ public class SimulationRun {
             json.getOrEmptyObject("linkType").iterator().asSequence().map {
                 val v = it.second
                 v as JsonParserObject
-                LinkType(
-                    it.first,
-                    v.getOrDefault("rangeInMeters", 0),
-                    v.getOrDefault("dataRateInKbps", 0),
-                )
+                LinkType(it.first, v.getOrDefault("rangeInMeters", 0), v.getOrDefault("dataRateInKbps", 0),)
             }.toList().toTypedArray()
         )
 // load all link types <<<---
@@ -217,14 +211,7 @@ public class SimulationRun {
                 factories[applicationName] = factory
             }
             applications.addAll(
-                factory.create(
-                    applicationJson,
-                    ownAddress,
-                    logger,
-                    outputDirectory,
-                    randGenerator,
-                    factories,
-                )
+                factory.create(applicationJson, ownAddress, logger, outputDirectory, randGenerator, factories,)
             )
         }
         val applicationStack = ApplicationStack_CatchSelfMessages(

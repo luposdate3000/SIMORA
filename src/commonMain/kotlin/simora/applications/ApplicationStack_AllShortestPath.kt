@@ -18,11 +18,11 @@
 package simora.applications
 
 import simora.IPayload
+import simora.ITimer
 import simora.SimulationRun
 import simora.models.Device
 import simora.models.net.LinkManagerMatrix
 import simora.models.net.NetworkPackage
-import simora.simulator_core.ITimer
 import kotlin.jvm.JvmField
 import kotlin.native.concurrent.ThreadLocal
 internal class ApplicationStack_AllShortestPath(

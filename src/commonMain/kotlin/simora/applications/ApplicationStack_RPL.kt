@@ -19,11 +19,11 @@ package simora.applications
 
 import simora.ILogger
 import simora.IPayload
+import simora.ITimer
 import simora.SimulationRun
 import simora.models.Device
 import simora.models.net.LinkManagerList
 import simora.models.net.NetworkPackage
-import simora.simulator_core.ITimer
 
 public class ApplicationStack_RPL(
     private val child: IApplicationStack_Actuator,

@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_core
+package simora
 // https://rosettacode.org/wiki/Fibonacci_heap#Kotlin
 
 internal class PriorityQueue<V>(private var node: PriorityQueueNode<V>? = null) {

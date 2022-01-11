@@ -18,12 +18,12 @@
 package simora.applications
 import simora.Config
 import simora.IPayload
+import simora.ITimer
+import simora.PriorityQueue
 import simora.SimulationRun
 import simora.models.Device
 import simora.models.net.LinkManagerList
 import simora.models.net.NetworkPackage
-import simora.simulator_core.ITimer
-import simora.simulator_core.PriorityQueue
 import kotlin.jvm.JvmField
 import kotlin.native.concurrent.ThreadLocal
 internal class ApplicationStack_RPL_Fast(

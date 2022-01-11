@@ -19,9 +19,9 @@ package simora.applications.scenario.configfile
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import simora.IPayload
+import simora.ITimer
 import simora.applications.IApplicationStack_Actuator
 import simora.applications.IApplicationStack_Middleware
-import simora.simulator_core.ITimer
 import kotlin.random.Random
 
 internal class Application_ConfigSender(

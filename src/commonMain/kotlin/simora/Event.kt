@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora.simulator_core
+package simora
 import simora.models.Device
 internal data class Event(
     val eventNumber: Int,

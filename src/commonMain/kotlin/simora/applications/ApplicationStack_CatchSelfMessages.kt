@@ -17,7 +17,7 @@
 package simora.applications
 
 import simora.IPayload
-import simora.simulator_core.ITimer
+import simora.ITimer
 
 internal class ApplicationStack_CatchSelfMessages(
     private val ownAddress: Int,
