@@ -15,17 +15,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.IPayloadRouting
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
+internal class Package_ApplicationStack_RPL_DAO(
+    internal val isPath: Boolean,
+    internal val destinations: IntArray,
+    internal val hopHasDatabase: Boolean,
+    internal val existingDatabaseHops: IntArray
+) : IPayloadRouting {
+    override fun getSizeInBytes(): Int {
+        val ipv6InBytes = 16
+        val destinationsSize = destinations.size * ipv6InBytes
+        val existingDatabaseHopsSize = existingDatabaseHops.size * ipv6InBytes
+        return destinationsSize + existingDatabaseHopsSize
     }
+
+    override fun toString(): String {
+        return "Package_ApplicationStack_RPL_DAO(isPath $isPath)"
+    }
+
+    override fun getTopic(): String = "Routing-RPL-DAO"
 }

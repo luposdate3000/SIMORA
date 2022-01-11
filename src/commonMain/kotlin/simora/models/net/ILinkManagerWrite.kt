@@ -15,17 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.models.net
 
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+public interface ILinkManagerWrite : ILinkManager {
+    public fun getTransmissionDelay(addrSrc: Int, addrDest: Int, numberOfBytesToSend: Int): Long
+    public fun setSupportedLinkTypes(addr: Int, data: IntArray)
+    public fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,)
+    public fun getSupportedLinkTypes(addr: Int): IntArray
 }

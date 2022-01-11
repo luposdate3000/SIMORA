@@ -7,25 +7,16 @@
  * the Free Software Foundation, version 3.
  *
  * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package simora
 
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal expect object ReflectionHelper {
+    @Suppress("NOTHING_TO_INLINE")
+    internal inline fun create(name: String): Any
 }

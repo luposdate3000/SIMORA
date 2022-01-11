@@ -15,17 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.parking
 
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+public interface IPackage_DatabaseTesting : IPackage_Database {
+    public fun setOnFinish(pck: IPackage_DatabaseTesting)
+    public fun getOnFinish(): IPackage_DatabaseTesting?
 }

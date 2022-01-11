@@ -15,17 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.mailinglist
 
-import simora.Evaluation
+import simora.IPayloadBinary
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class Package_Application_Mail(
+    private val text: String,
+) : IPayloadBinary {
+    override fun getSizeInBytes(): Int = text.length
+    override fun getTopic(): String = "Mail"
+    override fun getBytes(): ByteArray = text.encodeToByteArray()
 }

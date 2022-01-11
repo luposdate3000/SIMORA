@@ -1,6 +1,6 @@
 {
     "applications": {
-        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigReceiver": {},
+        "simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver": {},
     },
     "deterministic": true,
     "deviceType": {
@@ -43,10 +43,10 @@
         },
     },
     "logging": {
-        "simora.simulator_iot.LoggerMeasure": {
+        "simora.LoggerMeasure": {
             "enabled": true,
         },
-        "simora.simulator_iot.LoggerStdout": {
+        "simora.LoggerStdout": {
             "enabled": false,
         },
     },

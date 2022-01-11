@@ -16,16 +16,8 @@
  */
 
 package simora
-
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal object Config {
+    internal const val defaultOutputDirectory: String = "simulator_output/"
+    internal const val useDistanceLatLong: Boolean = false
+    internal const val usePriorityQueue: Boolean = false
 }

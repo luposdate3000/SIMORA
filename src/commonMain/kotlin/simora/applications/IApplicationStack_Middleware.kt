@@ -15,17 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.simulator_core.ITimer
+import simora.IPayload
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+public interface IApplicationStack_Middleware {
+    public fun send(destinationAddress: Int, pck: IPayload)
+    public fun getNextFeatureHops(destinationAddresses: IntArray, flag: Int): IntArray
+    public fun getAllChildApplications(): Set<IApplicationStack_Actuator>
+    public fun registerTimer(durationInNanoSeconds: Long, entity: ITimer)
+    public fun resolveHostName(name: String): Int
+    public fun closestDeviceWithFeature(name: String): Int
+    public fun flush()
+    public fun addChildApplication(child: IApplicationStack_Actuator)
 }

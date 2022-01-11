@@ -14,18 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package simora.applications.scenario.configfile
 
-package simora
+import simora.IPayload
+import simora.applications.IApplicationStack_Actuator
+import simora.applications.IApplicationStack_Middleware
 
-import simora.Evaluation
+internal class Application_ConfigReceiver : IApplicationStack_Actuator {
+    private lateinit var parent: IApplicationStack_Middleware
+    override fun setRouter(router: IApplicationStack_Middleware) {
+        parent = router
+    }
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
+    override fun startUp() {
+    }
+
+    override fun shutDown() {
+    }
+
+    override fun receive(pck: IPayload): IPayload? {
+        return if (pck is Package_Application_ConfigUnicast) {
+            null
+        } else {
+            pck
+        }
     }
 }

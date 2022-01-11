@@ -15,17 +15,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.IPayload
+import simora.models.Device
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+public interface IApplicationStack_Rooter : IApplicationStack_Middleware {
+    public fun setRoot()
+    public fun receive(pck: IPayload): IPayload? // return null on success, or the errored package on failure
+    public fun startUpRouting()
+    public fun startUp()
+    public fun shutDown()
+    public fun setDevice(device: Device)
 }

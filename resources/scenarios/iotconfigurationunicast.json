@@ -1,8 +1,8 @@
 {
     "applications": {
-        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigDistributor": {},
-        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigReceiver": {},
-        "simora.simulator_iot.applications.scenario.configfile.ApplicationFactory_ConfigSender": {
+        "simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor": {},
+        "simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver": {},
+        "simora.applications.scenario.configfile.ApplicationFactory_ConfigSender": {
             "maxSamples": 1,
             "rateInSec": 2,
             "sendStartClockInSec": 1000,
@@ -50,10 +50,10 @@
         },
     },
     "logging": {
-        "simora.simulator_iot.LoggerMeasure": {
+        "simora.LoggerMeasure": {
             "enabled": true,
         },
-        "simora.simulator_iot.LoggerStdout": {
+        "simora.LoggerStdout": {
             "enabled": false,
         },
     },

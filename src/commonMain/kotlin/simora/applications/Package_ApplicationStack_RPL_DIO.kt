@@ -15,17 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.IPayloadRouting
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
+internal class Package_ApplicationStack_RPL_DIO(internal val rank: Int) : IPayloadRouting {
+    override fun getSizeInBytes(): Int {
+        return 2
     }
+
+    override fun toString(): String {
+        return "Package_ApplicationStack_RPL_DIO(rank $rank)"
+    }
+
+    override fun getTopic(): String = "Routing-RPL-DIO"
 }

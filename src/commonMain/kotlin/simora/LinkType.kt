@@ -17,15 +17,8 @@
 
 package simora
 
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
-}
+internal class LinkType(
+    internal val name: String = "",
+    internal var rangeInMeters: Int = 0,
+    internal val dataRateInKbps: Int = 0,
+)

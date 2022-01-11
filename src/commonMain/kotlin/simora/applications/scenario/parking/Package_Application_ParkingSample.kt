@@ -15,17 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.parking
 
-import simora.Evaluation
+import simora.IPayload
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class Package_Application_ParkingSample(
+    internal val sensorID: Int,
+    internal val sampleTime: String,
+    internal val isOccupied: Boolean,
+    internal val area: Int,
+    internal val spotInArea: Int,
+) : IPayload {
+    override fun getSizeInBytes(): Int = 4 + sampleTime.length + 1 + 4 + 4
+    override fun getTopic(): String = "ParkingSample"
 }

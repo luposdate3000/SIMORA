@@ -15,17 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.parser.IJsonParserValue
+import simora.ILogger
+import kotlin.random.Random
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+public interface IApplication_Factory {
+    public fun create(json: IJsonParserValue, ownAddress: Int, logger: ILogger, outputDirectory: String, random: Random, factories: MutableMap<String, IApplication_Factory>): List<IApplicationStack_Actuator>
+    public fun registerFeatures(features: MutableList<IApplicationFeature>)
 }

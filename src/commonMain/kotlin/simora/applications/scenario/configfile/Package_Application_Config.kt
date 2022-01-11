@@ -15,17 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.configfile
 
-import simora.Evaluation
+import simora.IPayloadBinary
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class Package_Application_ConfigUnicast(
+    private val text: String,
+) : IPayloadBinary {
+    override fun getSizeInBytes(): Int = text.length
+    override fun getTopic(): String = "ConfigUnicast"
+    override fun getBytes(): ByteArray = text.encodeToByteArray()
 }

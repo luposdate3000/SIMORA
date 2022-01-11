@@ -15,17 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.mailinglist
 
-import simora.Evaluation
+import simora.IPayload
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class Package_Application_MailGroup(
+    internal val text: String,
+    internal val replacements: Map<Int, String>,
+) : IPayload {
+    override fun getSizeInBytes(): Int = text.length + 4 * replacements.size + replacements.values.sumOf { it.length } + 4
+    override fun getTopic(): String = "MailGroup"
 }

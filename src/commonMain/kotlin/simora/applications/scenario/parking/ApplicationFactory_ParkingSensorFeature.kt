@@ -15,17 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.parking
 
-import simora.Evaluation
+import simora.applications.IApplicationFeature
+import simora.applications.IApplicationStack_Actuator
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class ApplicationFactory_ParkingSensorFeature : IApplicationFeature {
+    override fun getName(): String = "Sensor"
+    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = application is Application_ParkingSensor
+    override fun equals(other: Any?): Boolean = other is ApplicationFactory_ParkingSensorFeature
+    override fun hashCode(): Int = getName().hashCode()
 }

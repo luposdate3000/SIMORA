@@ -17,15 +17,12 @@
 
 package simora
 
-import simora.Evaluation
+import simora.applications.IApplicationFeature
+import simora.applications.IApplicationStack_Actuator
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class RoutingFeature : IApplicationFeature {
+    override fun getName(): String = "RoutingFeature"
+    override fun hasFeature(application: IApplicationStack_Actuator): Boolean = true
+    override fun equals(other: Any?): Boolean = other is RoutingFeature
+    override fun hashCode(): Int = getName().hashCode()
 }

@@ -17,15 +17,17 @@
 
 package simora
 
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+public interface ILogger {
+    public fun onStartUp()
+    public fun onStartUpRouting()
+    public fun onShutDown()
+    public fun initialize(simRun: SimulationRun)
+    public fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long)
+    public fun onReceiveNetworkPackage(address: Int, pck: IPayload)
+    public fun onSendPackage(src: Int, dest: Int, pck: IPayload)
+    public fun onReceivePackage(address: Int, pck: IPayload)
+    public fun onStartSimulation()
+    public fun onStopSimulation()
+    public fun addConnectionTable(src: Int, dest: Int, hop: Int)
+    public fun addDevice(address: Int, x: Double, y: Double)
 }

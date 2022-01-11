@@ -15,17 +15,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.IPayload
+import simora.IPayloadLayer
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
+internal class Package_ApplicationStack_MergeMessages(
+    internal val data: List<IPayload>,
+) : IPayloadLayer {
+    override fun toString(): String = "Package_ApplicationStack_MergeMessages($data)"
+    override fun getSizeInBytes(): Int = data.sumOf { it.getSizeInBytes() }
+    override fun getApplicationPayload(): List<IPayload> {
+        val res = mutableListOf<IPayload>()
+        for (d in data) {
+            if (d is IPayloadLayer) {
+                res.addAll(d.getApplicationPayload())
+            } else {
+                res.add(d)
+            }
+        }
+        return res
     }
+
+    override fun getTopic(): String = TODO()
 }

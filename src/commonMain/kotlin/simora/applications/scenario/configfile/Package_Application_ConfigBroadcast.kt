@@ -15,17 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.configfile
 
-import simora.Evaluation
+import simora.IPayload
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class Package_Application_ConfigBroadcast(
+    internal val targets: IntArray,
+    internal val text_global: String,
+) : IPayload {
+    override fun getSizeInBytes(): Int = text_global.length + targets.size * 4 + 4
+    override fun getTopic(): String = "ConfigBroadcast"
 }

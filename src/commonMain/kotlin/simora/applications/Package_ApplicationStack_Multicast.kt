@@ -15,17 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications
 
-import simora.Evaluation
+import simora.IPayload
+import simora.IPayloadBinary
+import simora.IPayloadLayer
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class Package_ApplicationStack_Multicast(
+    internal var targets: MutableList<Int>,
+    internal val pck: IPayloadBinary,
+) : IPayloadLayer {
+    override fun getSizeInBytes(): Int = pck.getSizeInBytes() + 4 * targets.size + 4
+    override fun getTopic(): String = "Multicast"
+    override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes()
+        .contentEquals(other.pck.getBytes())
+
+    override fun hashCode(): Int = pck.getBytes().hashCode()
+    override fun getApplicationPayload(): List<IPayload> = List(targets.size) { pck }
 }

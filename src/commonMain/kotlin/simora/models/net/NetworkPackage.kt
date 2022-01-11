@@ -15,17 +15,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.models.net
 
-import simora.Evaluation
+import simora.IPayload
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal class NetworkPackage(
+    val sourceAddress: Int,
+    internal val destinationAddress: Int,
+    internal val payload: IPayload
+) : IPayload {
+    override fun getSizeInBytes(): Int = 40 + payload.getSizeInBytes()
+    override fun toString(): String = "Pck(src $sourceAddress, dest $destinationAddress, size ${getSizeInBytes()}, payload $payload)"
+    override fun getTopic(): String = TODO()
 }

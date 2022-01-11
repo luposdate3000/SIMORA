@@ -1,13 +1,13 @@
 {
     "applications": {
-        "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailDistributor": {},
-        "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailReceiver": {},
+        "simora.applications.scenario.mailinglist.ApplicationFactory_MailDistributor": {},
+        "simora.applications.scenario.mailinglist.ApplicationFactory_MailReceiver": {},
     },
     "deterministic": true,
     "deviceType": {
         "CentralTower": {
             "applications": {
-                "simora.simulator_iot.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical": {
+                "simora.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical": {
                     "maxSamples": 2,
                     "rateInSec": 2,
                     "receiverCount": 20,
@@ -54,10 +54,10 @@
         },
     },
     "logging": {
-        "simora.simulator_iot.LoggerMeasure": {
+        "simora.LoggerMeasure": {
             "enabled": true,
         },
-        "simora.simulator_iot.LoggerStdout": {
+        "simora.LoggerStdout": {
             "enabled": false,
         },
     },

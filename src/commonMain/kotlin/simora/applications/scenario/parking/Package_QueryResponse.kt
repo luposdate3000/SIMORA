@@ -15,17 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package simora
+package simora.applications.scenario.parking
 
-import simora.Evaluation
+import simora.shared.UUID_Counter
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
+public class Package_QueryResponse(
+    public val result: ByteArray,
+    public val queryID: Int
+) : IPackage_Database {
+    private val pckID: Long = UUID_Counter.getNextUUID()
+    override fun getPackageID(): Long = pckID
+
+    override fun getSizeInBytes(): Int {
+        return result.size
     }
+
+    override fun getTopic(): String = "SPARQL-Response"
+    override fun toString(): String = "Package_QueryResponse ${result.size}"
 }

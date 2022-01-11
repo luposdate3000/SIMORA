@@ -17,15 +17,6 @@
 
 package simora
 
-import simora.Evaluation
-
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun mainfunc(args: List<String>) {
-    try {
-        println("args $args")
-        Evaluation().evalConfigFileMerge(args)
-    } catch (e: Throwable) {
-        e.printStackTrace()
-        throw e
-    }
+internal interface IPayloadBinary : IPayload {
+    fun getBytes(): ByteArray
 }
