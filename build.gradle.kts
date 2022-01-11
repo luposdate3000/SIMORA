@@ -31,7 +31,6 @@ kotlin {
     metadata {
         compilations.forEach {
             it.kotlinOptions {
-                freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
                 freeCompilerArgs += "-Xnew-inference"
                 freeCompilerArgs += "-Xinline-classes"
             }
