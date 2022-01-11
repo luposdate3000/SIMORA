@@ -1,5 +1,5 @@
 #!/usr/bin/env gnuplot
-set terminal epslatex size 13cm,5cm
+set terminal epslatex size 15cm,5cm
 set output 'plot_routing.tex'
 set datafile separator ','
 unset key

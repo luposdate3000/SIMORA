@@ -94,15 +94,17 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
 val plot_scalability1 = mutableMapOf<Int, Double>()
 val plot_scalability2 = mutableMapOf<Int, Double>()
 val routingID = argumentNames.indexOf("routing")
+val packageCountID=argumentNames.indexOf("number of sent packages")
 val topologyID = argumentNames.indexOf("topology")
 val scenarioID = argumentNames.indexOf("scenario")
 val durationID = argumentNames.indexOf("simulation total duration real (Seconds)")
 val trafficID = argumentNames.indexOf("network traffic total (Bytes)")
 val benchmarkID = argumentNames.indexOf("benchmark_case")
 val routingMap = arrayOf("ASP", "RPLFast")
-val scenarioMap = arrayOf("iotconfigurationunicast", "iotconfigurationmulticastStateOfTheArt","iotconfigurationmulticast", "iotconfigurationbroadcast")
+val scenarioMap = arrayOf("iotconfigurationmulticast", "iotconfigurationmulticastStateOfTheArt", "iotconfigurationunicast", "iotconfigurationbroadcast")
 val topologyMap = arrayOf("Full128", "Uniform128", "Random128", "Ring128")
 val plot_routing = DoubleArray(scenarioMap.size * topologyMap.size * routingMap.size)
+val plot_routing_ctr = IntArray(scenarioMap.size * topologyMap.size * routingMap.size)
 var plot_routing_max = 1.0
 File("summary.csv").printWriter().use { out ->
     out.println(argumentNames.joinToString(","))
@@ -116,7 +118,8 @@ File("summary.csv").printWriter().use { out ->
                 var v = r[trafficID].toDouble()
                 var idx = (z * scenarioMap.size + y) * routingMap.size + x
                 plot_routing[idx] = v
-                if (plot_routing_max <v) {
+plot_routing_ctr[idx] = r[packageCountID].toDouble().toInt()
+                if (plot_routing_max < v) {
                     plot_routing_max = v
                 }
             }
@@ -154,38 +157,33 @@ File("plot_routing.csv").printWriter().use { out ->
         for (z in 0 until topologyMap.size) {
             val idx1 = (z * scenarioMap.size + y) * routingMap.size + x1
             val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
-//            row = "$row,${(plot_routing[idx1]+plot_routing[idx2]) / plot_routing_max*100.0}"
-            row = "$row,${(plot_routing[idx1]+plot_routing[idx2])/2048.0}"
+            row = "$row,${(plot_routing[idx1] + plot_routing[idx2]) / 2048.0}"
         }
         out.println(row)
     }
 }
 File("plot_routing_abs.map").printWriter().use { outMap ->
-File("plot_routing_abs.csv").printWriter().use { out ->
-var ctr=0
-    val x1 = routingMap.indexOf("ASP")
-    val x2 = routingMap.indexOf("RPLFast")
-    out.println("," + topologyMap.joinToString().replace("128", ""))
-    for (y in 0 until scenarioMap.size) {
-        var row = scenarioMap[y].replace("iotconfiguration", "").replaceFirstChar { it.uppercaseChar() }
-        for (z in 0 until topologyMap.size) {
-            val idx1 = (z * scenarioMap.size + y) * routingMap.size + x1
-            val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
-//val v1=plot_routing[idx1]
-//val v2=plot_routing[idx2]
-val v1=(plot_routing[idx1]/1024.0).toInt()
-val v2=(plot_routing[idx2]/1024.0).toInt()
-//val v1=((plot_routing[idx1]*100.0/1024.0).toInt().toDouble()/100.0).toDouble()
-//val v2=((plot_routing[idx2]*100.0/1024.0).toInt().toDouble()/100.0).toDouble()
-//            row = "$row,aaa${v1}bbb${v2}ccc"
-val c=ctr++
-outMap.println("$c.00:\\\\shortstack{${v1}\\\\\\\\${v2}}")
-row = "$row,$c.00"
-//row = "$row,\\\\shortstack{${v1}\\\\\\\\${v2}}"
+    File("plot_routing_abs.csv").printWriter().use { out ->
+        var ctr = 1000000
+        val x1 = routingMap.indexOf("ASP")
+        val x2 = routingMap.indexOf("RPLFast")
+        out.println("," + topologyMap.joinToString().replace("128", ""))
+        for (y in 0 until scenarioMap.size) {
+            var row = scenarioMap[y].replace("iotconfiguration", "").replaceFirstChar { it.uppercaseChar() }
+            for (z in 0 until topologyMap.size) {
+                val idx1 = (z * scenarioMap.size + y) * routingMap.size + x1
+                val idx2 = (z * scenarioMap.size + y) * routingMap.size + x2
+                val v1 = (plot_routing[idx1] / 1024.0).toInt()
+                val v2 = (plot_routing[idx2] / 1024.0).toInt()
+val v1b=plot_routing_ctr[idx1]/1000
+val v2b=plot_routing_ctr[idx2]/1000
+                val c = ctr++
+                outMap.println("$c.00:\\\\shortstack{${v1} ($v1b)\\\\\\\\${v2} ($v2b)}")
+                row = "$row,$c.00"
+            }
+            out.println(row)
         }
-        out.println(row)
     }
-}
 }
 File("plot_routing_asp.csv").printWriter().use { out ->
     val x = routingMap.indexOf("ASP")
@@ -194,7 +192,7 @@ File("plot_routing_asp.csv").printWriter().use { out ->
         var row = scenarioMap[y].replace("iotconfiguration", "")
         for (z in 0 until topologyMap.size) {
             val idx = (z * scenarioMap.size + y) * routingMap.size + x
-            row = "$row,${plot_routing[idx] / plot_routing_max*100.0}"
+            row = "$row,${plot_routing[idx] / plot_routing_max * 100.0}"
         }
         out.println(row)
     }
@@ -206,7 +204,7 @@ File("plot_routing_rpl.csv").printWriter().use { out ->
         var row = scenarioMap[y].replace("iotconfiguration", "")
         for (z in 0 until topologyMap.size) {
             val idx = (z * scenarioMap.size + y) * routingMap.size + x
-            row = "$row,${plot_routing[idx] / plot_routing_max*100.0}"
+            row = "$row,${plot_routing[idx] / plot_routing_max * 100.0}"
         }
         out.println(row)
     }
