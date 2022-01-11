@@ -17,8 +17,8 @@
 
 package simora.applications
 
-import simora.simulator_core.ITimer
 import simora.IPayload
+import simora.simulator_core.ITimer
 
 public interface IApplicationStack_Middleware {
     public fun send(destinationAddress: Int, pck: IPayload)

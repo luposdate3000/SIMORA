@@ -16,8 +16,8 @@
  */
 package simora.applications
 
-import simora.simulator_core.ITimer
 import simora.IPayload
+import simora.simulator_core.ITimer
 
 internal class ApplicationStack_MergeMessages(private val child: IApplicationStack_Actuator) : IApplicationStack_BothDirections {
     private var cache = mutableMapOf<Int, MutableList<IPayload>>()

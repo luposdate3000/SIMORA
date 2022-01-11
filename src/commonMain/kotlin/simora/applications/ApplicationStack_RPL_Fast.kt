@@ -16,16 +16,16 @@
  */
 
 package simora.applications
-import simora.simulator_core.ITimer
-import simora.simulator_core.PriorityQueue
-import kotlin.native.concurrent.ThreadLocal
 import simora.Config
 import simora.IPayload
 import simora.SimulationRun
 import simora.models.Device
 import simora.models.net.LinkManagerList
 import simora.models.net.NetworkPackage
+import simora.simulator_core.ITimer
+import simora.simulator_core.PriorityQueue
 import kotlin.jvm.JvmField
+import kotlin.native.concurrent.ThreadLocal
 internal class ApplicationStack_RPL_Fast(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
@@ -239,7 +239,8 @@ internal class ApplicationStack_RPL_Fast(
             isRoutingTableInitialized = true
         }
     }
-@ThreadLocal
+
+    @ThreadLocal
     internal companion object {
         @JvmField internal var featuredDevices: Array<IntArray> = Array(0) { IntArray(0) }
     }

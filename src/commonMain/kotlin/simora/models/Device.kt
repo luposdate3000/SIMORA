@@ -19,13 +19,13 @@ package simora.models
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import simora.simulator_core.Event
-import simora.simulator_core.ITimer
 import simora.SimulationRun
 import simora.applications.IApplicationStack_Actuator
 import simora.applications.IApplicationStack_Rooter
 import simora.models.net.ILinkManagerWrite
 import simora.models.net.NetworkPackage
+import simora.simulator_core.Event
+import simora.simulator_core.ITimer
 
 public class Device(
     private val simRun: SimulationRun,

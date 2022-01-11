@@ -16,9 +16,9 @@
  */
 package simora.applications
 
-import simora.simulator_core.ITimer
 import simora.IPayload
 import simora.IPayloadBinary
+import simora.simulator_core.ITimer
 
 internal class ApplicationStack_MulticastRouting(
     private val enableApplciationSideMulticast: Boolean,

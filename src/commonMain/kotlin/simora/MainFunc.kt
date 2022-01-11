@@ -17,8 +17,6 @@
 
 package simora
 
-import simora.Evaluation
-
 @Suppress("NOTHING_TO_INLINE")
 internal inline fun mainfunc(args: List<String>) {
     try {

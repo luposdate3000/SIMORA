@@ -16,7 +16,8 @@
  */
 package simora.shared.inline
 
-import kotlinx.cinterop.*
+import kotlinx.cinterop.refTo
+import kotlinx.cinterop.CPointer
 import platform.posix.*
 import simora.shared.IMyOutputStream
 

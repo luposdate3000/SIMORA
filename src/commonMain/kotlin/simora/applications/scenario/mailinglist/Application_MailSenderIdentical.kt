@@ -18,10 +18,10 @@ package simora.applications.scenario.mailinglist
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import simora.simulator_core.ITimer
 import simora.IPayload
 import simora.applications.IApplicationStack_Actuator
 import simora.applications.IApplicationStack_Middleware
+import simora.simulator_core.ITimer
 import kotlin.random.Random
 
 internal class Application_MailSenderIdentical(

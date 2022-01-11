@@ -17,14 +17,14 @@
 
 package simora.applications
 
-import simora.simulator_core.ITimer
 import simora.IPayload
 import simora.SimulationRun
-import kotlin.native.concurrent.ThreadLocal
 import simora.models.Device
 import simora.models.net.LinkManagerMatrix
 import simora.models.net.NetworkPackage
+import simora.simulator_core.ITimer
 import kotlin.jvm.JvmField
+import kotlin.native.concurrent.ThreadLocal
 internal class ApplicationStack_AllShortestPath(
     private val child: IApplicationStack_Actuator,
     private val config: SimulationRun,
@@ -137,7 +137,8 @@ internal class ApplicationStack_AllShortestPath(
             }
         }
     }
-@ThreadLocal
+
+    @ThreadLocal
     internal companion object {
         @JvmField internal var devicesWithFeatures = Array(0) { setOf<Int>() }
     }

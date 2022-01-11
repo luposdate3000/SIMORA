@@ -16,9 +16,9 @@
  */
 package simora.applications
 
-import simora.simulator_core.ITimer
 import simora.ILogger
 import simora.IPayload
+import simora.simulator_core.ITimer
 
 internal class ApplicationStack_Logger(
     private val ownAddress: Int,
