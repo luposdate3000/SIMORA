@@ -27,7 +27,7 @@ internal external fun openSync(filename: String, flags: String): Int
 internal external fun readSync(fd: Int, buffer: ByteArray, offset: Int, length: Int, position: Int): Int
 
 @JsName("writeSync")
-internal external fun writeSync(fd: Int, buffer: ByteArray, offset: Int, length: Int, position: Int): Int
+internal external fun writeSync(fd: Int, buffer: ByteArray, offset: Int, length: Int): Int
 
 @JsName("closeSync")
 internal external fun closeSync(fd: Int)

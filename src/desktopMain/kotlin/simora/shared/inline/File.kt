@@ -48,7 +48,14 @@ internal actual class File actual constructor(filename: String) {
         if (filename.startsWith("/")) {
             arr = listOf("") + arr
         }
-        var i = 0
+        var i = arr.size
+        while (i >= 0) {
+            if (mkdir(arr.subList(0, i).joinToString("/"), S_IRWXU) == 0) {
+                break
+            }
+            i--
+        }
+        i++
         while (i <= arr.size) {
             if (mkdir(arr.subList(0, i).joinToString("/"), S_IRWXU) != 0) {
                 return false

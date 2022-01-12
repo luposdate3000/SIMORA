@@ -19,10 +19,9 @@ package simora.shared.inline
 import simora.shared.IMyOutputStream
 internal class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
     val fd: Int
-    var pos = 0
     init {
         if (append) {
-            TODO()
+            fd = openSync(filename, "a")
         } else {
             fd = openSync(filename, "w")
         }
@@ -32,8 +31,7 @@ internal class MyOutputStream(private val filename: String, append: Boolean) : I
         write(buf, buf.size)
     }
     private fun write(buf: ByteArray, off: Int, len: Int) {
-        writeSync(fd, buf, off, len, pos)
-        pos += len
+        writeSync(fd, buf, off, len)
     }
     override fun write(buf: ByteArray, len: Int) {
         write(buf, 0, len)
