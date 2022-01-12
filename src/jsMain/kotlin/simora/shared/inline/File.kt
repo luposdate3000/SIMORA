@@ -66,18 +66,6 @@ internal actual class File actual constructor(internal val filename: String) {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-        return object : IMyOutputStream {
-            val tmp = ExternalModule_fs.openOutputStream(filename, append)
-            override fun write(buf: ByteArray): Unit = tmp.write(buf)
-            override fun write(buf: ByteArray, len: Int): Unit = tmp.write(buf, len)
-            override fun close(): Unit = tmp.close()
-            override fun flush(): Unit = tmp.flush()
-            override fun println(x: String) = tmp.println(x)
-            override fun print(x: String) = tmp.print(x)
-            override fun print(x: Boolean) = tmp.print(x)
-            override fun print(x: Int) = tmp.print(x)
-            override fun print(x: Double) = tmp.print(x)
-            override fun println() = tmp.println()
-        }
+        return MyOutputStream(filename, append)
     }
 }

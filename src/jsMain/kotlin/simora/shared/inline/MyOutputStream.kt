@@ -16,18 +16,80 @@
  */
 package simora.shared.inline
 
+import simora.shared.js.ExternalModule_fs
 import simora.shared.IMyOutputStream
+internal actual class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
+    private var buffer: ByteArray
+    private var bufferSize: Int
 
-internal actual class MyOutputStream : IMyOutputStream {
+    init {
+        if (append) {
+            val v = ExternalModule_fs.inmemoryFs[filename]
+            if (v != null) {
+                buffer = v
+                bufferSize = v.size
+            } else {
+                buffer = ByteArray(1024)
+                bufferSize = 0
+            }
+        } else {
+            buffer = ByteArray(1024)
+            bufferSize = 0
+        }
+    }
 
-    actual override fun close(): Unit = TODO("MyOutputStream")
-    actual override fun flush(): Unit = TODO("MyOutputStream")
-    actual override fun write(buf: ByteArray): Unit = write(buf, buf.size)
-    actual override fun write(buf: ByteArray, len: Int): Unit = TODO("MyOutputStream")
-    actual override fun println(x: String): Unit = TODO("MyOutputStream")
-    actual override fun print(x: String): Unit = TODO("MyOutputStream")
-    actual override fun print(x: Boolean): Unit = TODO("MyOutputStream")
-    actual override fun print(x: Int): Unit = TODO("MyOutputStream")
-    actual override fun print(x: Double): Unit = TODO("MyOutputStream")
-    actual override fun println(): Unit = TODO("MyOutputStream")
+    private fun reserveSpace(size: Int) {
+        if (bufferSize + size > buffer.size) {
+            var destSize = 1024
+            while (destSize < size + bufferSize) {
+                destSize *= 2
+            }
+            val b = ByteArray(destSize)
+            buffer.copyInto(b)
+            buffer = b
+        }
+    }
+
+     override actual fun write(buf: ByteArray) {
+        write(buf, buf.size)
+    }
+
+     override actual fun write(buf: ByteArray, len: Int) {
+        reserveSpace(len)
+        buf.copyInto(buffer, bufferSize, 0, len)
+        bufferSize += len
+    }
+
+     override actual fun close() {
+        val b = ByteArray(bufferSize)
+        buffer.copyInto(b, 0, 0, bufferSize)
+        ExternalModule_fs.inmemoryFs[filename] = b
+    }
+
+     override actual fun flush() {
+    }
+
+     override actual fun println(x: String) {
+        print("$x\n")
+    }
+
+     override actual fun print(x: String) {
+        write(x.encodeToByteArray())
+    }
+
+     override actual fun print(x: Boolean) {
+        print("$x")
+    }
+
+     override actual fun print(x: Int) {
+        print("$x")
+    }
+
+     override actual fun print(x: Double) {
+        print("$x")
+    }
+
+     override actual fun println() {
+        print("\n")
+    }
 }
