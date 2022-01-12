@@ -1,11 +1,11 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-val compileLinux: Boolean = true
+val compileLinux: Boolean = false
 val compileOSX: Boolean = false
 val compileWindows: Boolean = false
 val compileJS: Boolean = true
-val compileJVM: Boolean = true
+val compileJVM: Boolean = false
 
 buildscript {
     repositories {
@@ -66,7 +66,7 @@ kotlin {
             }
         }
     }
-if (compileWindows) {
+    if (compileWindows) {
         mingwX64("mingwX64") {
             compilations.forEach {
                 it.kotlinOptions {
@@ -83,7 +83,7 @@ if (compileWindows) {
             }
         }
     }
-if (compileOSX) {
+    if (compileOSX) {
         macosX64("macosX64") {
             compilations.forEach {
                 it.kotlinOptions {
@@ -103,14 +103,14 @@ if (compileOSX) {
     if (compileJS) {
         js {
             moduleName = "simora"
-            browser {
+            nodejs {
+                binaries.executable()
+            }
+/*            browser {
                 compilations.forEach {
                     it.kotlinOptions {
                         freeCompilerArgs += "-Xnew-inference"
                     }
-                }
-                dceTask {
-//                keep("Luposdate3000_Endpoint.lupos.endpoint.LuposdateEndpoint")
                 }
                 testTask {
                     useKarma {
@@ -118,7 +118,7 @@ if (compileOSX) {
                     }
                 }
             }
-            binaries.executable()
+*/
         }
     }
     sourceSets {

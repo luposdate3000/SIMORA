@@ -16,8 +16,8 @@
  */
 
 import simora.mainfunc
-import kotlin.js.JsName
-@JsName("main2")
-public fun main2(args: Array<String>) {
+internal external val process: dynamic
+public fun main(args: Array<String>) {
+    val args = process.argv.slice(2) as Array<String>
     mainfunc(args.toList())
 }

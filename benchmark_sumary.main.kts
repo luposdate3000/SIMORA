@@ -91,7 +91,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
     } catch (e: Throwable) {
     }
 }
-val plot_scalability = Array(4){mutableMapOf<Int, Double>()}
+val plot_scalability = Array(4) { mutableMapOf<Int, Double>() }
 val platformID = argumentNames.indexOf("platform")
 val routingID = argumentNames.indexOf("routing")
 val packageCountID = argumentNames.indexOf("number of sent packages")
@@ -124,33 +124,33 @@ File("summary.csv").printWriter().use { out ->
                 }
             }
             "scalability" -> {
-                    val x = r[topologyID].substring("Strong".length).toInt()
-                    val y = r[durationID].toDouble()
-if(r[platformID]=="linux"){
-if (r[routingID] == "RPLFastLate") {
-                    plot_scalability[2][x] = y
-                }
-                if (r[routingID] == "ASP") {
-                    plot_scalability[3][x] = y
-                }
-}else{
-                if (r[routingID] == "RPLFastLate") {
-                    plot_scalability[0][x] = y
-                }
-                if (r[routingID] == "ASP") {
-                    plot_scalability[1][x] = y
+                val x = r[topologyID].substring("Strong".length).toInt()
+                val y = r[durationID].toDouble()
+                if (r[platformID] == "linux") {
+                    if (r[routingID] == "RPLFastLate") {
+                        plot_scalability[2][x] = y
+                    }
+                    if (r[routingID] == "ASP") {
+                        plot_scalability[3][x] = y
+                    }
+                } else {
+                    if (r[routingID] == "RPLFastLate") {
+                        plot_scalability[0][x] = y
+                    }
+                    if (r[routingID] == "ASP") {
+                        plot_scalability[1][x] = y
+                    }
                 }
             }
-      }
-  }
+        }
     }
 }
-for(i in 0 until plot_scalability.size){
-File("plot_scalability${i+1}.csv").printWriter().use { out ->
-    for (k in plot_scalability[i].keys.sorted()) {
-        out.println("$k,${plot_scalability[i][k]}")
+for (i in 0 until plot_scalability.size) {
+    File("plot_scalability${i + 1}.csv").printWriter().use { out ->
+        for (k in plot_scalability[i].keys.sorted()) {
+            out.println("$k,${plot_scalability[i][k]}")
+        }
     }
-}
 }
 File("plot_routing.csv").printWriter().use { out ->
     val x1 = routingMap.indexOf("ASP")

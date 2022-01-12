@@ -19,7 +19,7 @@ package simora
 internal actual object ReflectionHelper {
     @Suppress("NOTHING_TO_INLINE")
     actual inline fun create(name: String): Any {
-return when (name) {
+        return when (name) {
             "simora.LoggerMeasure" -> LoggerMeasure()
             "simora.LoggerStdout" -> LoggerStdout()
             "simora.applications.scenario.parking.ApplicationFactory_ParkingSensor" -> simora.applications.scenario.parking.ApplicationFactory_ParkingSensor()
@@ -30,9 +30,9 @@ return when (name) {
             "simora.applications.scenario.mailinglist.ApplicationFactory_MailReceiver" -> simora.applications.scenario.mailinglist.ApplicationFactory_MailReceiver()
             "simora.applications.scenario.mailinglist.ApplicationFactory_MailSender" -> simora.applications.scenario.mailinglist.ApplicationFactory_MailSender()
             "simora.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical" -> simora.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical()
-"simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver"->simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver()
-"simora.applications.scenario.configfile.ApplicationFactory_ConfigSender"->simora.applications.scenario.configfile.ApplicationFactory_ConfigSender()
-"simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor"->simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor()
+            "simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver" -> simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver()
+            "simora.applications.scenario.configfile.ApplicationFactory_ConfigSender" -> simora.applications.scenario.configfile.ApplicationFactory_ConfigSender()
+            "simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor" -> simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor()
             else -> TODO("ReflectionHelper.create(\"$name\")")
         }
 //        return eval("new $name()") as Any
