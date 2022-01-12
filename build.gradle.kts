@@ -7,6 +7,8 @@ val compileWindows: Boolean = false
 val compileJS: Boolean = true
 val compileJVM: Boolean = false
 
+val nodeJSMode=true
+
 buildscript {
     repositories {
         mavenLocal()
@@ -103,22 +105,15 @@ kotlin {
     if (compileJS) {
         js {
             moduleName = "simora"
+if(nodeJSMode){
             nodejs {
                 binaries.executable()
             }
-/*            browser {
-                compilations.forEach {
-                    it.kotlinOptions {
-                        freeCompilerArgs += "-Xnew-inference"
-                    }
-                }
-                testTask {
-                    useKarma {
-                        useFirefox()
-                    }
-                }
+}else{
+            browser {
+binaries.executable()
             }
-*/
+}
         }
     }
     sourceSets {
@@ -167,10 +162,25 @@ kotlin {
             }
         }
         if (compileJS) {
+if(nodeJSMode){
             val jsMain by getting {
+val jsNodeMain by creating {
+                dependsOn(commonMain)
+            }
+dependsOn(jsNodeMain)
                 dependencies {
                 }
             }
+}else{
+val jsBrowserMain by creating {
+                dependsOn(commonMain)
+            }          
+  val jsMain by getting {
+dependsOn(jsBrowserMain)
+                dependencies {
+                }
+            }
+}
         }
     }
 }

@@ -17,7 +17,7 @@
 package simora.shared.inline
 
 import simora.shared.IMyOutputStream
-internal class MyRealOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
+internal class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
     val fd: Int
     var pos = 0
     init {

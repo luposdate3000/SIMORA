@@ -21,24 +21,16 @@ import simora.shared.IMyOutputStream
 
 internal actual class File actual constructor(internal val filename: String) {
     internal companion object {
-        internal var virtualFileSystemMode = true
         internal val inmemoryFs = mutableMapOf<String, ByteArray>()
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean {
-        return if (virtualFileSystemMode) {
-            inmemoryFs[filename] != null
-        } else {
-            existsSync(filename)
-        }
+return            existsSync(filename)
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun mkdirs(): Boolean {
-        return if (virtualFileSystemMode) {
-            true
-        } else {
             var arr = filename.split("/").filterNot { it == "" || it == "." }
             if (filename.startsWith("/")) {
                 arr = listOf("") + arr
@@ -52,7 +44,6 @@ internal actual class File actual constructor(internal val filename: String) {
             }
             return true
         }
-    }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
@@ -92,19 +83,11 @@ internal actual class File actual constructor(internal val filename: String) {
     }
 
     private fun openInputStream(): IMyJSInputStream {
-        if (virtualFileSystemMode) {
-            return MyVirtualInputStream(filename)
-        } else {
-            return MyRealInputStream(filename)
-        }
+            return MyInputStream(filename)
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-        if (virtualFileSystemMode) {
-            return MyVirtualOutputStream(filename, append)
-        } else {
-            return MyRealOutputStream(filename, append)
-        }
+            return MyOutputStream(filename, append)
     }
 }

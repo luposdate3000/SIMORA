@@ -17,7 +17,7 @@
 package simora.shared.inline
 
 import simora.shared.IMyOutputStream
-internal class MyVirtualOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
+internal class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
     private var buffer: ByteArray
     private var bufferSize: Int
 

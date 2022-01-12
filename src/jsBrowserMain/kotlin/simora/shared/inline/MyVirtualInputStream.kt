@@ -19,7 +19,7 @@ package simora.shared.inline
 import simora.shared.IMyInputStream
 import simora.shared.IMyJSInputStream
 
-internal class MyVirtualInputStream constructor(filename: String) : IMyInputStream, IMyJSInputStream {
+internal class MyInputStream constructor(filename: String) : IMyInputStream, IMyJSInputStream {
     private var pos = 0
     private val buffer: ByteArray = File.inmemoryFs[filename]!!
 
