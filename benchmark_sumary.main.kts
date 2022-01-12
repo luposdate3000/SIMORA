@@ -133,6 +133,13 @@ File("summary.csv").printWriter().use { out ->
                     if (r[routingID] == "ASP") {
                         plot_scalability[3][x] = y
                     }
+                } else if (r[platformID] == "js") {
+                    if (r[routingID] == "RPLFastLate") {
+                        plot_scalability[4][x] = y
+                    }
+                    if (r[routingID] == "ASP") {
+                        plot_scalability[5][x] = y
+                    }
                 } else {
                     if (r[routingID] == "RPLFastLate") {
                         plot_scalability[0][x] = y

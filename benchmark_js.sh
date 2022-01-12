@@ -1,7 +1,7 @@
 #!/bin/bash
 ./gradlew jsJar
 m="./resources/multicast/Application.json"
-c='node index.js js.json'
+c='node build/js/packages/simora/kotlin/simora.js js.json'
 
 cmpRoutingAndMulticastAndTopologies=false
 cmpScalability=true
@@ -45,7 +45,7 @@ x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done
 done
-for tt in 4096 8192 16384 32768 65536 131072 262144
+for tt in 4096 8192 16384 32768 65536 131072
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFastLate.json
