@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.shared.js
-import simora.shared.inline.MyOutputStream
 
 internal object ExternalModule_fs {
     internal val inmemoryFs = mutableMapOf<String, ByteArray>()
@@ -29,5 +28,4 @@ internal object ExternalModule_fs {
     internal inline fun mkdirs(@Suppress("UNUSED_PARAMETER") filename: String): Boolean {
         return true
     }
-
 }

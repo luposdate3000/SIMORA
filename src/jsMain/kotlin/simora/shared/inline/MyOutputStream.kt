@@ -16,9 +16,9 @@
  */
 package simora.shared.inline
 
-import simora.shared.js.ExternalModule_fs
 import simora.shared.IMyOutputStream
-internal  class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
+import simora.shared.js.ExternalModule_fs
+internal class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
     private var buffer: ByteArray
     private var bufferSize: Int
 
@@ -50,46 +50,46 @@ internal  class MyOutputStream(private val filename: String, append: Boolean) : 
         }
     }
 
-     override  fun write(buf: ByteArray) {
+    override fun write(buf: ByteArray) {
         write(buf, buf.size)
     }
 
-     override  fun write(buf: ByteArray, len: Int) {
+    override fun write(buf: ByteArray, len: Int) {
         reserveSpace(len)
         buf.copyInto(buffer, bufferSize, 0, len)
         bufferSize += len
     }
 
-     override  fun close() {
+    override fun close() {
         val b = ByteArray(bufferSize)
         buffer.copyInto(b, 0, 0, bufferSize)
         ExternalModule_fs.inmemoryFs[filename] = b
     }
 
-     override  fun flush() {
+    override fun flush() {
     }
 
-     override  fun println(x: String) {
+    override fun println(x: String) {
         print("$x\n")
     }
 
-     override  fun print(x: String) {
+    override fun print(x: String) {
         write(x.encodeToByteArray())
     }
 
-     override  fun print(x: Boolean) {
+    override fun print(x: Boolean) {
         print("$x")
     }
 
-     override  fun print(x: Int) {
+    override fun print(x: Int) {
         print("$x")
     }
 
-     override  fun print(x: Double) {
+    override fun print(x: Double) {
         print("$x")
     }
 
-     override  fun println() {
+    override fun println() {
         print("\n")
     }
 }

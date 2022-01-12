@@ -19,15 +19,15 @@ package simora.shared.inline
 import simora.shared.IMyInputStream
 import simora.shared.js.ExternalModule_fs
 
-internal  class MyInputStream constructor(filename: String) : IMyInputStream {
+internal class MyInputStream constructor(filename: String) : IMyInputStream {
     private var pos = 0
     private val buffer: ByteArray = ExternalModule_fs.inmemoryFs[filename]!!
 
-     override fun readByte(): Byte {
+    override fun readByte(): Byte {
         return buffer[pos++]
     }
 
-     override fun read(buf: ByteArray, off: Int, len: Int): Int {
+    override fun read(buf: ByteArray, off: Int, len: Int): Int {
         var l = len + off
         if (len + off > buffer.size) {
             l = buffer.size
@@ -38,22 +38,22 @@ internal  class MyInputStream constructor(filename: String) : IMyInputStream {
         return l - off
     }
 
-     override fun read(buf: ByteArray, len: Int): Int {
+    override fun read(buf: ByteArray, len: Int): Int {
         val l = read(buf, pos, len)
         pos += l
         return l
     }
 
-     override fun read(buf: ByteArray): Int {
+    override fun read(buf: ByteArray): Int {
         val l = read(buf, pos, buf.size)
         pos += l
         return l
     }
 
-     override fun close() {
+    override fun close() {
     }
 
-     override fun readLine(): String? {
+    override fun readLine(): String? {
 // TODO this may break on utf-8
         val buf = mutableListOf<Byte>()
         try {
