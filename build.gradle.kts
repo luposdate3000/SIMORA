@@ -7,7 +7,7 @@ val compileWindows: Boolean = false
 val compileJS: Boolean = true
 val compileJVM: Boolean = false
 
-val nodeJSMode = true
+val nodeJSMode = false
 
 buildscript {
     repositories {
