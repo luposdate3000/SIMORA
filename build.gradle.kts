@@ -66,6 +66,40 @@ kotlin {
             }
         }
     }
+if (compileWindows) {
+        mingwX64("mingwX64") {
+            compilations.forEach {
+                it.kotlinOptions {
+                    freeCompilerArgs += "-Xnew-inference"
+                }
+            }
+            binaries {
+                sharedLib {
+                }
+                executable(listOf(DEBUG)) {
+                }
+                executable(listOf(RELEASE)) {
+                }
+            }
+        }
+    }
+if (compileOSX) {
+        macosX64("macosX64") {
+            compilations.forEach {
+                it.kotlinOptions {
+                    freeCompilerArgs += "-Xnew-inference"
+                }
+            }
+            binaries {
+                sharedLib {
+                }
+                executable(listOf(DEBUG)) {
+                }
+                executable(listOf(RELEASE)) {
+                }
+            }
+        }
+    }
     if (compileJS) {
         js {
             moduleName = "simora"
