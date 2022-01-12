@@ -14,18 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package simora.shared.js
+@file:JsModule("fs")
+@file:JsNonModule
+package simora.shared.inline
 
-internal object ExternalModule_fs {
-    internal val inmemoryFs = mutableMapOf<String, ByteArray>()
+import kotlin.js.JsName
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal inline fun exists(filename: String): Boolean {
-        return inmemoryFs[filename] != null
-    }
+@JsName("openSync")
+internal external fun openSync(filename: String, flags: String): Int
 
-    @Suppress("NOTHING_TO_INLINE")
-    internal inline fun mkdirs(@Suppress("UNUSED_PARAMETER") filename: String): Boolean {
-        return true
-    }
-}
+@JsName("readSync")
+internal external fun readSync(fd: Int, buffer: ByteArray, offset: Int, length: Int, position: Int): Int
+
+@JsName("writeSync")
+internal external fun writeSync(fd: Int, buffer: ByteArray, offset: Int, length: Int, position: Int): Int
+
+@JsName("closeSync")
+internal external fun closeSync(fd: Int)
+
+@JsName("readFileSync")
+internal external fun readFileSync(filename: String): ByteArray
+
+@JsName("mkdirSync")
+internal external fun mkdirSync(filename: String)
+
+@JsName("existsSync")
+internal external fun existsSync(filename: String): Boolean

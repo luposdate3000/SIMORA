@@ -17,53 +17,30 @@
 package simora.shared.inline
 
 import simora.shared.IMyOutputStream
-import simora.shared.js.ExternalModule_fs
-internal class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
-    private var buffer: ByteArray
-    private var bufferSize: Int
-
+internal class MyRealOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
+    val fd: Int
+    var pos = 0
     init {
         if (append) {
-            val v = ExternalModule_fs.inmemoryFs[filename]
-            if (v != null) {
-                buffer = v
-                bufferSize = v.size
-            } else {
-                buffer = ByteArray(1024)
-                bufferSize = 0
-            }
+            TODO()
         } else {
-            buffer = ByteArray(1024)
-            bufferSize = 0
-        }
-    }
-
-    private fun reserveSpace(size: Int) {
-        if (bufferSize + size > buffer.size) {
-            var destSize = 1024
-            while (destSize < size + bufferSize) {
-                destSize *= 2
-            }
-            val b = ByteArray(destSize)
-            buffer.copyInto(b)
-            buffer = b
+            fd = openSync(filename, "w")
         }
     }
 
     override fun write(buf: ByteArray) {
         write(buf, buf.size)
     }
-
+    private fun write(buf: ByteArray, off: Int, len: Int) {
+        writeSync(fd, buf, off, len, pos)
+        pos += len
+    }
     override fun write(buf: ByteArray, len: Int) {
-        reserveSpace(len)
-        buf.copyInto(buffer, bufferSize, 0, len)
-        bufferSize += len
+        write(buf, 0, len)
     }
 
     override fun close() {
-        val b = ByteArray(bufferSize)
-        buffer.copyInto(b, 0, 0, bufferSize)
-        ExternalModule_fs.inmemoryFs[filename] = b
+        closeSync(fd)
     }
 
     override fun flush() {

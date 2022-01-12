@@ -16,21 +16,48 @@
  */
 package simora.shared.inline
 
+import simora.shared.IMyJSInputStream
 import simora.shared.IMyOutputStream
-import simora.shared.js.ExternalModule_fs
 
 internal actual class File actual constructor(internal val filename: String) {
+    internal companion object {
+        internal var virtualFileSystemMode = true
+        internal val inmemoryFs = mutableMapOf<String, ByteArray>()
+    }
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun exists(): Boolean = ExternalModule_fs.exists(filename)
+    internal actual inline fun exists(): Boolean {
+        return if (virtualFileSystemMode) {
+            inmemoryFs[filename] != null
+        } else {
+            existsSync(filename)
+        }
+    }
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun mkdirs(): Boolean = ExternalModule_fs.mkdirs(filename)
+    internal actual inline fun mkdirs(): Boolean {
+        return if (virtualFileSystemMode) {
+            true
+        } else {
+            var arr = filename.split("/").filterNot { it == "" || it == "." }
+            if (filename.startsWith("/")) {
+                arr = listOf("") + arr
+            }
+            var i = 1
+            while (i <= arr.size) {
+                try {
+                    mkdirSync(arr.subList(0, i).joinToString("/"))
+                } catch (e: Throwable) {}
+                i++
+            }
+            return true
+        }
+    }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
         val res = StringBuilder()
-        val stream = MyInputStream(filename)
+        val stream = openInputStream()
         val buffer = ByteArray(8192)
         var pos = 0
         val s = mutableListOf<Byte>()
@@ -64,8 +91,20 @@ internal actual class File actual constructor(internal val filename: String) {
         }
     }
 
+    private fun openInputStream(): IMyJSInputStream {
+        if (virtualFileSystemMode) {
+            return MyVirtualInputStream(filename)
+        } else {
+            return MyRealInputStream(filename)
+        }
+    }
+
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-        return MyOutputStream(filename, append)
+        if (virtualFileSystemMode) {
+            return MyVirtualOutputStream(filename, append)
+        } else {
+            return MyRealOutputStream(filename, append)
+        }
     }
 }

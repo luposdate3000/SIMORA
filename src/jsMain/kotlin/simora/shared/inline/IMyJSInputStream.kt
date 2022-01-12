@@ -14,12 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package simora.shared
 
-import simora.mainfunc
-import simora.shared.inline.File
-internal external val process: dynamic
-public fun main(args: Array<String>) {
-    val args = process.argv.slice(2) as Array<String>
-    File.virtualFileSystemMode = false
-    mainfunc(args.toList())
+internal interface IMyJSInputStream {
+    fun read(buf: ByteArray, len: Int): Int
+    fun close()
 }
