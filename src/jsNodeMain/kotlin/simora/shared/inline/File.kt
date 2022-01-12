@@ -26,24 +26,24 @@ internal actual class File actual constructor(internal val filename: String) {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean {
-return            existsSync(filename)
+        return existsSync(filename)
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun mkdirs(): Boolean {
-            var arr = filename.split("/").filterNot { it == "" || it == "." }
-            if (filename.startsWith("/")) {
-                arr = listOf("") + arr
-            }
-            var i = 1
-            while (i <= arr.size) {
-                try {
-                    mkdirSync(arr.subList(0, i).joinToString("/"))
-                } catch (e: Throwable) {}
-                i++
-            }
-            return true
+        var arr = filename.split("/").filterNot { it == "" || it == "." }
+        if (filename.startsWith("/")) {
+            arr = listOf("") + arr
         }
+        var i = 1
+        while (i <= arr.size) {
+            try {
+                mkdirSync(arr.subList(0, i).joinToString("/"))
+            } catch (e: Throwable) {}
+            i++
+        }
+        return true
+    }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
@@ -83,11 +83,11 @@ return            existsSync(filename)
     }
 
     private fun openInputStream(): IMyJSInputStream {
-            return MyInputStream(filename)
+        return MyInputStream(filename)
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-            return MyOutputStream(filename, append)
+        return MyOutputStream(filename, append)
     }
 }

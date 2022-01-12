@@ -16,8 +16,7 @@
  */
 
 import simora.mainfunc
-import simora.shared.inline.File
 internal external val process: dynamic
 public fun main(args: Array<String>) {
-  mainfunc((process.argv.slice(2) as Array<String>).toList())
+    mainfunc((process.argv.slice(2) as Array<String>).toList())
 }
