@@ -19,14 +19,14 @@ package simora.shared.inline
 import simora.shared.IMyOutputStream
 import java.io.OutputStream
 
-internal  class MyOutputStream // kotlin.io.println("MyOutputStream.constructor $this")
+internal class MyOutputStream // kotlin.io.println("MyOutputStream.constructor $this")
 internal constructor(it: OutputStream) : IMyOutputStream {
     private val buffer: ByteArray = ByteArray(8192)
     private var bufferPos = 0
 
     private var stream: OutputStream? = it
 
-     override fun close() {
+    override fun close() {
         flush()
         stream!!.close()
         stream = null
@@ -40,7 +40,7 @@ internal constructor(it: OutputStream) : IMyOutputStream {
         }
     }
 
-     override fun flush() {
+    override fun flush() {
         // kotlin.io.println("MyOutputStream.flush $this")
         localFlush()
         stream!!.flush()
@@ -60,11 +60,11 @@ internal constructor(it: OutputStream) : IMyOutputStream {
         }
     }
 
-     override fun write(buf: ByteArray) {
+    override fun write(buf: ByteArray) {
         _write(buf, 0, buf.size)
     }
 
-     override fun write(buf: ByteArray, len: Int) {
+    override fun write(buf: ByteArray, len: Int) {
         _write(buf, 0, len)
     }
 
@@ -74,10 +74,10 @@ internal constructor(it: OutputStream) : IMyOutputStream {
         _write(buf, 0, buf.size)
     }
 
-     override fun println(x: String) = _print("$x\n")
-     override fun print(x: String) = _print(x)
-     override fun print(x: Boolean) = _print("$x")
-     override fun print(x: Int) = _print("$x")
-     override fun print(x: Double) = _print("$x")
-     override fun println() = _print("\n")
+    override fun println(x: String) = _print("$x\n")
+    override fun print(x: String) = _print(x)
+    override fun print(x: Boolean) = _print("$x")
+    override fun print(x: Int) = _print("$x")
+    override fun print(x: Double) = _print("$x")
+    override fun println() = _print("\n")
 }

@@ -26,12 +26,12 @@ internal actual class File actual constructor(internal val filename: String) {
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean {
-      return      inmemoryFs[filename] != null
+        return inmemoryFs[filename] != null
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun mkdirs(): Boolean {
-return            true
+        return true
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -72,11 +72,11 @@ return            true
     }
 
     private fun openInputStream(): IMyJSInputStream {
-            return MyInputStream(filename)
+        return MyInputStream(filename)
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-            return MyOutputStream(filename, append)
+        return MyOutputStream(filename, append)
     }
 }

@@ -24,12 +24,12 @@ import platform.posix.fflush
 import platform.posix.fwrite
 import simora.shared.IMyOutputStream
 
-internal  class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOutputStream {
+internal class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOutputStream {
     val buffer: ByteArray = ByteArray(8192)
     var bufferPos = 0
     private var stream: CPointer<FILE>? = file
 
-     override fun close() {
+    override fun close() {
         flush()
         fclose(stream)
         stream = null
@@ -43,7 +43,7 @@ internal  class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyO
         }
     }
 
-     override fun flush() {
+    override fun flush() {
         // kotlin.io.println("MyOutputStream.flush $this")
         localFlush()
         fflush(stream)
@@ -63,11 +63,11 @@ internal  class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyO
         }
     }
 
-     override fun write(buf: ByteArray) {
+    override fun write(buf: ByteArray) {
         _write(buf, 0, buf.size)
     }
 
-     override fun write(buf: ByteArray, len: Int) {
+    override fun write(buf: ByteArray, len: Int) {
         _write(buf, 0, len)
     }
 
@@ -77,10 +77,10 @@ internal  class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyO
         _write(buf, 0, buf.size)
     }
 
-     override fun println(x: String) = _print("$x\n")
-     override fun print(x: String) = _print(x)
-     override fun print(x: Boolean) = _print("$x")
-     override fun print(x: Int) = _print("$x")
-     override fun print(x: Double) = _print("$x")
-     override fun println() = _print("\n")
+    override fun println(x: String) = _print("$x\n")
+    override fun print(x: String) = _print(x)
+    override fun print(x: Boolean) = _print("$x")
+    override fun print(x: Int) = _print("$x")
+    override fun print(x: Double) = _print("$x")
+    override fun println() = _print("\n")
 }

@@ -19,15 +19,15 @@ package simora.shared.inline
 import simora.shared.IMyInputStream
 import java.io.InputStream
 
-internal  class MyInputStream(private val stream: InputStream) : IMyInputStream {
+internal class MyInputStream(private val stream: InputStream) : IMyInputStream {
 
     private val buf8: ByteArray = ByteArray(8)
 
-     override fun read(buf: ByteArray): Int {
+    override fun read(buf: ByteArray): Int {
         return read(buf, buf.size)
     }
 
-     override fun read(buf: ByteArray, len: Int): Int {
+    override fun read(buf: ByteArray, len: Int): Int {
         var o = 0
         var s = len
         while (s > 0) {
@@ -41,7 +41,7 @@ internal  class MyInputStream(private val stream: InputStream) : IMyInputStream 
         return len
     }
 
-     override fun read(buf: ByteArray, off: Int, len: Int): Int {
+    override fun read(buf: ByteArray, off: Int, len: Int): Int {
         var o = off
         var s = len
         while (s > 0) {
@@ -55,18 +55,18 @@ internal  class MyInputStream(private val stream: InputStream) : IMyInputStream 
         return len
     }
 
-     override fun readByte(): Byte {
+    override fun readByte(): Byte {
         read(buf8, 1)
         return buf8[0]
     }
 
-     override fun close() {
+    override fun close() {
         // kotlin.io.println("MyInputStream.close $this")
         stream.close()
     }
 
     private var buffer = ByteArray(1)
-     override fun readLine(): String? {
+    override fun readLine(): String? {
 // TODO this may break on utf-8 if '\r' or '\0' is part of another char
         var len = 0
         try {

@@ -30,9 +30,9 @@ internal actual object ReflectionHelper {
             "simora.applications.scenario.mailinglist.ApplicationFactory_MailReceiver" -> simora.applications.scenario.mailinglist.ApplicationFactory_MailReceiver()
             "simora.applications.scenario.mailinglist.ApplicationFactory_MailSender" -> simora.applications.scenario.mailinglist.ApplicationFactory_MailSender()
             "simora.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical" -> simora.applications.scenario.mailinglist.ApplicationFactory_MailSenderIdentical()
-"simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver"->simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver()
-"simora.applications.scenario.configfile.ApplicationFactory_ConfigSender"->simora.applications.scenario.configfile.ApplicationFactory_ConfigSender()
-"simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor"->simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor()
+            "simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver" -> simora.applications.scenario.configfile.ApplicationFactory_ConfigReceiver()
+            "simora.applications.scenario.configfile.ApplicationFactory_ConfigSender" -> simora.applications.scenario.configfile.ApplicationFactory_ConfigSender()
+            "simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor" -> simora.applications.scenario.configfile.ApplicationFactory_ConfigDistributor()
             else -> TODO("ReflectionHelper.create(\"$name\")")
         }
     }

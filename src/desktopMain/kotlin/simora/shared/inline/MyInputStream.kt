@@ -23,16 +23,16 @@ import platform.posix.fclose
 import platform.posix.fread
 import simora.shared.IMyInputStream
 
-internal  class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
+internal class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
     private var stream: CPointer<FILE>? = file
     private val buf8: ByteArray = ByteArray(8)
     private var buffer = ByteArray(1)
 
-     override fun read(buf: ByteArray): Int {
+    override fun read(buf: ByteArray): Int {
         return read(buf, buf.size)
     }
 
-     override fun read(buf: ByteArray, len: Int): Int {
+    override fun read(buf: ByteArray, len: Int): Int {
         var o = 0
         var s = len
         while (s > 0) {
@@ -46,7 +46,7 @@ internal  class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
         return len
     }
 
-     override fun read(buf: ByteArray, off: Int, len: Int): Int {
+    override fun read(buf: ByteArray, off: Int, len: Int): Int {
         var o = off
         var s = len
         while (s > 0) {
@@ -60,18 +60,18 @@ internal  class MyInputStream(file: CPointer<FILE>) : IMyInputStream {
         return len
     }
 
-     override fun readByte(): Byte {
+    override fun readByte(): Byte {
         read(buf8, 1)
         return buf8[0]
     }
 
-     override fun close() {
+    override fun close() {
         // kotlin.io.println("MyInputStream.close $this")
         fclose(stream)
         stream = null
     }
 
-     override fun readLine(): String? {
+    override fun readLine(): String? {
 // TODO this may break on utf-8 if '\r' or '\0' is part of another char
         var len = 0
         try {
