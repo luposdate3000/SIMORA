@@ -56,9 +56,9 @@ public class SimulationRun {
     private var linkManagerWrite: ILinkManagerWrite = LinkManagerList()
     public var linkManager: ILinkManager = linkManagerWrite
     internal var startConfigurationStamp: Instant = Clock.System.now()
-    public var notInitializedClock: Long = -1
-    public var simMaxClock: Long = notInitializedClock
-    public var maxClock: Long = Long.MAX_VALUE
+    private var notInitializedClock: Long = -1
+    private var simMaxClock: Long = notInitializedClock
+    private var maxClock: Long = Long.MAX_VALUE
     public var clock: Long = 0
     private val randGenerator = Random(0)
     internal val logger: Loggers = Loggers(mutableListOf())
