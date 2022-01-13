@@ -24,42 +24,14 @@ internal actual class File actual constructor(internal val filename: String) {
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun exists(): Boolean {
-        return inmemoryFs[filename] != null
-    }
+    internal actual inline fun exists(): Boolean =        inmemoryFs[filename] != null
+    
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun mkdirs(): Boolean {
-        return true
-    }
+    internal actual inline fun mkdirs(): Boolean =true
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun readAsString(): String {
-        val res = StringBuilder()
-        val stream = MyInputStream(filename)
-        val buffer = ByteArray(8192)
-        var pos = 0
-        val s = mutableListOf<Byte>()
-        while (true) {
-            val len = stream.read(buffer, buffer.size)
-            if (len == 0) {
-                break
-            }
-            for (i in 0 until len) {
-                val b = buffer[i]
-                if (b == '\r'.code.toByte() || b == '\n'.code.toByte()) {
-                    res.appendLine(s.toByteArray().decodeToString())
-                    s.clear()
-                } else {
-                    s.add(b)
-                }
-            }
-            pos += len
-        }
-        res.appendLine(s.toByteArray().decodeToString())
-        stream.close()
-        return res.toString()
-    }
+    internal actual inline fun readAsString(): String =inmemoryFs[filename]!!.decodeToString()
 
     internal actual inline fun withOutputStream(crossinline action: (IMyOutputStream) -> Unit) {
         val stream = openOutputStream(false)
@@ -71,7 +43,5 @@ internal actual class File actual constructor(internal val filename: String) {
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream {
-        return MyOutputStream(filename, append)
-    }
+    internal actual inline fun openOutputStream(append: Boolean): IMyOutputStream =MyOutputStream(filename, append)
 }

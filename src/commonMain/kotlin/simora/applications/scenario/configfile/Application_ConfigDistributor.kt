@@ -49,7 +49,7 @@ internal class Application_ConfigDistributor(
 // send broadcast towards next hops
                 for (h in hops.toSet()) {
                     val targets = mutableListOf<Int>()
-                    for (i in 0 until destinations.size) {
+                    for (i in destinations.indices) {
                         if (hops[i] == h) {
                             targets.add(destinations[i])
                         }

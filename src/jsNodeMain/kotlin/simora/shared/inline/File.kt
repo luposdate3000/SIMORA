@@ -19,8 +19,7 @@ package simora.shared.inline
 import simora.shared.IMyOutputStream
 
 internal actual class File actual constructor(internal val filename: String) {
-    internal companion object {
-    }
+    internal companion object;
 
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun exists(): Boolean {
