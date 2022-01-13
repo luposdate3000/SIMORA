@@ -45,7 +45,7 @@ x=$(cat tmp2 | grep simulator_output | sed "s/.*outputdirectory=//g")
 mv tmp "$x/time"
 done
 done
-for tt in 8192 16384 32768 65536 131072
+for tt in 8192 16384 32768 65536
 do
 t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFastLate.json

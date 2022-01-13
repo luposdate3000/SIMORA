@@ -62,8 +62,10 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
                 if (h != null) {
                     val row = mutableMapOf<String, String>()
                     row.putAll(baseRow)
-                    val timeUsed = (baseRow["system time (Seconds)"]!!.toDouble() / lines.size.toDouble()).toString()
-                    row["system time (Seconds)"] = timeUsed
+                    try {
+                        row["system time (Seconds)"] = (baseRow["system time (Seconds)"]!!.toDouble() / lines.size.toDouble()).toString()
+                    } catch (e: Throwable) {
+                    }
                     val s = if (h.size < lines[0].size) h.size else lines[0].size
                     for (i in 0 until s) {
                         val values = mutableListOf<Double>()
@@ -91,7 +93,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
     } catch (e: Throwable) {
     }
 }
-val plot_scalability = Array(4) { mutableMapOf<Int, Double>() }
+val plot_scalability = Array(6) { mutableMapOf<Int, Double>() }
 val platformID = argumentNames.indexOf("platform")
 val routingID = argumentNames.indexOf("routing")
 val packageCountID = argumentNames.indexOf("number of sent packages")
