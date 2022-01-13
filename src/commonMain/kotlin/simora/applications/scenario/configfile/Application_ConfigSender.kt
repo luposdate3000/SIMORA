@@ -106,7 +106,7 @@ internal class Application_ConfigSender(
                             data.text_global + data.groups.joinToString("") {
                                 it.first + it.second.values.joinToString(
                                     ""
-                                ) { it }
+                                )
                             }
                         )
                     )

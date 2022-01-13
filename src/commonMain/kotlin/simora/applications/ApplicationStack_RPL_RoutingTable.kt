@@ -78,7 +78,7 @@ internal class ApplicationStack_RPL_RoutingTable(
         if (destinationAddress < nextDatabaseHops.size) {
             nextDatabaseHops[destinationAddress]
         } else {
-            -1 // tell the caller that we dont know it
+            -1 // tell the caller that we don't know it
         }
 
     @Suppress("NOTHING_TO_INLINE")

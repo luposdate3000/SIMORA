@@ -174,7 +174,7 @@ internal class LoggerMeasure : ILogger {
     override fun onReceiveNetworkPackage(address: Int, pck: IPayload) {}
     override fun onSendPackage(src: Int, dest: Int, pck: IPayload) {
         if (src == dest) {
-            // self messages never produce network packages .. therefore catch them here
+            // self messages does not count as network packages
             onSendNetworkPackageInternal(src, dest, dest, pck)
         }
     }
