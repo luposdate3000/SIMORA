@@ -35,7 +35,14 @@ internal class ApplicationFactory_QuerySender : IApplication_Factory {
             it as JsonParserObject
             if (it.getOrDefault("enabled", true)) {
                 res.add(
-                    Application_QuerySender(it.getOrDefault("sendStartClockInSec", 0), it.getOrDefault("sendRateInSec", 1), it.getOrDefault("maxNumberOfQueries", 1), it.getOrDefault("query", ""), ownAddress, "$outputDirectory/",)
+                    Application_QuerySender(
+                        it.getOrDefault("sendStartClockInSec", 0),
+                        it.getOrDefault("sendRateInSec", 1),
+                        it.getOrDefault("maxNumberOfQueries", 1),
+                        it.getOrDefault("query", ""),
+                        ownAddress,
+                        "$outputDirectory/",
+                    )
                 )
             }
         }

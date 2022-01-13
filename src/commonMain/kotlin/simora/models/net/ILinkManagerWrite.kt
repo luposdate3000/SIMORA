@@ -20,6 +20,6 @@ package simora.models.net
 public interface ILinkManagerWrite : ILinkManager {
     public fun getTransmissionDelay(addrSrc: Int, addrDest: Int, numberOfBytesToSend: Int): Long
     public fun setSupportedLinkTypes(addr: Int, data: IntArray)
-    public fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,)
+    public fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int)
     public fun getSupportedLinkTypes(addr: Int): IntArray
 }

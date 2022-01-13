@@ -99,7 +99,7 @@ internal class Application_ConfigSender(
                 } else if (useApplicationSideMulticast) {
                     parent.send(ownAddress, data)
                 } else if (useApplicationSideBroadcast) {
-                    parent.send(ownAddress, Package_Application_ConfigBroadcast(targets, data.text_global + data.groups.map { it.first + it.second.values.map { it }.joinToString("") }.joinToString("")))
+                    parent.send(ownAddress, Package_Application_ConfigBroadcast(targets, data.text_global + data.groups.joinToString("") { it.first + it.second.values.map { it }.joinToString("") }))
                 } else {
                     TODO()
                 }

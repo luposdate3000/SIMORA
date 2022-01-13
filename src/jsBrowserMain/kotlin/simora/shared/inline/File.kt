@@ -16,7 +16,6 @@
  */
 package simora.shared.inline
 
-import simora.shared.IMyJSInputStream
 import simora.shared.IMyOutputStream
 
 internal actual class File actual constructor(internal val filename: String) {
@@ -37,7 +36,7 @@ internal actual class File actual constructor(internal val filename: String) {
     @Suppress("NOTHING_TO_INLINE")
     internal actual inline fun readAsString(): String {
         val res = StringBuilder()
-        val stream = openInputStream()
+        val stream = MyInputStream(filename)
         val buffer = ByteArray(8192)
         var pos = 0
         val s = mutableListOf<Byte>()
@@ -69,10 +68,6 @@ internal actual class File actual constructor(internal val filename: String) {
         } finally {
             stream.close()
         }
-    }
-
-    private fun openInputStream(): IMyJSInputStream {
-        return MyInputStream(filename)
     }
 
     @Suppress("NOTHING_TO_INLINE")

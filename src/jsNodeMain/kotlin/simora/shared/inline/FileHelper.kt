@@ -32,9 +32,6 @@ internal external fun writeSync(fd: Int, buffer: ByteArray, offset: Int, length:
 @JsName("closeSync")
 internal external fun closeSync(fd: Int)
 
-@JsName("readFileSync")
-internal external fun readFileSync(filename: String): ByteArray
-
 @JsName("mkdirSync")
 internal external fun mkdirSync(filename: String)
 

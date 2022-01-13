@@ -61,7 +61,13 @@ internal class Application_ParkingSensor(
             eventCounter++
             parent.send(
                 receiver,
-                Package_Application_ParkingSample(sensorID = ownAddress, sampleTime = sampleTime, isOccupied = random.nextBoolean(), area = area, spotInArea = spotInArea,)
+                Package_Application_ParkingSample(
+                    sensorID = ownAddress,
+                    sampleTime = sampleTime,
+                    isOccupied = random.nextBoolean(),
+                    area = area,
+                    spotInArea = spotInArea,
+                )
             )
             parent.flush()
             parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)

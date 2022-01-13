@@ -17,13 +17,13 @@
 package simora.shared.inline
 
 import simora.shared.IMyOutputStream
-internal class MyOutputStream(private val filename: String, append: Boolean) : IMyOutputStream {
-    val fd: Int
+internal class MyOutputStream(filename: String, append: Boolean) : IMyOutputStream {
+    private val fd: Int
     init {
-        if (append) {
-            fd = openSync(filename, "a")
+        fd = if (append) {
+            openSync(filename, "a")
         } else {
-            fd = openSync(filename, "w")
+            openSync(filename, "w")
         }
     }
 

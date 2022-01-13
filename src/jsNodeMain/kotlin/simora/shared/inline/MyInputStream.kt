@@ -15,22 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package simora.shared.inline
-import simora.shared.IMyJSInputStream
 
-internal class MyInputStream constructor(filename: String) : IMyJSInputStream {
-    val fd = openSync(filename, "r")
-    var pos = 0
+internal class MyInputStream constructor(filename: String) {
+    private val fd = openSync(filename, "r")
+    private var pos = 0
     private fun read(buf: ByteArray, off: Int, len: Int): Int {
         return readSync(fd, buf, off, len, pos)
     }
 
-    override fun read(buf: ByteArray, len: Int): Int {
+    internal fun read(buf: ByteArray, len: Int): Int {
         val l = read(buf, 0, len)
         pos += l
         return l
     }
 
-    override fun close() {
+    internal fun close() {
         closeSync(fd)
     }
 }

@@ -121,7 +121,7 @@ public class SimulationRun {
             json.getOrEmptyObject("linkType").iterator().asSequence().map {
                 val v = it.second
                 v as JsonParserObject
-                LinkType(it.first, v.getOrDefault("rangeInMeters", 0), v.getOrDefault("dataRateInKbps", 0),)
+                LinkType(it.first, v.getOrDefault("rangeInMeters", 0), v.getOrDefault("dataRateInKbps", 0))
             }.toList().toTypedArray()
         )
 // load all link types <<<---
@@ -211,7 +211,7 @@ public class SimulationRun {
                 factories[applicationName] = factory
             }
             applications.addAll(
-                factory.create(applicationJson, ownAddress, logger, outputDirectory, randGenerator, factories,)
+                factory.create(applicationJson, ownAddress, logger, outputDirectory, randGenerator, factories)
             )
         }
         val applicationStack = ApplicationStack_CatchSelfMessages(
@@ -232,8 +232,7 @@ public class SimulationRun {
                 }
             )
         )
-        val routerType = jsonRouting.getOrDefault("protocol", "RPL")
-        val router = when (routerType) {
+        val router = when (jsonRouting.getOrDefault("protocol", "RPL")) {
             "AllShortestPath" ->
                 ApplicationStack_AllShortestPath(
                     multicastLayer,
@@ -510,17 +509,17 @@ public class SimulationRun {
     }
 
     internal fun getDistanceInMeters(one: Device, two: Device): Double {
-        if (Config.useDistanceLatLong) {
+        return if (Config.useDistanceLatLong) {
             val lat1R = one.latitude / 180.0 * PI
             val lat2R = two.latitude / 180.0 * PI
             val dLatR = abs(lat2R - lat1R)
             val dLngR = abs((two.longitude - one.longitude) / 180.0 * PI)
             val a = sin(dLatR / 2) * sin(dLatR / 2) + (cos(lat1R) * cos(lat2R) * sin(dLngR / 2) * sin(dLngR / 2))
-            return 2 * atan2(sqrt(a), sqrt(1 - a)) * 6371009
+            2 * atan2(sqrt(a), sqrt(1 - a)) * 6371009
         } else {
             val x = two.latitude - one.latitude
             val y = two.longitude - one.longitude
-            return sqrt(x * x + y * y)
+            sqrt(x * x + y * y)
         }
     }
 }

@@ -86,8 +86,8 @@ internal class ApplicationStack_AllShortestPath(
         if (config.routingHelper == null) {
             val linkManager = config.linkManager as LinkManagerMatrix
             val size = config.devices.size
-            val matrix = linkManager.matrix
-            val matrixNext = linkManager.matrixNext
+            val matrix = linkManager.getMatrix()
+            val matrixNext = linkManager.getMatrixNext()
 // floydWarshal
             for (k in 0 until size) {
                 for (i in 0 until size) {

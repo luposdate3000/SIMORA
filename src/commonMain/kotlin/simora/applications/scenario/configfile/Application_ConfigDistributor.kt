@@ -48,7 +48,7 @@ internal class Application_ConfigDistributor(
                 }
 // send broadcast towards next hops
                 for (h in hops.toSet()) {
-                    var targets = mutableListOf<Int>()
+                    val targets = mutableListOf<Int>()
                     for (i in 0 until destinations.size) {
                         if (hops[i] == h) {
                             targets.add(destinations[i])
@@ -98,7 +98,7 @@ internal class Application_ConfigDistributor(
                 }
 // iterate over the message grouped by next hop, and send it
                 for ((hop, group) in groups) {
-                    if (group.map { it.second.size }.sum() == 1) {
+                    if (group.sumOf { it.second.size } == 1) {
                         for (g in group) {
                             for (v in g.second.values) {
                                 parent.send(hop, Package_Application_ConfigUnicast(pck.text_global + g.first + v))

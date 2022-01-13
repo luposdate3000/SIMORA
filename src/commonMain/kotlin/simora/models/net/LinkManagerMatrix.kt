@@ -25,13 +25,21 @@ public class LinkManagerMatrix(
     private val largeDouble = 999999999999.0
     private var size = 0
     private var supportedLinkTypes = mutableListOf<IntArray>()
-    internal var matrix = DoubleArray(0)
-    internal var matrixNext = IntArray(0)
+    private var matrix = DoubleArray(0)
+    private var matrixNext = IntArray(0)
     private var matrixRate = DoubleArray(0)
     private var noLinksAddedRightNow = true
     private var linkCounter = 0
+    internal fun getMatrix(): DoubleArray {
+        prepareMatrix()
+        return matrix
+    }
+    internal fun getMatrixNext(): IntArray {
+        prepareMatrix()
+        return matrixNext
+    }
     override fun getNeighbours(addrSrc: Int): List<Int> {
-        var res = mutableListOf<Int>()
+        val res = mutableListOf<Int>()
         for (addrDest in 0 until size) {
             if (addrDest != addrSrc) {
                 val idx = addrDest * size + addrSrc
@@ -80,8 +88,7 @@ public class LinkManagerMatrix(
         val seconds = kiloBits / matrixRate[addrDest * size + addrSrc]
         return (seconds * 1000 * 1000 * 1000).roundToLong()
     }
-
-    override fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int,) {
+    private fun prepareMatrix() {
         if (noLinksAddedRightNow) {
             noLinksAddedRightNow = false
             size = supportedLinkTypes.size
@@ -95,6 +102,9 @@ public class LinkManagerMatrix(
                 matrixRate[idx] = -1.0
             }
         }
+    }
+    override fun addLink(addrSrc: Int, addrDest: Int, dataRateInKbps: Int) {
+        prepareMatrix()
         val cost = config.getDistanceInMeters(config.devices[addrSrc], config.devices[addrDest]) + 1.0
         val idx = addrDest * size + addrSrc
         if (dataRateInKbps> matrixRate[idx]) {

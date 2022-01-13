@@ -109,8 +109,7 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
 
     @Suppress("NOTHING_TO_INLINE")
     internal inline operator fun get(k: String): IJsonParserValue? {
-        val tmp = map[k]
-        return tmp
+        return map[k]
     }
 
     public fun getOrDefault(k: String, v: IJsonParserValue): IJsonParserValue {
@@ -126,14 +125,12 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
 
     @Suppress("NOTHING_TO_INLINE")
     public inline fun getOrEmptyObject(k: String): JsonParserObject {
-        val res = getOrDefault(k, JsonParserObject(mutableMapOf())) as JsonParserObject
-        return res
+        return getOrDefault(k, JsonParserObject(mutableMapOf())) as JsonParserObject
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal inline fun getOrEmptyArray(k: String): JsonParserArray {
-        val res = getOrDefault(k, JsonParserArray(mutableListOf())) as JsonParserArray
-        return res
+        return getOrDefault(k, JsonParserArray(mutableListOf())) as JsonParserArray
     }
 
     public fun getOrDefault(k: String, v: String): String {
