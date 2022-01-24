@@ -25,6 +25,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
     val pending = mutableListOf<Package_Application_ParkingSample>()
     val requestedIDs = mutableMapOf<Int, Int>() // packageID -> sensorID
     val cache = mutableMapOf<Int, IntArray>()
+val crashIDs=mutableMapOf<Int,Int>()//error-queryID -> cause-queryID
 /*
   cache = sensorID -> [stage, values...]
   stage=0 -> [stage, sendSensorInitID]
@@ -56,6 +57,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
         query.appendLine("_:luposdate3000id$Sensor sosa:madeObservation _:Observation .")
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
+println("send ${pckQuery.queryID} ${query.toString()}")
         parent.send(ownAddress, pckQuery)
     }
 
@@ -72,6 +74,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
         query.appendLine("?Sensor parking:sensorID \"${sensorID}\"^^xsd:integer .")
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
+println("send ${pckQuery.queryID} ${query.toString()}")
         action(pckQuery.queryID)
         parent.send(ownAddress, pckQuery)
     }
@@ -102,6 +105,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
         query.appendLine("_:Sensor ssn:implements parking:SensorOnEachSlot .")
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
+println("send ${pckQuery.queryID} ${query.toString()}")
         action(pckQuery.queryID)
         parent.send(ownAddress, pckQuery)
     }
@@ -122,6 +126,11 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             }
             return null
         } else if (pck is Package_QueryResponse) {
+println("receive ${pck.queryID} ${pck.result.decodeToString()}")
+if(crashIDs.contains(pck.queryID)){
+TODO()
+}
+try{
             val sensorID = requestedIDs.remove(pck.queryID)
             if (sensorID != null) {
                 val c = cache[sensorID]!!
@@ -176,6 +185,14 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             } else {
                 return pck
             }
+}catch(e:Throwable){
+val query="SELECT * WHERE { ?s ?p ?o . }"
+        val pckQuery = Package_Query(ownAddress, query.encodeToByteArray())
+println("send ${pckQuery.queryID} ${query}")
+        parent.send(ownAddress, pckQuery)
+crashIDs[pckQuery.queryID]=pck.queryID
+return null
+}
         } else {
             return pck
         }
