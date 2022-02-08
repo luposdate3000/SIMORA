@@ -25,10 +25,10 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
 
 // val relatedDatabase=0
 //    val timeToSleep = 360000000000L
-internal companion object{
-    var timeToSleep = 1L //wait before sending a query
-var timeToSleepStep=100000000000L//increase time to wait, to keep ordering
-}
+    internal companion object {
+        var timeToSleep = 1L // wait before sending a query
+        var timeToSleepStep = 100000000000L // increase time to wait, to keep ordering
+    }
     private lateinit var parent: IApplicationStack_Middleware
     val pending = mutableListOf<Package_Application_ParkingSample>()
     val requestedIDs = mutableMapOf<Int, Int>() // packageID -> sensorID
@@ -41,15 +41,15 @@ var timeToSleepStep=100000000000L//increase time to wait, to keep ordering
   stage=2 -> [stage, ?Sensor, ?ParkingSlotLocation]
 */
 
-fun getTimeStep():Long{
-if(false){
-val t=timeToSleep
-timeToSleep+=timeToSleepStep
-return t
-}else{
-return 360000000000L
-}
-}
+    fun getTimeStep(): Long {
+        if (false) {
+            val t = timeToSleep
+            timeToSleep += timeToSleepStep
+            return t
+        } else {
+            return 360000000000L
+        }
+    }
     private inline fun sendSensorSample(pck: Package_Application_ParkingSample) {
         val c = cache[pck.sensorID]!!
         val Sensor = c[1]
@@ -74,15 +74,15 @@ return 360000000000L
         query.appendLine("_:luposdate3000id$Sensor sosa:madeObservation _:Observation .")
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
-         //println("send ${pckQuery.queryID} $query")
-parent.registerTimer(
-                                getTimeStep(),
-                                object : ITimer {
-                                    override fun onTimerExpired(clock: Long) {
-        parent.send(relatedDatabase, pckQuery)
-}
-}
-)
+        // println("send ${pckQuery.queryID} $query")
+        parent.registerTimer(
+            getTimeStep(),
+            object : ITimer {
+                override fun onTimerExpired(clock: Long) {
+                    parent.send(relatedDatabase, pckQuery)
+                }
+            }
+        )
     }
 
     private inline fun requestSensorID(sensorID: Int, crossinline action: (Int) -> Unit) {
@@ -99,11 +99,11 @@ parent.registerTimer(
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
         action(pckQuery.queryID)
-parent.registerTimer(
+        parent.registerTimer(
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
- //println("send ${pckQuery.queryID} $query")
+// println("send ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
                 }
             }
@@ -137,15 +137,15 @@ parent.registerTimer(
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
         action(pckQuery.queryID)
-parent.registerTimer(
-                                getTimeStep(),
-                                object : ITimer {
-                                    override fun onTimerExpired(clock: Long) {
-         //println("send ${pckQuery.queryID} $query")
-        parent.send(relatedDatabase, pckQuery)
-}
-}
-)
+        parent.registerTimer(
+            getTimeStep(),
+            object : ITimer {
+                override fun onTimerExpired(clock: Long) {
+// println("send ${pckQuery.queryID} $query")
+                    parent.send(relatedDatabase, pckQuery)
+                }
+            }
+        )
     }
 
     override fun receive(pck: IPayload): IPayload? {
@@ -164,7 +164,7 @@ parent.registerTimer(
             }
             return null
         } else if (pck is Package_QueryResponse) {
-             //println("receive ${pck.queryID} ${pck.result.decodeToString()}")
+            // println("receive ${pck.queryID} ${pck.result.decodeToString()}")
             if (crashIDs.contains(pck.queryID)) {
                 TODO()
             }
@@ -234,7 +234,7 @@ parent.registerTimer(
 //                val query = "SELECT * WHERE { ?s ?p ?o . }"
                 val query = "SELECT * WHERE { ?Sensor <https://github.com/luposdate3000/parking#sensorID> \"1126\"^^<http://www.w3.org/2001/XMLSchema#integer> . }"
                 val pckQuery = Package_Query(ownAddress, query.encodeToByteArray())
-                 //println("send ${pckQuery.queryID} $query")
+                // println("send ${pckQuery.queryID} $query")
                 parent.send(relatedDatabase, pckQuery)
                 crashIDs[pckQuery.queryID] = pck.queryID
                 return null
