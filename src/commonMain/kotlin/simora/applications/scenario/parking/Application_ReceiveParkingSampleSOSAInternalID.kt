@@ -80,6 +80,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
                     parent.send(relatedDatabase, pckQuery)
+                    parent.flush()
                 }
             }
         )
@@ -103,8 +104,9 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
-// println("send ${pckQuery.queryID} $query")
+                    // println("send ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
+                    parent.flush()
                 }
             }
         )
@@ -141,8 +143,9 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
-// println("send ${pckQuery.queryID} $query")
+                    // println("send ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
+                    parent.flush()
                 }
             }
         )
@@ -231,11 +234,12 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                     return pck
                 }
             } catch (e: Throwable) {
-//                val query = "SELECT * WHERE { ?s ?p ?o . }"
-                val query = "SELECT * WHERE { ?Sensor <https://github.com/luposdate3000/parking#sensorID> \"1126\"^^<http://www.w3.org/2001/XMLSchema#integer> . }"
+                val query = "SELECT * WHERE { ?s ?p ?o . }"
+//                val query = "SELECT * WHERE { ?Sensor <https://github.com/luposdate3000/parking#sensorID> \"1126\"^^<http://www.w3.org/2001/XMLSchema#integer> . }"
                 val pckQuery = Package_Query(ownAddress, query.encodeToByteArray())
                 // println("send ${pckQuery.queryID} $query")
                 parent.send(relatedDatabase, pckQuery)
+                parent.flush()
                 crashIDs[pckQuery.queryID] = pck.queryID
                 return null
             }
