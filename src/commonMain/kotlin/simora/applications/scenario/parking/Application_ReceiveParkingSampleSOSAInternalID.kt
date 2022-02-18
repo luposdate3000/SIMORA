@@ -32,7 +32,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
     private lateinit var parent: IApplicationStack_Middleware
     val pending = mutableListOf<Package_Application_ParkingSample>()
     val requestedIDs = mutableMapOf<Int, Int>() // packageID -> sensorID
-    val cache = mutableMapOf<Int, IntArray>()
+    val cache = mutableMapOf<Int, LongArray>()
     val crashIDs = mutableMapOf<Int, Int>() // error-queryID -> cause-queryID
 /*
   cache = sensorID -> [stage, values...]
@@ -41,6 +41,16 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
   stage=2 -> [stage, ?Sensor, ?ParkingSlotLocation]
 */
 
+    override fun shutDown() {
+if(pending.size>0){
+println("pending ${pending.map{it.sensorID}}")
+println("cache ${cache.toList().map{"${it.first} to ${it.second.toList()}"}.joinToString("\n")}")
+TODO("close with non empty pending")
+}
+if(crashIDs.size>0){
+TODO("close but should have been crashed $crashIDs")
+}
+    }
     fun getTimeStep(): Long {
         if (false) {
             val t = timeToSleep
@@ -74,7 +84,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
         query.appendLine("_:luposdate3000id$Sensor sosa:madeObservation _:Observation .")
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
-        // println("send ${pckQuery.queryID} $query")
+        //println("send-a sensorID=${pck.sensorID} ${pckQuery.queryID} $query")
         parent.registerTimer(
             getTimeStep(),
             object : ITimer {
@@ -104,7 +114,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
-                    // println("send ${pckQuery.queryID} $query")
+                    //println("send-b sensorID=${sensorID} ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
                     parent.flush()
                 }
@@ -143,7 +153,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
-                    // println("send ${pckQuery.queryID} $query")
+                    //println("send-c sensorID=${pck.sensorID} ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
                     parent.flush()
                 }
@@ -157,17 +167,17 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
             if (c == null) {
                 sendSensorInit(pck) { i ->
                     requestedIDs[i] = pck.sensorID
-                    cache[pck.sensorID] = intArrayOf(0, i, 0)
+                    cache[pck.sensorID] = longArrayOf(0L, i.toLong(), 0L)
                     pending.add(pck)
                 }
-            } else if (c[0] == 2) {
+            } else if (c[0] == 2L) {
                 sendSensorSample(pck)
             } else {
                 pending.add(pck)
             }
             return null
         } else if (pck is Package_QueryResponse) {
-            // println("receive ${pck.queryID} ${pck.result.decodeToString()}")
+            //println("receive ${pck.queryID} ${pck.result.decodeToString()}")
             if (crashIDs.contains(pck.queryID)) {
                 TODO()
             }
@@ -175,23 +185,16 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                 val sensorID = requestedIDs.remove(pck.queryID)
                 if (sensorID != null) {
                     val c = cache[sensorID]!!
-                    if (c[0] == 0) {
+                    if (c[0] == 0L) {
                         requestSensorID(sensorID) { i ->
-                            parent.registerTimer(
-                                getTimeStep(),
-                                object : ITimer {
-                                    override fun onTimerExpired(clock: Long) {
                                         requestedIDs[i] = sensorID
-                                        c[0] = 1
-                                        c[1] = i
-                                    }
-                                }
-                            )
+                                        c[0] = 1L
+                                        c[1] = i.toLong()
                         }
                         return null
-                    } else if (c[0] == 1) {
-                        var Sensor = 0
-                        var ParkingSlotLocation = 0
+                    } else if (c[0] == 1L) {
+                        var Sensor = 0L
+                        var ParkingSlotLocation = 0L
                         var r = pck.result.decodeToString()
                         var a = r.indexOf("<result>") + "<result>".length
                         var b = r.indexOf("</result>", a)
@@ -204,10 +207,10 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                         val r2 = r.substring(a2, b2)
                         val c1 = r1.indexOf("<bnode>") + "<bnode>".length
                         val d1 = r1.indexOf("</bnode>", c1)
-                        val v1 = r1.substring(c1, d1).toInt()
+                        val v1 = r1.substring(c1, d1).toLong(16)
                         val c2 = r2.indexOf("<bnode>") + "<bnode>".length
                         val d2 = r2.indexOf("</bnode>", c2)
-                        val v2 = r2.substring(c2, d2).toInt()
+                        val v2 = r2.substring(c2, d2).toLong(16)
                         if (r1.contains("\"Sensor\"")) {
                             Sensor = v1
                             ParkingSlotLocation = v2
@@ -218,16 +221,19 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                         c[0] = 2
                         c[1] = Sensor
                         c[2] = ParkingSlotLocation
-                        val s = pending.size
-                        for (i in 0 until s) {
-                            val j = s - i - 1 // reverse iteration
-                            if (pending[j].sensorID == sensorID) {
-                                sendSensorSample(pending[j])
-                                pending.removeAt(j)
-                            }
+val tmpPending=mutableListOf<Package_Application_ParkingSample>()
+tmpPending.addAll(pending)
+pending.clear()
+                        for (p in tmpPending) {
+                            if (p.sensorID == sensorID) {
+                                sendSensorSample(p)
+                            }else{
+pending.add(p)
+}
                         }
                         return null
                     } else {
+TODO("something wrong??")
                         return pck
                     }
                 } else {
@@ -237,7 +243,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                 val query = "SELECT * WHERE { ?s ?p ?o . }"
 //                val query = "SELECT * WHERE { ?Sensor <https://github.com/luposdate3000/parking#sensorID> \"1126\"^^<http://www.w3.org/2001/XMLSchema#integer> . }"
                 val pckQuery = Package_Query(ownAddress, query.encodeToByteArray())
-                // println("send ${pckQuery.queryID} $query")
+                //println("send-d ${pckQuery.queryID} $query")
                 parent.send(relatedDatabase, pckQuery)
                 parent.flush()
                 crashIDs[pckQuery.queryID] = pck.queryID
@@ -255,6 +261,4 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
     override fun startUp() {
     }
 
-    override fun shutDown() {
-    }
 }
