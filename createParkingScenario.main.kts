@@ -19,6 +19,8 @@ var routing = ERouting.ASP
 var size = 128
 var commRange = 150
 var avgConnections = 10.0
+var sensorsPerDatabase=10
+
 if (args.size == 0) {
     println("usage ./createParkingScenario.main.kts [options]")
     println("--topology=${ETopology.values().toSet()}")
@@ -47,12 +49,7 @@ if (args.size == 0) {
             else -> TODO("unknown argument $k = $v")
         }
     }
-    var size_pow_2 = 1
-    while (size_pow_2 * 2 <= size) {
-        size_pow_2 = size_pow_2 * 2
-    }
-    val count = size_pow_2 * 3.0 //for union and random
-//val radius=sqrt(count)*commRange/avgConnections//for union and random
+    val count = size * 3.0 //for union and random
     val radius = sqrt(count * commRange * commRange / avgConnections)
     val res = StringBuilder()
     res.appendLine("{")
@@ -277,7 +274,7 @@ if (args.size == 0) {
     res.appendLine("            \"patterns\": [")
     fun addSensors() {
         res.appendLine("                        {")
-        res.appendLine("                            \"count\": 10,")
+        res.appendLine("                            \"count\": ${sensorsPerDatabase},")
         res.appendLine("                            \"deviceType\": \"Sensor Device\",")
         res.appendLine("                            \"mode\": \"count\",")
         res.appendLine("                            \"provideCounterAs\": \"spotInArea\",")
@@ -290,7 +287,7 @@ if (args.size == 0) {
     val unused4 = when (topology) {
         ETopology.RING -> {
             res.appendLine("                {")
-            res.appendLine("                    \"count\": ${size_pow_2 - 1},")
+            res.appendLine("                    \"count\": ${size - 1},")
             res.appendLine("                    \"deviceType\": \"Database Device\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"patterns\": [")
@@ -303,7 +300,7 @@ if (args.size == 0) {
         }
         ETopology.FULL -> {
             res.appendLine("                {")
-            res.appendLine("                    \"count\": ${size_pow_2 - 1},")
+            res.appendLine("                    \"count\": ${size - 1},")
             res.appendLine("                    \"deviceType\": \"Database Device\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"patterns\": [")
@@ -316,14 +313,14 @@ if (args.size == 0) {
         }
         ETopology.RANDOM -> {
             res.appendLine("                {")
-            res.appendLine("                    \"count\": ${size_pow_2 * 2},")
+            res.appendLine("                    \"count\": ${size * 2},")
             res.appendLine("                    \"deviceType\": \"Mesh Hop\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"radius\": $radius,")
             res.appendLine("                    \"type\": \"random_fill\",")
             res.appendLine("                },")
             res.appendLine("                {")
-            res.appendLine("                    \"count\": ${size_pow_2 - 1},")
+            res.appendLine("                    \"count\": ${size - 1},")
             res.appendLine("                    \"deviceType\": \"Database Device\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"patterns\": [")
@@ -336,14 +333,14 @@ if (args.size == 0) {
         }
         ETopology.UNIFORM -> {
             res.appendLine("                {")
-            res.appendLine("                    \"count\": ${size_pow_2 * 2},")
+            res.appendLine("                    \"count\": ${size * 2},")
             res.appendLine("                    \"deviceType\": \"Mesh Hop\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"radius\": $radius,")
             res.appendLine("                    \"type\": \"UNIFORM\",")
             res.appendLine("                },")
             res.appendLine("                {")
-            res.appendLine("                    \"count\": ${size_pow_2 - 1},")
+            res.appendLine("                    \"count\": ${size - 1},")
             res.appendLine("                    \"deviceType\": \"Database Device\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"patterns\": [")
