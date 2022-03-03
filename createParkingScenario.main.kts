@@ -39,12 +39,12 @@ if (args.size == 0) {
         val v = a[1]
         val unused = when (k) {
             "--topology" -> topology = ETopology.valueOf(v)
-            "--programDistribution" -> EProgramDistribution.valueOf(v)
-            "--queries" -> EQueries.valueOf(v)
-            "--dataDistribution" -> EDataDistribution.valueOf(v)
-            "--queryDistribution" -> EQueryDistribution.valueOf(v)
-            "--multicast" -> EMulticast.valueOf(v)
-            "--routing" -> ERouting.valueOf(v)
+            "--programDistribution" -> programDistribution=EProgramDistribution.valueOf(v)
+            "--queries" -> queries=EQueries.valueOf(v)
+            "--dataDistribution" ->dataDistribution= EDataDistribution.valueOf(v)
+            "--queryDistribution" ->queryDistribution= EQueryDistribution.valueOf(v)
+            "--multicast" -> multicast=EMulticast.valueOf(v)
+            "--routing" -> routing=ERouting.valueOf(v)
             "--size" -> size = v.toInt()
             else -> TODO("unknown argument $k = $v")
         }
