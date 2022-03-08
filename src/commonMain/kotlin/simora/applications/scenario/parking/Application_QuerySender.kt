@@ -17,7 +17,6 @@
 package simora.applications.scenario.parking
 
 import simora.IPayload
-import simora.ITimer
 import simora.applications.IApplicationStack_Actuator
 import simora.applications.IApplicationStack_Middleware
 import simora.shared.inline.File
@@ -26,15 +25,15 @@ public class Application_QuerySender(
     private val queryPck: IPackage_Database,
     private val receiver: Int,
     private val outputdirectory: String,
-private val label:String,
+    private val label: String,
 ) : IApplicationStack_Actuator {
     public constructor(
         query: String,
         receiver: Int,
         outputdirectory: String,
-label:String,
-    ) : this(   Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory,label)
-private var first=true
+        label: String,
+    ) : this(Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory, label)
+    private var first = true
     private lateinit var parent: IApplicationStack_Middleware
     private var awaitingQueries = mutableListOf<Int>()
 
@@ -64,16 +63,16 @@ private var first=true
         }
     }
 
-    override fun emptyEventQueue(): String? = if(first){
-first=false
-            val p = queryPck
-            if (p is Package_Query) {
-                awaitingQueries.add(p.queryID)
-            }
-            parent.send(receiver, p)
-            parent.flush()
- label
-}else{
- null
+    override fun emptyEventQueue(): String? = if (first) {
+        first = false
+        val p = queryPck
+        if (p is Package_Query) {
+            awaitingQueries.add(p.queryID)
         }
+        parent.send(receiver, p)
+        parent.flush()
+        label
+    } else {
+        null
+    }
 }

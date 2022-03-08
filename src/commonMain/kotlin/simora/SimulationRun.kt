@@ -437,18 +437,18 @@ public class SimulationRun {
         var nextPhaseLabel = "initialization"
         while (true) {
             if (nextEvent == null) {
-var label:String?=null
-for(app in globalApplications){
-label=app.emptyEventQueue()
-if(label!=null){
-break
-}
-}
-if(label!=null){
+                var label: String? = null
+                for (app in globalApplications) {
+                    label = app.emptyEventQueue()
+                    if (label != null) {
+                        break
+                    }
+                }
+                if (label != null) {
                     logger.reset(nextPhaseLabel, false)
                     nextPhaseLabel = label
-}
-nextEvent=futureEvents.extractMinValue()
+                }
+                nextEvent = futureEvents.extractMinValue()
                 if (nextEvent == null) {
                     break
                 }

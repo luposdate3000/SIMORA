@@ -108,10 +108,10 @@ internal class LoggerMeasure : ILogger {
         }
         for (topicId in 0 until packageByTopic.size) {
             for (i in 0 until res.size) {
-                res[i].add(packageCounter[i][topicId])
-                res[i].add(packageSize[i][topicId])
-                res[i].add(packageSizeAggregated[i][topicId])
-                res[i].add(packageSizeSelfMessage[i][topicId])
+                res[i].add(packageCounter[i].getOrElse(topicId, { 0.0 }))
+                res[i].add(packageSize[i].getOrElse(topicId, { 0.0 }))
+                res[i].add(packageSizeAggregated[i].getOrElse(topicId, { 0.0 }))
+                res[i].add(packageSizeSelfMessage[i].getOrElse(topicId, { 0.0 }))
             }
         }
         return res.map { it.toDoubleArray() }.toTypedArray() to dataLabels.toTypedArray()
@@ -231,10 +231,10 @@ internal class LoggerMeasure : ILogger {
             onShutDown()
             onStopSimulation()
             data.add(DoubleArray(StatCounter))
-            packageCounter.add(mutableListOf<Double>())
-            packageSize.add(mutableListOf<Double>())
-            packageSizeAggregated.add(mutableListOf<Double>())
-            packageSizeSelfMessage.add(mutableListOf<Double>())
+            packageCounter.add(MutableList(packageByTopic.size) { 0.0 })
+            packageSize.add(MutableList(packageByTopic.size) { 0.0 })
+            packageSizeAggregated.add(MutableList(packageByTopic.size) { 0.0 })
+            packageSizeSelfMessage.add(MutableList(packageByTopic.size) { 0.0 })
             onStartSimulation()
             onStartUpRouting()
             onStartUp()
