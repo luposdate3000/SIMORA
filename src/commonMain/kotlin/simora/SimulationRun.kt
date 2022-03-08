@@ -437,13 +437,18 @@ public class SimulationRun {
         var nextPhaseLabel = "initialization"
         while (true) {
             if (nextEvent == null) {
-                val labels = globalApplications.map { it.emptyEventQueue() }.filterNotNull().toSet()
-                if (labels.size> 1) {
-                    TODO("too many events on empty event queue... $labels")
-                } else {
+var label:String?=null
+for(app in globalApplications){
+label=app.emptyEventQueue()
+if(label!=null){
+break
+}
+}
+if(label!=null){
                     logger.reset(nextPhaseLabel, false)
-                    nextPhaseLabel = labels.first()
-                }
+                    nextPhaseLabel = label
+}
+nextEvent=futureEvents.extractMinValue()
                 if (nextEvent == null) {
                     break
                 }

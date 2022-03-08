@@ -23,24 +23,19 @@ import simora.applications.IApplicationStack_Middleware
 import simora.shared.inline.File
 
 public class Application_QuerySender(
-    private val startClockInSec: Int,
-    private val sendRateInSec: Int,
-    private val maxNumber: Int,
     private val queryPck: IPackage_Database,
     private val receiver: Int,
     private val outputdirectory: String,
-) : IApplicationStack_Actuator, ITimer {
+private val label:String,
+) : IApplicationStack_Actuator {
     public constructor(
-        startClockInSec: Int,
-        sendRateInSec: Int,
-        maxNumber: Int,
         query: String,
         receiver: Int,
         outputdirectory: String,
-    ) : this(startClockInSec, sendRateInSec, maxNumber, Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory)
-
+label:String,
+    ) : this(   Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory,label)
+private var first=true
     private lateinit var parent: IApplicationStack_Middleware
-    private var eventCounter = 0
     private var awaitingQueries = mutableListOf<Int>()
 
     override fun setRouter(router: IApplicationStack_Middleware) {
@@ -48,7 +43,6 @@ public class Application_QuerySender(
     }
 
     override fun startUp() {
-        parent.registerTimer(startClockInSec.toLong() * 1000000000L, this)
     }
 
     override fun shutDown() {
@@ -70,17 +64,16 @@ public class Application_QuerySender(
         }
     }
 
-    override fun onTimerExpired(clock: Long) {
-        if (eventCounter < maxNumber || maxNumber == -1) {
-            eventCounter++
+    override fun emptyEventQueue(): String? = if(first){
+first=false
             val p = queryPck
             if (p is Package_Query) {
                 awaitingQueries.add(p.queryID)
             }
             parent.send(receiver, p)
             parent.flush()
-            parent.registerTimer(sendRateInSec.toLong() * 1000000000L, this)
+ label
+}else{
+ null
         }
-    }
-    override fun emptyEventQueue(): String? = null
 }

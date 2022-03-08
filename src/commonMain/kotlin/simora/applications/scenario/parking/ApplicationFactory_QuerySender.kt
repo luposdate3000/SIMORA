@@ -36,12 +36,10 @@ internal class ApplicationFactory_QuerySender : IApplication_Factory {
             if (it.getOrDefault("enabled", true)) {
                 res.add(
                     Application_QuerySender(
-                        it.getOrDefault("sendStartClockInSec", 0),
-                        it.getOrDefault("sendRateInSec", 1),
-                        it.getOrDefault("maxNumberOfQueries", 1),
                         it.getOrDefault("query", ""),
                         ownAddress,
                         "$outputDirectory/",
+                        it.getOrDefault("label", "query"),
                     )
                 )
             }
