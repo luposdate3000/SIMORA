@@ -62,4 +62,7 @@ internal class LoggerStdout : ILogger {
     override fun addDevice(address: Int, x: Double, y: Double) {
         println("addDevice $address $x $y")
     }
+    override fun reset(label: String, finish: Boolean) {
+        println("${simRun.clock} reset($label, $finish)")
+    }
 }

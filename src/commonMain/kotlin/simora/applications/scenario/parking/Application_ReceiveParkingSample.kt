@@ -52,4 +52,5 @@ internal class Application_ReceiveParkingSample(private val ownAddress: Int) : I
             return pck
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

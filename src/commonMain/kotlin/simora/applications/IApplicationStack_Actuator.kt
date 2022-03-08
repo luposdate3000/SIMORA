@@ -24,4 +24,5 @@ public interface IApplicationStack_Actuator {
     public fun startUp()
     public fun shutDown()
     public fun setRouter(router: IApplicationStack_Middleware)
+    public fun emptyEventQueue(): String? // if it adds something to eventqueue, than return the label of current step, otherwise null
 }

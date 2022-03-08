@@ -97,4 +97,5 @@ internal class Application_MailDistributor(
             }
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

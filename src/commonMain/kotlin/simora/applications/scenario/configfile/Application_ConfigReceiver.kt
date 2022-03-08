@@ -39,4 +39,5 @@ internal class Application_ConfigReceiver : IApplicationStack_Actuator {
             pck
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

@@ -51,7 +51,8 @@ internal class LoggerMeasure : ILogger {
         private val StatNetworkTrafficIncludingLocalMessages: Int = StatCounter++
     }
 
-    private val data: DoubleArray = DoubleArray(StatCounter)
+    private val data: MutableList<DoubleArray> = mutableListOf(DoubleArray(StatCounter))
+    private val dataLabels = mutableListOf<String>()
     private val headers: Array<String> = Array(StatCounter) {
         when (it) {
             StatNumberOfDevices -> "number of devices"
@@ -79,16 +80,20 @@ internal class LoggerMeasure : ILogger {
     private var startSimulationTimeStamp: Instant = Clock.System.now()
     private var startSimulationTimeStampVirtual: Long = 0
     private val packageByTopic = mutableMapOf<String, Int>()
-    private val packageCounter = mutableListOf<Double>()
-    private val packageSize = mutableListOf<Double>()
-    private val packageSizeAggregated = mutableListOf<Double>()
-    private val packageSizeSelfMessage = mutableListOf<Double>()
+    private val packageCounter = mutableListOf(mutableListOf<Double>())
+    private val packageSize = mutableListOf(mutableListOf<Double>())
+    private val packageSizeAggregated = mutableListOf(mutableListOf<Double>())
+    private val packageSizeSelfMessage = mutableListOf(mutableListOf<Double>())
 
     @Suppress("NOTHING_TO_INLINE")
-    internal inline fun getDataAggregated(): DoubleArray {
-        val res = mutableListOf<Double>()
-        for (d in data) {
-            res.add(d)
+    internal inline fun getDataAggregated2(): Pair<Array<DoubleArray>, Array<String>> {
+        val res = mutableListOf<MutableList<Double>>()
+        for (dd in data) {
+            val t = mutableListOf<Double>()
+            res.add(t)
+            for (d in dd) {
+                t.add(d)
+            }
         }
         for (feature in 0 until simRun.features.size) {
             var counter = 0.0
@@ -97,15 +102,19 @@ internal class LoggerMeasure : ILogger {
                     counter++
                 }
             }
-            res.add(counter)
+            for (t in res) {
+                t.add(counter)
+            }
         }
         for (topicId in 0 until packageByTopic.size) {
-            res.add(packageCounter[topicId])
-            res.add(packageSize[topicId])
-            res.add(packageSizeAggregated[topicId])
-            res.add(packageSizeSelfMessage[topicId])
+            for (i in 0 until res.size) {
+                res[i].add(packageCounter[i][topicId])
+                res[i].add(packageSize[i][topicId])
+                res[i].add(packageSizeAggregated[i][topicId])
+                res[i].add(packageSizeSelfMessage[i][topicId])
+            }
         }
-        return res.toDoubleArray()
+        return res.map { it.toDoubleArray() }.toTypedArray() to dataLabels.toTypedArray()
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -132,11 +141,11 @@ internal class LoggerMeasure : ILogger {
     }
 
     override fun onSendNetworkPackage(src: Int, dest: Int, hop: Int, pck: IPayload, delay: Long) {
-        data[StatNetworkTraffic] += pck.getSizeInBytes().toDouble()
-        data[StatNetworkCounter]++
+        data.last()[StatNetworkTraffic] += pck.getSizeInBytes().toDouble()
+        data.last()[StatNetworkCounter]++
         if (dest != hop) {
-            data[StatNetworkCounterForwarded]++
-            data[StatNetworkTrafficForwarded] += pck.getSizeInBytes().toDouble()
+            data.last()[StatNetworkCounterForwarded]++
+            data.last()[StatNetworkTrafficForwarded] += pck.getSizeInBytes().toDouble()
         }
         if (pck is IPayloadLayer) {
             for (p in pck.getApplicationPayload()) {
@@ -155,20 +164,20 @@ internal class LoggerMeasure : ILogger {
         if (id == null) {
             id = packageByTopic.size
             packageByTopic[topic] = id
-            packageCounter.add(0.0)
-            packageSize.add(0.0)
-            packageSizeAggregated.add(0.0)
-            packageSizeSelfMessage.add(0.0)
+            packageCounter.last().add(0.0)
+            packageSize.last().add(0.0)
+            packageSizeAggregated.last().add(0.0)
+            packageSizeSelfMessage.last().add(0.0)
         }
         if (src == dest) {
-            packageSizeSelfMessage[id] += size
+            packageSizeSelfMessage.last()[id] += size
         }
         if (dest == hop) {
-            packageCounter[id]++
-            packageSize[id] += size
+            packageCounter.last()[id]++
+            packageSize.last()[id] += size
         }
-        packageSizeAggregated[id] += size
-        data[StatNetworkTrafficIncludingLocalMessages] += size
+        packageSizeAggregated.last()[id] += size
+        data.last()[StatNetworkTrafficIncludingLocalMessages] += size
     }
 
     override fun onReceiveNetworkPackage(address: Int, pck: IPayload) {}
@@ -184,36 +193,51 @@ internal class LoggerMeasure : ILogger {
 
     override fun onStartSimulation() { // phase 1
         val stamp = Clock.System.now()
-        data[StatSimulationStartupConfigDurationReal] = (stamp - simRun.startConfigurationStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        data.last()[StatSimulationStartupConfigDurationReal] = (stamp - simRun.startConfigurationStamp).inWholeNanoseconds.toDouble() / 1000000000.0
         startSimulationTimeStamp = stamp
         startSimulationTimeStampVirtual = simRun.clock
     }
 
     override fun onStartUpRouting() { // phase 2
         val stamp = Clock.System.now()
-        data[StatSimulationStartupRoutingDurationReal] = (stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
-        data[StatSimulationStartupRoutingDurationVirtual] = (simRun.clock - startSimulationTimeStampVirtual).toDouble() / 1000000000.0
+        data.last()[StatSimulationStartupRoutingDurationReal] = (stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0
+        data.last()[StatSimulationStartupRoutingDurationVirtual] = (simRun.clock - startSimulationTimeStampVirtual).toDouble() / 1000000000.0
     }
 
     override fun onStartUp() { // phase 3
         val stamp = Clock.System.now()
-        data[StatSimulationStartupDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal]
+        data.last()[StatSimulationStartupDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data.last()[StatSimulationStartupRoutingDurationReal]
         val linkCount = simRun.linkManager.getLinkCount().toDouble()
-        data[StatNetworkLinkCounter] = linkCount
+        data.last()[StatNetworkLinkCounter] = linkCount
     }
     override fun onShutDown() { // phase 4
         val stamp = Clock.System.now()
-        data[StatSimulationDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationReal] - data[StatSimulationStartupDurationReal]
-        data[StatSimulationDurationVirtual] = ((simRun.clock - startSimulationTimeStampVirtual).toDouble() / 1000000000.0) - data[StatSimulationStartupRoutingDurationVirtual]
+        data.last()[StatSimulationDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data.last()[StatSimulationStartupRoutingDurationReal] - data.last()[StatSimulationStartupDurationReal]
+        data.last()[StatSimulationDurationVirtual] = ((simRun.clock - startSimulationTimeStampVirtual).toDouble() / 1000000000.0) - data.last()[StatSimulationStartupRoutingDurationVirtual]
     }
 
     override fun onStopSimulation() { // phase 5
         val stamp = Clock.System.now()
-        data[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data[StatSimulationDurationReal] - data[StatSimulationStartupDurationReal] - data[StatSimulationStartupRoutingDurationReal]
-        data[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) + data[StatSimulationStartupConfigDurationReal]
+        data.last()[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data.last()[StatSimulationDurationReal] - data.last()[StatSimulationStartupDurationReal] - data.last()[StatSimulationStartupRoutingDurationReal]
+        data.last()[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) + data.last()[StatSimulationStartupConfigDurationReal]
     }
 
     override fun addDevice(address: Int, x: Double, y: Double) {
-        data[StatNumberOfDevices]++
+        data.last()[StatNumberOfDevices]++
+    }
+    override fun reset(label: String, finish: Boolean) {
+        dataLabels.add(label)
+        if (!finish) {
+            onShutDown()
+            onStopSimulation()
+            data.add(DoubleArray(StatCounter))
+            packageCounter.add(mutableListOf<Double>())
+            packageSize.add(mutableListOf<Double>())
+            packageSizeAggregated.add(mutableListOf<Double>())
+            packageSizeSelfMessage.add(mutableListOf<Double>())
+            onStartSimulation()
+            onStartUpRouting()
+            onStartUp()
+        }
     }
 }

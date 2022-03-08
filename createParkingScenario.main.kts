@@ -19,7 +19,7 @@ var routing = ERouting.ASP
 var size = 128
 var commRange = 150
 var avgConnections = 10.0
-var sensorsPerDatabase=10
+var sensorsPerDatabase = 10
 
 if (args.size == 0) {
     println("usage ./createParkingScenario.main.kts [options]")
@@ -39,17 +39,17 @@ if (args.size == 0) {
         val v = a[1]
         val unused = when (k) {
             "--topology" -> topology = ETopology.valueOf(v)
-            "--programDistribution" -> programDistribution=EProgramDistribution.valueOf(v)
-            "--queries" -> queries=EQueries.valueOf(v)
-            "--dataDistribution" ->dataDistribution= EDataDistribution.valueOf(v)
-            "--queryDistribution" ->queryDistribution= EQueryDistribution.valueOf(v)
-            "--multicast" -> multicast=EMulticast.valueOf(v)
-            "--routing" -> routing=ERouting.valueOf(v)
+            "--programDistribution" -> programDistribution = EProgramDistribution.valueOf(v)
+            "--queries" -> queries = EQueries.valueOf(v)
+            "--dataDistribution" -> dataDistribution = EDataDistribution.valueOf(v)
+            "--queryDistribution" -> queryDistribution = EQueryDistribution.valueOf(v)
+            "--multicast" -> multicast = EMulticast.valueOf(v)
+            "--routing" -> routing = ERouting.valueOf(v)
             "--size" -> size = v.toInt()
             else -> TODO("unknown argument $k = $v")
         }
     }
-    val count = size * 3.0 //for union and random
+    val count = size * 3.0 // for union and random
     val radius = sqrt(count * commRange * commRange / avgConnections)
     val res = StringBuilder()
     res.appendLine("{")
@@ -213,7 +213,6 @@ if (args.size == 0) {
         }
         EProgramDistribution.CENTRAL -> {
         }
-
     }
     res.appendLine("            },")
     res.appendLine("            \"performance\": 30.0,")
@@ -274,14 +273,13 @@ if (args.size == 0) {
     res.appendLine("            \"patterns\": [")
     fun addSensors() {
         res.appendLine("                        {")
-        res.appendLine("                            \"count\": ${sensorsPerDatabase},")
+        res.appendLine("                            \"count\": $sensorsPerDatabase,")
         res.appendLine("                            \"deviceType\": \"Sensor Device\",")
         res.appendLine("                            \"mode\": \"count\",")
         res.appendLine("                            \"provideCounterAs\": \"spotInArea\",")
         res.appendLine("                            \"radius\": 50,")
         res.appendLine("                            \"type\": \"random_fill\",")
         res.appendLine("                        },")
-
     }
     addSensors()
     val unused4 = when (topology) {

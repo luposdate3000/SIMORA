@@ -115,4 +115,5 @@ internal class Application_ConfigDistributor(
             }
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

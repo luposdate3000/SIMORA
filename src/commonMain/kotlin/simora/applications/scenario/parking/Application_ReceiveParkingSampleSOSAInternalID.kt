@@ -42,14 +42,14 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
 */
 
     override fun shutDown() {
-if(pending.size>0){
-println("pending ${pending.map{it.sensorID}}")
-println("cache ${cache.toList().map{"${it.first} to ${it.second.toList()}"}.joinToString("\n")}")
-TODO("close with non empty pending")
-}
-if(crashIDs.size>0){
-TODO("close but should have been crashed $crashIDs")
-}
+        if (pending.size> 0) {
+            println("pending ${pending.map{it.sensorID}}")
+            println("cache ${cache.toList().map{"${it.first} to ${it.second.toList()}"}.joinToString("\n")}")
+            TODO("close with non empty pending")
+        }
+        if (crashIDs.size> 0) {
+            TODO("close but should have been crashed $crashIDs")
+        }
     }
     fun getTimeStep(): Long {
         if (false) {
@@ -84,7 +84,7 @@ TODO("close but should have been crashed $crashIDs")
         query.appendLine("_:luposdate3000id$Sensor sosa:madeObservation _:Observation .")
         query.appendLine("}")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
-        //println("send-a sensorID=${pck.sensorID} ${pckQuery.queryID} $query")
+        // println("send-a sensorID=${pck.sensorID} ${pckQuery.queryID} $query")
         parent.registerTimer(
             getTimeStep(),
             object : ITimer {
@@ -114,7 +114,7 @@ TODO("close but should have been crashed $crashIDs")
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
-                    //println("send-b sensorID=${sensorID} ${pckQuery.queryID} $query")
+                    // println("send-b sensorID=${sensorID} ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
                     parent.flush()
                 }
@@ -153,7 +153,7 @@ TODO("close but should have been crashed $crashIDs")
             getTimeStep(),
             object : ITimer {
                 override fun onTimerExpired(clock: Long) {
-                    //println("send-c sensorID=${pck.sensorID} ${pckQuery.queryID} $query")
+                    // println("send-c sensorID=${pck.sensorID} ${pckQuery.queryID} $query")
                     parent.send(relatedDatabase, pckQuery)
                     parent.flush()
                 }
@@ -177,7 +177,7 @@ TODO("close but should have been crashed $crashIDs")
             }
             return null
         } else if (pck is Package_QueryResponse) {
-            //println("receive ${pck.queryID} ${pck.result.decodeToString()}")
+            // println("receive ${pck.queryID} ${pck.result.decodeToString()}")
             if (crashIDs.contains(pck.queryID)) {
                 TODO()
             }
@@ -187,9 +187,9 @@ TODO("close but should have been crashed $crashIDs")
                     val c = cache[sensorID]!!
                     if (c[0] == 0L) {
                         requestSensorID(sensorID) { i ->
-                                        requestedIDs[i] = sensorID
-                                        c[0] = 1L
-                                        c[1] = i.toLong()
+                            requestedIDs[i] = sensorID
+                            c[0] = 1L
+                            c[1] = i.toLong()
                         }
                         return null
                     } else if (c[0] == 1L) {
@@ -221,19 +221,19 @@ TODO("close but should have been crashed $crashIDs")
                         c[0] = 2
                         c[1] = Sensor
                         c[2] = ParkingSlotLocation
-val tmpPending=mutableListOf<Package_Application_ParkingSample>()
-tmpPending.addAll(pending)
-pending.clear()
+                        val tmpPending = mutableListOf<Package_Application_ParkingSample>()
+                        tmpPending.addAll(pending)
+                        pending.clear()
                         for (p in tmpPending) {
                             if (p.sensorID == sensorID) {
                                 sendSensorSample(p)
-                            }else{
-pending.add(p)
-}
+                            } else {
+                                pending.add(p)
+                            }
                         }
                         return null
                     } else {
-TODO("something wrong??")
+                        TODO("something wrong??")
                         return pck
                     }
                 } else {
@@ -243,7 +243,7 @@ TODO("something wrong??")
                 val query = "SELECT * WHERE { ?s ?p ?o . }"
 //                val query = "SELECT * WHERE { ?Sensor <https://github.com/luposdate3000/parking#sensorID> \"1126\"^^<http://www.w3.org/2001/XMLSchema#integer> . }"
                 val pckQuery = Package_Query(ownAddress, query.encodeToByteArray())
-                //println("send-d ${pckQuery.queryID} $query")
+                // println("send-d ${pckQuery.queryID} $query")
                 parent.send(relatedDatabase, pckQuery)
                 parent.flush()
                 crashIDs[pckQuery.queryID] = pck.queryID
@@ -260,5 +260,5 @@ TODO("something wrong??")
 
     override fun startUp() {
     }
-
+    override fun emptyEventQueue(): String? = null
 }

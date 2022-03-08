@@ -39,4 +39,5 @@ internal class Application_MailReceiver : IApplicationStack_Actuator {
             pck
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

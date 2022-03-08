@@ -56,7 +56,6 @@ public class Evaluation {
         File("$outputdirectory.generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
             out.println(JsonParser().jsonToString(json))
         }
-        val measurements = mutableListOf<LoggerMeasure>()
         json.getOrEmptyObject("logging").getOrEmptyObject("simora.LoggerMeasure")["enabled"] = true
         val outputDirectory = json.getOrDefault("outputDirectory", "simulator_output") + "/"
         File(outputDirectory).mkdirs()
@@ -73,6 +72,8 @@ public class Evaluation {
 
         val numberOfRepetitions: Int = json.getOrDefault("repeatSimulationCount", 1)
         val initTime = Clock.System.now() - stamp
+        val measurementsm = mutableMapOf<String, MutableList<DoubleArray>>()
+        var headerLine = ""
         for (repetition in 0 until numberOfRepetitions) {
             val simRun = SimulationRun()
             simRun.startConfigurationStamp = Clock.System.now() - initTime
@@ -80,39 +81,51 @@ public class Evaluation {
             simRun.startSimulation()
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
-                    measurements.add(logger)
-                    appendLineToFile("measurement.csv", { logger.getHeadersAggregated().toList().joinToString(",") }, logger.getDataAggregated().toList().joinToString(","))
+                    val (datas, labels) = logger.getDataAggregated2()
+                    for (i in 0 until datas.size) {
+                        val data = datas[i]
+                        val label = labels[i]
+                        var t = measurementsm[label]
+                        if (t == null) {
+                            t = mutableListOf()
+                            measurementsm[label] = t
+                        }
+                        t.add(data)
+                        headerLine = "phase," + logger.getHeadersAggregated().toList().joinToString(",")
+                        appendLineToFile("measurement.csv", { headerLine }, label + "," + data.toList().joinToString(","))
+                    }
                 }
             }
         }
-        if (measurements.size > 0) {
-            val size = measurements[0].getDataAggregated().size
-            val firstLogger = measurements.first()
-            val dataAvg = DoubleArray(size)
-            val dataDev = DoubleArray(size)
-            val dataDevp = DoubleArray(size)
-            for (i in 0 until size) {
-                var sum = 0.0
-                for (m in measurements) {
-                    sum += m.getDataAggregated()[i]
+        for ((label, measurements) in measurementsm) {
+            if (measurements.size > 0) {
+                val size = measurements[0].size
+                val dataAvg = DoubleArray(size)
+                val dataDev = DoubleArray(size)
+                val dataDevp = DoubleArray(size)
+                for (i in 0 until size) {
+                    var sum = 0.0
+                    for (m in measurements) {
+                        sum += m[i]
+                    }
+                    val avg = sum / measurements.size
+                    var dev = 0.0
+                    for (m in measurements) {
+                        dev += (m[i] - avg) * (m[i] - avg)
+                    }
+                    val devPercent = if (avg == 0.0) {
+                        0.0
+                    } else {
+                        sqrt(dev / measurements.size) * 100 / avg
+                    }
+                    dataAvg[i] = avg
+                    dataDev[i] = dev
+                    dataDevp[i] = devPercent
                 }
-                val avg = sum / measurements.size
-                var dev = 0.0
-                for (m in measurements) {
-                    dev += (m.getDataAggregated()[i] - avg) * (m.getDataAggregated()[i] - avg)
-                }
-                val devPercent = if (avg == 0.0) {
-                    0.0
-                } else {
-                    sqrt(dev / measurements.size) * 100 / avg
-                }
-                dataAvg[i] = avg
-                dataDev[i] = dev
-                dataDevp[i] = devPercent
+                appendLineToFile("average.csv", { headerLine }, label + "," + dataAvg.toList().joinToString(","))
+                appendLineToFile("deviation.csv", { headerLine }, label + "," + dataDev.toList().joinToString(","))
+                appendLineToFile("deviationPercent.csv", { headerLine }, label + "," + dataDevp.toList().joinToString(","))
             }
-            appendLineToFile("average.csv", { firstLogger.getHeadersAggregated().toList().joinToString(",") }, dataAvg.toList().joinToString(","))
-            appendLineToFile("deviation.csv", { firstLogger.getHeadersAggregated().toList().joinToString(",") }, dataDev.toList().joinToString(","))
-            appendLineToFile("deviationPercent.csv", { firstLogger.getHeadersAggregated().toList().joinToString(",") }, dataDevp.toList().joinToString(","))
         }
         File("$outputdirectory.generated.used.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
             out.println(JsonParser().jsonToString(json))

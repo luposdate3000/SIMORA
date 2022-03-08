@@ -86,4 +86,5 @@ internal class ApplicationStack_MultipleChilds(
             child.startUp()
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

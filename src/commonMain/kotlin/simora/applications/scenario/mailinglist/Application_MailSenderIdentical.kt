@@ -80,4 +80,5 @@ internal class Application_MailSenderIdentical(
             parent.registerTimer(sendRateInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

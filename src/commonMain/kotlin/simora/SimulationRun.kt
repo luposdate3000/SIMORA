@@ -53,6 +53,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
 public class SimulationRun {
+    private val globalApplications = mutableListOf<IApplicationStack_Actuator>()
     private var linkManagerWrite: ILinkManagerWrite = LinkManagerList()
     public var linkManager: ILinkManager = linkManagerWrite
     internal var startConfigurationStamp: Instant = Clock.System.now()
@@ -214,6 +215,7 @@ public class SimulationRun {
                 factory.create(applicationJson, ownAddress, logger, outputDirectory, randGenerator, factories)
             )
         }
+        globalApplications.addAll(applications)
         val applicationStack = ApplicationStack_CatchSelfMessages(
             ownAddress,
             ApplicationStack_MultipleChilds(applications.map { ApplicationStack_Logger(ownAddress, logger, it) }.toTypedArray()),
@@ -432,7 +434,20 @@ public class SimulationRun {
 
     public fun run() {
         var nextEvent = futureEvents.extractMinValue()
-        while (nextEvent != null) {
+        var nextPhaseLabel = "initialization"
+        while (true) {
+            if (nextEvent == null) {
+                val labels = globalApplications.map { it.emptyEventQueue() }.filterNotNull().toSet()
+                if (labels.size> 1) {
+                    TODO("too many events on empty event queue... $labels")
+                } else {
+                    logger.reset(nextPhaseLabel, false)
+                    nextPhaseLabel = labels.first()
+                }
+                if (nextEvent == null) {
+                    break
+                }
+            }
             if (nextEvent.occurrenceTime > maxClock) {
                 break
             }
@@ -441,6 +456,7 @@ public class SimulationRun {
             entity.processIncomingEvent(nextEvent)
             nextEvent = futureEvents.extractMinValue()
         }
+        logger.reset(nextPhaseLabel, true)
     }
 
     internal fun addEvent(delay: Long, src: Device, dest: Device, data: Any) {

@@ -89,4 +89,9 @@ internal class Loggers internal constructor(internal val loggers: MutableList<IL
             logger.addDevice(address, x, y)
         }
     }
+    override fun reset(label: String, finish: Boolean) {
+        for (logger in loggers) {
+            logger.reset(label, finish)
+        }
+    }
 }

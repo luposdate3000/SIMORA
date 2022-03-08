@@ -82,4 +82,5 @@ public class Application_QuerySender(
             parent.registerTimer(sendRateInSec.toLong() * 1000000000L, this)
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

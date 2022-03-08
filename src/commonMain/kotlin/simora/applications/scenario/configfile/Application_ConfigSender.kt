@@ -119,4 +119,5 @@ internal class Application_ConfigSender(
         } catch (e: Throwable) {
         }
     }
+    override fun emptyEventQueue(): String? = null
 }

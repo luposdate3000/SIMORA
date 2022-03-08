@@ -99,4 +99,5 @@ internal class ApplicationStack_Sequence(
     override fun closestDeviceWithFeature(name: String): Int = parent.closestDeviceWithFeature(name)
     override fun resolveHostName(name: String): Int = parent.resolveHostName(name)
     override fun addChildApplication(child: IApplicationStack_Actuator): Unit = (this.child as IApplicationStack_Middleware).addChildApplication(child)
+    override fun emptyEventQueue(): String? = null
 }

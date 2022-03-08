@@ -163,9 +163,9 @@ kotlin {
         }
         if (compileJS) {
             if (nodeJSMode) {
-                    val jsNodeMain by creating {
-                        dependsOn(commonMain)
-                    }
+                val jsNodeMain by creating {
+                    dependsOn(commonMain)
+                }
                 val jsMain by getting {
                     dependsOn(jsNodeMain)
                     dependencies {

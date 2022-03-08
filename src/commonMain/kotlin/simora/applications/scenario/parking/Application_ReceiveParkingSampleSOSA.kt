@@ -128,4 +128,5 @@ internal class Application_ReceiveParkingSampleSOSA(private val ownAddress: Int)
             return pck
         }
     }
+    override fun emptyEventQueue(): String? = null
 }
