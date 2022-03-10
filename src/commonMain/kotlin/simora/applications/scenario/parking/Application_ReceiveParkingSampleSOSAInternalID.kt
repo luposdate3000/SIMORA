@@ -107,7 +107,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
         query.appendLine("SELECT ?Sensor ?ParkingSlotLocation WHERE {")
         query.appendLine("?ParkingSlotLocation sosa:isObservedBy ?Sensor .")
         query.appendLine("?Sensor parking:sensorID \"${sensorID}\"^^xsd:integer .")
-        query.appendLine("}")
+        query.appendLine("} LIMIT 1")
         val pckQuery = Package_Query(ownAddress, query.toString().encodeToByteArray())
         action(pckQuery.queryID)
         parent.registerTimer(
@@ -247,6 +247,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                 parent.send(relatedDatabase, pckQuery)
                 parent.flush()
                 crashIDs[pckQuery.queryID] = pck.queryID
+e.printStackTrace()
                 return null
             }
         } else {

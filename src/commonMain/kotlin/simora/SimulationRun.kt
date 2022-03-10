@@ -53,7 +53,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
 public class SimulationRun {
-    private val globalApplications = mutableListOf<IApplicationStack_Actuator>()
+    public val globalApplications:MutableList<IApplicationStack_Actuator> = mutableListOf<IApplicationStack_Actuator>()
     private var linkManagerWrite: ILinkManagerWrite = LinkManagerList()
     public var linkManager: ILinkManager = linkManagerWrite
     internal var startConfigurationStamp: Instant = Clock.System.now()
