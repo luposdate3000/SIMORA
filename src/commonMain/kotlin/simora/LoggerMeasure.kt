@@ -77,7 +77,7 @@ internal class LoggerMeasure : ILogger {
             else -> TODO("$it")
         }
     }
-private var localStartConfigurationStamp: Instant = Clock.System.now()
+    private var localStartConfigurationStamp: Instant = Clock.System.now()
     private var startSimulationTimeStamp: Instant = Clock.System.now()
     private var startSimulationTimeStampVirtual: Long = 0
     private val packageByTopic = mutableMapOf<String, Int>()
@@ -192,14 +192,13 @@ private var localStartConfigurationStamp: Instant = Clock.System.now()
     override fun onReceivePackage(address: Int, pck: IPayload) {}
     override fun addConnectionTable(src: Int, dest: Int, hop: Int) {}
 
-
     override fun onStartSimulation() { // phase 1
         val stamp = Clock.System.now()
-var startStamp=if(data.size==1){
- simRun.startConfigurationStamp
-}else{
-localStartConfigurationStamp
-}
+        var startStamp = if (data.size == 1) {
+            simRun.startConfigurationStamp
+        } else {
+            localStartConfigurationStamp
+        }
         data.last()[StatSimulationStartupConfigDurationReal] = (stamp - startStamp).inWholeNanoseconds.toDouble() / 1000000000.0
         startSimulationTimeStamp = stamp
         startSimulationTimeStampVirtual = simRun.clock
@@ -225,7 +224,7 @@ localStartConfigurationStamp
 
     override fun onStopSimulation() { // phase 5
         val stamp = Clock.System.now()
-localStartConfigurationStamp=stamp
+        localStartConfigurationStamp = stamp
         data.last()[StatSimulationShutdownDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) - data.last()[StatSimulationDurationReal] - data.last()[StatSimulationStartupDurationReal] - data.last()[StatSimulationStartupRoutingDurationReal]
         data.last()[StatSimulationTotalDurationReal] = ((stamp - startSimulationTimeStamp).inWholeNanoseconds.toDouble() / 1000000000.0) + data.last()[StatSimulationStartupConfigDurationReal]
     }
@@ -239,6 +238,7 @@ localStartConfigurationStamp=stamp
             onShutDown()
             onStopSimulation()
             data.add(DoubleArray(StatCounter))
+            data.last()[StatNumberOfDevices] = data.first()[StatNumberOfDevices]
             packageCounter.add(MutableList(packageByTopic.size) { 0.0 })
             packageSize.add(MutableList(packageByTopic.size) { 0.0 })
             packageSizeAggregated.add(MutableList(packageByTopic.size) { 0.0 })

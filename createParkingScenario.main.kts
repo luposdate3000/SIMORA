@@ -281,7 +281,7 @@ if (args.size == 0) {
             res.appendLine("                    \"deviceType\": \"Mesh Hop\",")
             res.appendLine("                    \"mode\": \"count\",")
             res.appendLine("                    \"radius\": $radius,")
-            res.appendLine("                    \"type\": \"UNIFORM\",")
+            res.appendLine("                    \"type\": \"uniform\",")
             res.appendLine("                },")
             res.appendLine("                {")
             res.appendLine("                    \"count\": ${size - 1},")
@@ -292,7 +292,7 @@ if (args.size == 0) {
             res.appendLine("                    ],")
             res.appendLine("                    \"provideCounterAs\": \"area\",")
             res.appendLine("                    \"radius\": $radius,")
-            res.appendLine("                    \"type\": \"UNIFORM\",")
+            res.appendLine("                    \"type\": \"uniform\",")
             res.appendLine("                },")
         }
     }

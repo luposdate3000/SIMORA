@@ -247,7 +247,7 @@ internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAdd
                 parent.send(relatedDatabase, pckQuery)
                 parent.flush()
                 crashIDs[pckQuery.queryID] = pck.queryID
-e.printStackTrace()
+                e.printStackTrace()
                 return null
             }
         } else {
