@@ -35,7 +35,7 @@ public class Application_QuerySender(
     ) : this(Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory, label)
     private var first = true
     private lateinit var parent: IApplicationStack_Middleware
-    private var awaitingQueries = mutableListOf<Int>()
+    private var awaitingQueries = mutableSetOf<Int>()
 
     override fun setRouter(router: IApplicationStack_Middleware) {
         parent = router
