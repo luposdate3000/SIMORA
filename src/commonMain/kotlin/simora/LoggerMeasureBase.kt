@@ -52,7 +52,7 @@ abstract internal class LoggerMeasureBase : ILogger {
     }
 
     internal val data: MutableList<DoubleArray> = mutableListOf(DoubleArray(StatCounter))
-    internal val dataLabels = mutableListOf<String>()
+    internal val dataLabels :MutableList<String> = mutableListOf<String>()
     internal val headers: Array<String> = Array(StatCounter) {
         when (it) {
             StatNumberOfDevices -> "number of devices"
