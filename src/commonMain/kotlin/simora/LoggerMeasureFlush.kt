@@ -55,6 +55,10 @@ internal class LoggerMeasureFlush : LoggerMeasureBase() {
 
             dataLabels.removeFirst()
             data.removeFirst()
+            packageCounter.removeFirst()
+		packageSize.removeFirst()
+packageSizeAggregated.removeFirst()
+packageSizeSelfMessage.removeFirst()
         }
     }
 }
