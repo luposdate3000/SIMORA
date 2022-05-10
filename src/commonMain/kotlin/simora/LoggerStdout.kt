@@ -65,4 +65,4 @@ internal class LoggerStdout : ILogger {
     override fun reset(label: String, finish: Boolean) {
         println("${simRun.clock} reset($label, $finish)")
     }
-}
+override fun costumData(data: Any){}}

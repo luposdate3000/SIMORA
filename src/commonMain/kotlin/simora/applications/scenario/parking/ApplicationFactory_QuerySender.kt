@@ -36,6 +36,7 @@ internal class ApplicationFactory_QuerySender : IApplication_Factory {
             if (it.getOrDefault("enabled", true)) {
                 res.add(
                     Application_QuerySender(
+logger,
                         it.getOrDefault("query", ""),
                         ownAddress,
                         "$outputDirectory/",

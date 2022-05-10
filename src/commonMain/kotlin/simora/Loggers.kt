@@ -94,4 +94,9 @@ internal class Loggers internal constructor(internal val loggers: MutableList<IL
             logger.reset(label, finish)
         }
     }
+override fun costumData(data: Any){
+ for (logger in loggers) {
+ logger.costumData(data)
+}
+}
 }

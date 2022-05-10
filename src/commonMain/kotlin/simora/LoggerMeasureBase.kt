@@ -232,4 +232,5 @@ abstract internal class LoggerMeasureBase : ILogger {
     override fun addDevice(address: Int, x: Double, y: Double) {
         data.last()[StatNumberOfDevices]++
     }
+override fun costumData(data: Any){}
 }
