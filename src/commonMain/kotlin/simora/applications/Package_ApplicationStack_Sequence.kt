@@ -25,6 +25,10 @@ internal class Package_ApplicationStack_Sequence(
     internal val num: Int,
     internal val src: Int,
 ) : IPayloadLayer {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
 
     override fun getSizeInBytes(): Int = data.getSizeInBytes() + 8
     override fun toString(): String = "Package_ApplicationStack_Sequence($data)"

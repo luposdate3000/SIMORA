@@ -143,6 +143,8 @@ public class Device(
 
     @Suppress("NOTHING_TO_INLINE")
     internal inline fun assignToSimulation(dest: Int, hop: Int, pck: NetworkPackage, delay: Long) {
+pck.addHop(address)
+pck.payload.addHop(address)
         val entity = simRun.getDeviceByAddress(hop)
         scheduleEvent(entity, pck, delay)
         simRun.logger.onSendNetworkPackage(address, dest, hop, pck.payload, delay)

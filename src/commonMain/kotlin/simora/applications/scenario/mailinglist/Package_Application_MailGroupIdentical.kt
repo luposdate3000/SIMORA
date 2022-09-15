@@ -23,6 +23,10 @@ internal class Package_Application_MailGroupIdentical(
     internal val text: String,
     internal val targets: Set<Int>,
 ) : IPayload {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
     override fun getSizeInBytes(): Int = text.length + 4 * targets.size + 4
     override fun getTopic(): String = "MailGroupIdentical"
 }

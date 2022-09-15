@@ -26,6 +26,10 @@ internal class Package_Application_ParkingSample(
     internal val area: Int,
     internal val spotInArea: Int,
 ) : IPayload {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
     override fun getSizeInBytes(): Int = 4 + sampleTime.length + 1 + 4 + 4
     override fun getTopic(): String = "ParkingSample"
 }

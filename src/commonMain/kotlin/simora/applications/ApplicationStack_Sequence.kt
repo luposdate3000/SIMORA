@@ -57,6 +57,9 @@ internal class ApplicationStack_Sequence(
                 caches.add(mutableListOf())
             }
             if (pck.num == incomingNum[pck.src]) {
+for(h in pck.getAllHops()){
+pck.data.addHop(h)
+}
                 child.receive(pck.data)
                 incomingNum[pck.src]++
                 var changed = true
@@ -64,6 +67,9 @@ internal class ApplicationStack_Sequence(
                     changed = false
                     for (c in caches[pck.src]) {
                         if (c.num == incomingNum[pck.src]) {
+for(h in pck.getAllHops()){
+c.data.addHop(h)
+}
                             val p = child.receive(c.data)
                             incomingNum[pck.src]++
                             caches[pck.src].remove(c)

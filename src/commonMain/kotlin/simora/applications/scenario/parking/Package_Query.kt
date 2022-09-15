@@ -24,6 +24,10 @@ public class Package_Query(
     public val query: ByteArray,
 public val attributes:Map<String,Any> =mapOf()
 ) : IPackage_Database {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
     public val queryID: Int = UUID_Counter.getNextUUID().toInt()
     private val pckID: Long = UUID_Counter.getNextUUID()
     override fun getPackageID(): Long = pckID

@@ -20,4 +20,6 @@ package simora
 public interface IPayload {
     public fun getSizeInBytes(): Int
     public fun getTopic(): String
+    public fun addHop(address:Int)
+    public fun getAllHops():List<Int>
 }

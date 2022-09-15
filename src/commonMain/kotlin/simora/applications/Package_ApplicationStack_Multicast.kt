@@ -25,6 +25,10 @@ internal class Package_ApplicationStack_Multicast(
     internal var targets: MutableList<Int>,
     internal val pck: IPayloadBinary,
 ) : IPayloadLayer {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
     override fun getSizeInBytes(): Int = pck.getSizeInBytes() + 4 * targets.size + 4
     override fun getTopic(): String = "Multicast"
     override fun equals(other: Any?): Boolean = (other is Package_ApplicationStack_Multicast) && pck.getBytes()

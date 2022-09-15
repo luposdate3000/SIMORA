@@ -88,6 +88,9 @@ internal class ApplicationStack_MulticastRouting(
             val newTargets = mutableListOf<Int>()
             for (t in pck.targets) {
                 if (t == ownAddress) {
+for(h in pck.getAllHops()){
+pck.pck.addHop(h)
+}
                     child.receive(pck.pck)
                 } else {
                     newTargets.add(t)

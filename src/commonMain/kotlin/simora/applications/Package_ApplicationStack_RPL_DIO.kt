@@ -20,6 +20,10 @@ package simora.applications
 import simora.IPayloadRouting
 
 internal class Package_ApplicationStack_RPL_DIO(internal val rank: Int) : IPayloadRouting {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
     override fun getSizeInBytes(): Int {
         return 2
     }

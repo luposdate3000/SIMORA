@@ -23,6 +23,10 @@ internal class Package_Application_ConfigBroadcast(
     internal val targets: IntArray,
     internal val text_global: String,
 ) : IPayload {
+private val hops=mutableListOf<Int>()
+    override fun addHop(address:Int){hops.add(address)}
+    override fun getAllHops():List<Int> =hops
+
     override fun getSizeInBytes(): Int = text_global.length + targets.size * 4 + 4
     override fun getTopic(): String = "ConfigBroadcast"
 }
