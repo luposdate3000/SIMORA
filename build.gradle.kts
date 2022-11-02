@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 val compileLinux: Boolean = true
 val compileOSX: Boolean = false
 val compileWindows: Boolean = false
@@ -14,17 +13,22 @@ buildscript {
         mavenLocal()
         google()
         mavenCentral()
+maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+    }
+dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.255-SNAPSHOT")
     }
 }
 plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    id("org.jetbrains.kotlin.multiplatform") version "1.6.10"
+    id("org.jetbrains.kotlin.multiplatform") version "1.8.255-SNAPSHOT"
     `maven-publish`
 }
 repositories {
     mavenLocal()
     google()
     mavenCentral()
+maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
 }
 group = "simora"
 version = "0.0.1"
@@ -103,7 +107,7 @@ kotlin {
         }
     }
     if (compileJS) {
-        js {
+        js(IR) {
             moduleName = "simora"
             if (nodeJSMode) {
                 nodejs {
@@ -119,7 +123,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             }
         }
         val commonTest by getting {
