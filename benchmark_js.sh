@@ -9,9 +9,9 @@ cmpScalability=true
 if $cmpRoutingAndMulticastAndTopologies
 then
 # compare routing and multicast
-for t in $(find ./resources/topologies/ -name *.json | grep 128 | sort | grep -v Strong)
+for t in $(find ./resources/topologies/ -name "*.json" | grep 128 | sort | grep -v Strong)
 do
-for s in $(find ./resources/scenarios/ -name iotconfiguration*.json | sort)
+for s in $(find ./resources/scenarios/ -name "iotconfiguration*.json" | sort)
 do
 for r in ./resources/routing/ASP.json ./resources/routing/RPLFast.json
 do
@@ -31,10 +31,10 @@ if $cmpScalability
 then
 # compare scalability optimized
 s="./resources/scenarios/none.json"
-#for t in $(find ./resources/topologies/ -name *.json | grep Strong | sort)
+#for t in $(find ./resources/topologies/ -name "*.json" | grep Strong | sort)
 for tt in 2 4 8 16 32 64 128 256 512 1024 2048
 do
-t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
+t=$(find ./resources/topologies/ -name "*.json" | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/ASP.json ./resources/routing/RPLFastLate.json
 do
 echo
@@ -47,7 +47,7 @@ done
 done
 for tt in 4096 8192 16384 32768 65536 131072
 do
-t=$(find ./resources/topologies/ -name *.json | grep Strong | sort | grep Strong0*$tt.json)
+t=$(find ./resources/topologies/ -name "*.json" | grep Strong | sort | grep Strong0*$tt.json)
 for r in ./resources/routing/RPLFastLate.json
 do
 echo

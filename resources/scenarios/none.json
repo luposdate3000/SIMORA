@@ -6,27 +6,27 @@
     "deviceType": {
         "CentralTower": {
             "applications": {},
-            "performance": 100.0,
+            "performance": 100,
             "supportedLinkTypes": [
                 "WPAN",
                 "WLAN",
             ],
         },
         "EdgeDevice": {
-            "performance": 100.0,
+            "performance": 100,
             "supportedLinkTypes": [
                 "WPAN",
                 "WLAN",
             ],
         },
         "MeshHop": {
-            "performance": 100.0,
+            "performance": 100,
             "supportedLinkTypes": [
                 "WLAN",
             ],
         },
         "SensorDevice": {
-            "performance": 100.0,
+            "performance": 100,
             "supportedLinkTypes": [
                 "WPAN",
             ],

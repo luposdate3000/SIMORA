@@ -70,7 +70,11 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
                     for (i in 0 until s) {
                         val values = mutableListOf<Double>()
                         for (l in lines) {
+try {
                             values.add(l[i].toDouble())
+} catch (e: Throwable) {
+values.add(0.0)
+                    }
                         }
                         val valueAvg = values.sum() / values.size
                         val valueMin = values.first()
@@ -88,7 +92,7 @@ for (f in File("simulator_output").walk().maxDepth(1)) {
                     addRow(row)
                 }
             } catch (e: Throwable) {
-            }
+}
         }
     } catch (e: Throwable) {
     }
@@ -191,7 +195,7 @@ File("plot_routing_abs.map").printWriter().use { outMap ->
                 val v1b = plot_routing_ctr[idx1] / 1000
                 val v2b = plot_routing_ctr[idx2] / 1000
                 val c = ctr++
-                outMap.println("$c.00:\\\\shortstack{$v1 ($v1b)\\\\\\\\$v2 ($v2b)}")
+                outMap.println("$c.00:\\\\\\\\shortstack{$v1 ($v1b)\\\\\\\\\\\\\\\\$v2 ($v2b)}")
                 row = "$row,$c.00"
             }
             out.println(row)
