@@ -47,7 +47,7 @@ public class Evaluation {
             outputdirectoryTmp += if (outputdirectoryTmp == "") {
                 t
             } else {
-                "_$t"
+                "/$t"
             }
         }
         val outputdirectory = json.getOrDefault("outputDirectory", outputdirectoryTmp.replace("luposdate3000","")) + "/"
