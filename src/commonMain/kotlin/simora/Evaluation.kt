@@ -20,7 +20,6 @@ import kotlinx.datetime.Clock
 import simora.parser.JsonParser
 import simora.shared.inline.File
 import kotlin.math.sqrt
-
 @OptIn(kotlin.time.ExperimentalTime::class)
 public class Evaluation {
 
@@ -52,13 +51,15 @@ public class Evaluation {
         }
         val outputdirectory = json.getOrDefault("outputDirectory", outputdirectoryTmp.replace("luposdate3000","")) + "/"
         println("outputdirectory=$outputdirectory")
+        if (File(outputdirectory).exists()&&json.getOrDefault("exitIfExists",false)){
+return
+}
         File(outputdirectory).mkdirs()
         File("$outputdirectory.generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
             out.println(JsonParser().jsonToString(json))
         }
         json.getOrEmptyObject("logging").getOrEmptyObject("simora.LoggerMeasure")["enabled"] = true
         val outputDirectory = json.getOrDefault("outputDirectory", "simulator_output") + "/"
-        File(outputDirectory).mkdirs()
         fun appendLineToFile(name: String, header: () -> String, line: String) {
             val f = File(outputDirectory + name)
             val flag = f.exists()
