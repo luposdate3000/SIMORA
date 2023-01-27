@@ -16,12 +16,12 @@ buildscript {
 maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
     }
 dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.255-SNAPSHOT")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
     }
 }
 plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    id("org.jetbrains.kotlin.multiplatform") version "1.8.255-SNAPSHOT"
+    id("org.jetbrains.kotlin.multiplatform") version "1.8.0"
     `maven-publish`
 }
 repositories {
