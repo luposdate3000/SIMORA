@@ -31,5 +31,5 @@ public interface ILogger {
     public fun addConnectionTable(src: Int, dest: Int, hop: Int)
     public fun addDevice(address: Int, x: Double, y: Double)
     public fun reset(label: String, finish: Boolean)
-public fun costumData(data:Any)
+    public fun costumData(data: Any)
 }

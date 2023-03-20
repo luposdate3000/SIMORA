@@ -17,9 +17,6 @@
 
 package simora
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlin.native.concurrent.ThreadLocal
 import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
@@ -28,7 +25,7 @@ internal class LoggerMeasureFlush : LoggerMeasureBase() {
         val f = File(simRun.outputDirectory + name)
         val flag = f.exists()
         val stream = f.openOutputStream(flag)
-            stream.println(header())
+        stream.println(header())
         stream.println(line)
         stream.close()
     }
@@ -56,9 +53,9 @@ internal class LoggerMeasureFlush : LoggerMeasureBase() {
             dataLabels.removeFirst()
             data.removeFirst()
             packageCounter.removeFirst()
-		packageSize.removeFirst()
-packageSizeAggregated.removeFirst()
-packageSizeSelfMessage.removeFirst()
+            packageSize.removeFirst()
+            packageSizeAggregated.removeFirst()
+            packageSizeSelfMessage.removeFirst()
         }
     }
 }

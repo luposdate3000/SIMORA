@@ -77,7 +77,7 @@ public class SimulationRun {
     private var sortedLinkTypes: Array<LinkType> = emptyArray()
 
     internal fun getAllDevicesForFeature(feature: Int): List<Device> = devices.filter { hasFeature(it, feature) }
-public fun getLogger0():ILogger=logger
+    public fun getLogger0(): ILogger = logger
     public fun featureIdForName2(name: String): Int {
         for (i in 0 until features.size) {
             if (features[i].getName() == name) {

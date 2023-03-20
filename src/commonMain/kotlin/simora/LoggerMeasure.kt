@@ -17,12 +17,9 @@
 
 package simora
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlin.native.concurrent.ThreadLocal
 @OptIn(kotlin.time.ExperimentalTime::class)
- internal class LoggerMeasure : LoggerMeasureBase() {
-override fun reset(label: String, finish: Boolean) {
+internal class LoggerMeasure : LoggerMeasureBase() {
+    override fun reset(label: String, finish: Boolean) {
         dataLabels.add(label)
         if (!finish) {
             onShutDown()

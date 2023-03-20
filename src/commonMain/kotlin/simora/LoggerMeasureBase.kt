@@ -21,12 +21,17 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.native.concurrent.ThreadLocal
 @OptIn(kotlin.time.ExperimentalTime::class)
-abstract internal class LoggerMeasureBase : ILogger {
+internal abstract class LoggerMeasureBase : ILogger {
     internal lateinit var simRun: SimulationRun
     override fun initialize(simRun: SimulationRun) {
         this.simRun = simRun
     }
-
+internal fun clear(){
+while(data.size>1){
+data.removeLast()
+}
+dataLabels.clear()
+}
     @ThreadLocal
     internal companion object {
         internal var StatCounter: Int = 0
@@ -52,7 +57,7 @@ abstract internal class LoggerMeasureBase : ILogger {
     }
 
     internal val data: MutableList<DoubleArray> = mutableListOf(DoubleArray(StatCounter))
-    internal val dataLabels :MutableList<String> = mutableListOf<String>()
+    internal val dataLabels: MutableList<String> = mutableListOf<String>()
     internal val headers: Array<String> = Array(StatCounter) {
         when (it) {
             StatNumberOfDevices -> "number of devices"
@@ -232,5 +237,5 @@ abstract internal class LoggerMeasureBase : ILogger {
     override fun addDevice(address: Int, x: Double, y: Double) {
         data.last()[StatNumberOfDevices]++
     }
-override fun costumData(data: Any){}
+    override fun costumData(data: Any) {}
 }

@@ -17,12 +17,12 @@
 
 package simora
 import kotlinx.datetime.Clock
+import py4j.GatewayServer
 import simora.parser.JsonParser
 import simora.shared.inline.File
-import kotlin.math.sqrt
 
 @OptIn(kotlin.time.ExperimentalTime::class)
-public class Evaluation {
+public class EvaluationJavaBridge {
 
     public fun evalConfigFileMerge(configFileNames: List<String>) {
         val stamp = Clock.System.now()
@@ -74,61 +74,24 @@ public class Evaluation {
         val initTime = Clock.System.now() - stamp
         val measurementsm = mutableMapOf<String, MutableList<DoubleArray>>()
         var headerLine = ""
-        for (repetition in 0 until numberOfRepetitions) {
-            val simRun = SimulationRun()
-            simRun.startConfigurationStamp = Clock.System.now() - initTime
-            simRun.parseConfig(json, "", false)
-            simRun.startSimulation()
-            for (logger in simRun.logger.loggers) {
-                if (logger is LoggerMeasure) {
-                    val (datas, labels) = logger.getDataAggregated2()
-                    for (i in 0 until datas.size) {
-                        val data = datas[i]
-                        val label = labels[i]
-                        var t = measurementsm[label]
-                        if (t == null) {
-                            t = mutableListOf()
-                            measurementsm[label] = t
-                        }
-                        t.add(data)
-                        headerLine = "phase," + logger.getHeadersAggregated().toList().joinToString(",")
-                        appendLineToFile("measurement.csv", { headerLine }, label + "," + data.toList().joinToString(","))
-                    }
-                }
+
+        GatewayServer(this).start()
+    }
+    public fun getIntermediateResultsFor(sparql: String): Long {
+try{
+        val simRun = SimulationRun()
+        simRun.startConfigurationStamp = Clock.System.now() - initTime
+        simRun.parseConfig(json, "", false)
+        simRun.startSimulation()
+        for (logger in simRun.logger.loggers) {
+            if (logger is LoggerMeasure) {
+                val res= logger.data.last()[StatNetworkTraffic]
+logger.clear()
+return res
             }
         }
-        for ((label, measurements) in measurementsm) {
-            if (measurements.size > 0) {
-                val size = measurements[0].size
-                val dataAvg = DoubleArray(size)
-                val dataDev = DoubleArray(size)
-                val dataDevp = DoubleArray(size)
-                for (i in 0 until size) {
-                    var sum = 0.0
-                    for (m in measurements) {
-                        sum += m[i]
-                    }
-                    val avg = sum / measurements.size
-                    var dev = 0.0
-                    for (m in measurements) {
-                        dev += (m[i] - avg) * (m[i] - avg)
-                    }
-                    val devPercent = if (avg == 0.0) {
-                        0.0
-                    } else {
-                        sqrt(dev / measurements.size) * 100 / avg
-                    }
-                    dataAvg[i] = avg
-                    dataDev[i] = dev
-                    dataDevp[i] = devPercent
-                }
-                appendLineToFile("average.csv", { headerLine }, label + "," + dataAvg.toList().joinToString(","))
-                appendLineToFile("deviation.csv", { headerLine }, label + "," + dataDev.toList().joinToString(","))
-                appendLineToFile("deviationPercent.csv", { headerLine }, label + "," + dataDevp.toList().joinToString(","))
-            }
-        }
-        File("$outputdirectory.generated.used.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
-            out.println(JsonParser().jsonToString(json))
-        }
+}catch(e:Exception){}
+logger.clear()
+return -1
     }
 }

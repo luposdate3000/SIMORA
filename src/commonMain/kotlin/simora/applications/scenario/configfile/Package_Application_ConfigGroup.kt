@@ -26,9 +26,9 @@ internal class Package_Application_ConfigMulticast(
     internal val text_global: String,
     internal val groups: Package_Application_ConfigMulticast_Group,
 ) : IPayload {
-private val hops=mutableListOf<Int>()
-    override fun addHop(address:Int){hops.add(address)}
-    override fun getAllHops():List<Int> =hops
+    private val hops = mutableListOf<Int>()
+    override fun addHop(address: Int) { hops.add(address) }
+    override fun getAllHops(): List<Int> = hops
 
     override fun getSizeInBytes(): Int {
         var res = text_global.length // the global text

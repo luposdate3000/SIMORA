@@ -24,9 +24,9 @@ internal class NetworkPackage(
     internal val destinationAddress: Int,
     internal val payload: IPayload
 ) : IPayload {
-private val hops=mutableListOf<Int>()
-    override fun addHop(address:Int){hops.add(address)}
-    override fun getAllHops():List<Int> =hops
+    private val hops = mutableListOf<Int>()
+    override fun addHop(address: Int) { hops.add(address) }
+    override fun getAllHops(): List<Int> = hops
 
     override fun getSizeInBytes(): Int = 40 + payload.getSizeInBytes()
     override fun toString(): String = "Pck(src $sourceAddress, dest $destinationAddress, size ${getSizeInBytes()}, payload $payload)"

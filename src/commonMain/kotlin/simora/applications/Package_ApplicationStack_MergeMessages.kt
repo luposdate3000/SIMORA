@@ -23,9 +23,9 @@ import simora.IPayloadLayer
 internal class Package_ApplicationStack_MergeMessages(
     internal val data: List<IPayload>,
 ) : IPayloadLayer {
-private val hops=mutableListOf<Int>()
-    override fun addHop(address:Int){hops.add(address)}
-    override fun getAllHops():List<Int> =hops
+    private val hops = mutableListOf<Int>()
+    override fun addHop(address: Int) { hops.add(address) }
+    override fun getAllHops(): List<Int> = hops
 
     override fun toString(): String = "Package_ApplicationStack_MergeMessages($data)"
     override fun getSizeInBytes(): Int = data.sumOf { it.getSizeInBytes() }

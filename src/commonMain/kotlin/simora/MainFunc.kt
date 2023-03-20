@@ -21,7 +21,16 @@ package simora
 internal inline fun mainfunc(args: List<String>) {
     try {
         println("args $args")
+if(args.size>0 && args[0]=="JavaBridge"){
+val a=mutableListOf<String>()
+for(i in args){
+a.add(i)
+}
+a.removeFirst()
+EvaluationJavaBridge.evalConfigFileMerge(a)
+}else{
         Evaluation().evalConfigFileMerge(args)
+}
     } catch (e: Throwable) {
         e.printStackTrace()
         throw e

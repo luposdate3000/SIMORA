@@ -46,9 +46,9 @@ internal class ApplicationStack_MergeMessages(private val child: IApplicationSta
     override fun receive(pck: IPayload): IPayload? {
         if (pck is Package_ApplicationStack_MergeMessages) {
             for (p in pck.data) {
-for(h in pck.getAllHops()){
-p.addHop(h)
-}
+                for (h in pck.getAllHops()) {
+                    p.addHop(h)
+                }
                 val pp = child.receive(p)
                 if (pp != null) {
                     return pp

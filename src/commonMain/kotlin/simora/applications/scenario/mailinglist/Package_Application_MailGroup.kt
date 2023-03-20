@@ -23,9 +23,9 @@ internal class Package_Application_MailGroup(
     internal val text: String,
     internal val replacements: Map<Int, String>,
 ) : IPayload {
-private val hops=mutableListOf<Int>()
-    override fun addHop(address:Int){hops.add(address)}
-    override fun getAllHops():List<Int> =hops
+    private val hops = mutableListOf<Int>()
+    override fun addHop(address: Int) { hops.add(address) }
+    override fun getAllHops(): List<Int> = hops
 
     override fun getSizeInBytes(): Int = text.length + 4 * replacements.size + replacements.values.sumOf { it.length } + 4
     override fun getTopic(): String = "MailGroup"

@@ -22,19 +22,19 @@ import simora.applications.IApplicationStack_Middleware
 import simora.shared.inline.File
 
 public class Application_QuerySender(
-private val logger:ILogger,
+    private val logger: ILogger,
     private val queryPck: IPackage_Database,
     private val receiver: Int,
     private val outputdirectory: String,
     private val label: String,
 ) : IApplicationStack_Actuator {
     public constructor(
- logger:ILogger,
+        logger: ILogger,
         query: String,
         receiver: Int,
         outputdirectory: String,
         label: String,
-    ) : this(logger,Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory, label)
+    ) : this(logger, Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory, label)
     private var first = true
     private lateinit var parent: IApplicationStack_Middleware
     private var awaitingQueries = mutableSetOf<Int>()
@@ -69,7 +69,7 @@ private val logger:ILogger,
         first = false
         val p = queryPck
         if (p is Package_Query) {
-logger.costumData(p)
+            logger.costumData(p)
             awaitingQueries.add(p.queryID)
         }
         parent.send(receiver, p)

@@ -25,9 +25,9 @@ internal class Package_ApplicationStack_RPL_DAO(
     internal val hopHasDatabase: Boolean,
     internal val existingDatabaseHops: IntArray
 ) : IPayloadRouting {
-private val hops=mutableListOf<Int>()
-    override fun addHop(address:Int){hops.add(address)}
-    override fun getAllHops():List<Int> =hops
+    private val hops = mutableListOf<Int>()
+    override fun addHop(address: Int) { hops.add(address) }
+    override fun getAllHops(): List<Int> = hops
 
     override fun getSizeInBytes(): Int {
         val ipv6InBytes = 16

@@ -22,9 +22,9 @@ import simora.IPayloadBinary
 internal class Package_Application_ConfigUnicast(
     private val text: String,
 ) : IPayloadBinary {
-private val hops=mutableListOf<Int>()
-    override fun addHop(address:Int){hops.add(address)}
-    override fun getAllHops():List<Int> =hops
+    private val hops = mutableListOf<Int>()
+    override fun addHop(address: Int) { hops.add(address) }
+    override fun getAllHops(): List<Int> = hops
 
     override fun getSizeInBytes(): Int = text.length
     override fun getTopic(): String = "ConfigUnicast"
