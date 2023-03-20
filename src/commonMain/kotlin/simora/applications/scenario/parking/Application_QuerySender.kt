@@ -1,3 +1,4 @@
+
 /*
  * This file is part of the Luposdate3000 distribution (https://github.com/luposdate3000/SIMORA).
  * Copyright (c) 2020-2021, Institute of Information Systems (Benjamin Warnke and contributors of LUPOSDATE3000), University of Luebeck
@@ -27,6 +28,7 @@ public class Application_QuerySender(
     private val receiver: Int,
     private val outputdirectory: String,
     private val label: String,
+    private val order: String="",
 ) : IApplicationStack_Actuator {
     public constructor(
         logger: ILogger,
@@ -34,7 +36,8 @@ public class Application_QuerySender(
         receiver: Int,
         outputdirectory: String,
         label: String,
-    ) : this(logger, Package_Query(receiver, query.encodeToByteArray()), receiver, outputdirectory, label)
+        order: String="",
+    ) : this(logger, Package_Query(receiver, query.encodeToByteArray(),if(order!=""){query.encodeToByteArray()}else{null}), receiver, outputdirectory, label,order)
     private var first = true
     private lateinit var parent: IApplicationStack_Middleware
     private var awaitingQueries = mutableSetOf<Int>()

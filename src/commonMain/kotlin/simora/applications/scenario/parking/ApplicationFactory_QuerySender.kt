@@ -41,6 +41,7 @@ internal class ApplicationFactory_QuerySender : IApplication_Factory {
                         ownAddress,
                         "$outputDirectory/",
                         it.getOrDefault("label", "query"),
+                        it.getOrDefault("order", ""),
                     )
                 )
             }

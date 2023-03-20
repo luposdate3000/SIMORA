@@ -18,9 +18,10 @@
 package simora
 
 @OptIn(kotlin.time.ExperimentalTime::class)
-public expect class EvaluationJavaBridge : IEvaluationJavaBridge
+public expect class EvaluationJavaBridge() : IEvaluationJavaBridge
 
 public interface IEvaluationJavaBridge {
     public fun evalConfigFileMerge(configFileNames: List<String>)
     public fun getIntermediateResultsFor(sparql: String): Long
+    public fun getIntermediateResultsFor(sparql: String, order: String): Long
 }

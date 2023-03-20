@@ -22,6 +22,7 @@ import simora.shared.UUID_Counter
 public class Package_Query(
     public val sourceAddress: Int,
     public val query: ByteArray,
+public val order:ByteArray?=null,
     public val attributes: Map<String, Any> = mapOf()
 ) : IPackage_Database {
     private val hops = mutableListOf<Int>()

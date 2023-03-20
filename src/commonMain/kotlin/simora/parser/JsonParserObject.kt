@@ -17,7 +17,7 @@
 
 package simora.parser
 
-public class JsonParserObject(private val map: MutableMap<String, IJsonParserValue>) : Iterable<Pair<String, IJsonParserValue>>, IJsonParserValue {
+public class JsonParserObject(internal val map: MutableMap<String, IJsonParserValue>) : Iterable<Pair<String, IJsonParserValue>>, IJsonParserValue {
     override fun cloneJson(): JsonParserObject {
         val res = JsonParserObject(mutableMapOf())
         for ((k, v) in map) {
@@ -146,7 +146,6 @@ public class JsonParserObject(private val map: MutableMap<String, IJsonParserVal
         map[k] = tmp2
         return res
     }
-
     public fun getOrDefault(k: String, v: Boolean): Boolean {
         val res = when (val tmp = getOrDefault(k, JsonParserBoolean(v))) {
             is JsonParserString -> tmp.value.lowercase() == "true"

@@ -19,14 +19,15 @@ package simora
 import kotlinx.datetime.Clock
 import py4j.GatewayServer
 import simora.parser.JsonParser
+import simora.parser.JsonParserObject
 import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
-public actual class EvaluationJavaBridge : IEvaluationJavaBridge {
-
+public actual class EvaluationJavaBridge actual constructor () : IEvaluationJavaBridge {
+    internal var json: JsonParserObject? = null
     public override fun evalConfigFileMerge(configFileNames: List<String>) {
         val stamp = Clock.System.now()
-        val json = JsonParser().fileMergeToJson(configFileNames)
+        json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Config.defaultOutputDirectory + "/"
         for (n in configFileNames) {
             val a = n.lastIndexOf("/") + 1
@@ -50,14 +51,14 @@ public actual class EvaluationJavaBridge : IEvaluationJavaBridge {
                 "_$t"
             }
         }
-        val outputdirectory = json.getOrDefault("outputDirectory", outputdirectoryTmp.replace("luposdate3000", "")) + "/"
+        val outputdirectory = json!!.getOrDefault("outputDirectory", outputdirectoryTmp.replace("luposdate3000", "")) + "/"
         println("outputdirectory=$outputdirectory")
         File(outputdirectory).mkdirs()
         File("$outputdirectory.generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
-            out.println(JsonParser().jsonToString(json))
+            out.println(JsonParser().jsonToString(json!!))
         }
-        json.getOrEmptyObject("logging").getOrEmptyObject("simora.LoggerMeasure")["enabled"] = true
-        val outputDirectory = json.getOrDefault("outputDirectory", "simulator_output") + "/"
+        json!!.getOrEmptyObject("logging").getOrEmptyObject("simora.LoggerMeasure")["enabled"] = true
+        val outputDirectory = json!!.getOrDefault("outputDirectory", "simulator_output") + "/"
         File(outputDirectory).mkdirs()
         fun appendLineToFile(name: String, header: () -> String, line: String) {
             val f = File(outputDirectory + name)
@@ -70,28 +71,64 @@ public actual class EvaluationJavaBridge : IEvaluationJavaBridge {
             stream.close()
         }
 
-        val numberOfRepetitions: Int = json.getOrDefault("repeatSimulationCount", 1)
-        val initTime = Clock.System.now() - stamp
+        val numberOfRepetitions: Int = json!!.getOrDefault("repeatSimulationCount", 1)
         val measurementsm = mutableMapOf<String, MutableList<DoubleArray>>()
         var headerLine = ""
 
         GatewayServer(this).start()
     }
-    public override fun getIntermediateResultsFor(sparql: String): Long {
+    public override fun getIntermediateResultsFor(sparql: String, order: String): Long {
         try {
             val simRun = SimulationRun()
-            simRun.startConfigurationStamp = Clock.System.now() - initTime
-            simRun.parseConfig(json, "", false)
+            simRun.startConfigurationStamp = Clock.System.now()
+println("a # ${JsonParser().jsonToString(json!!)}")
+val a=json!!.getOrEmptyObject("deviceType")
+println("b")
+val b=a.getOrEmptyObject("Central Tower")
+println("c")
+val c=b.getOrEmptyObject("applications")
+println("d + ${(c as JsonParserObject).map}")
+val d=c.getOrEmptyArray("simora.applications.scenario.parking.ApplicationFactory_QuerySender")
+println("e")
+val e=d[0]
+println("f")
+val f=e as JsonParserObject
+println("g1")
+f.set("query", sparql)
+println("g2")
+f.set("order", order)
+println("h")
+            simRun.parseConfig(json!!, "", false)
             simRun.startSimulation()
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
-                    val res = logger.data.last()[StatNetworkTraffic]
+                    val res = logger.data.last()[LoggerMeasureBase.StatNetworkTraffic]
                     logger.clear()
-                    return res
+                    return res.toLong()
                 }
             }
-        } catch (e: Exception) {}
-        logger.clear()
+        } catch (e: Exception) {
+e.printStackTrace()
+}
+        return -1
+    }
+    public override fun getIntermediateResultsFor(sparql: String): Long {
+        try {
+            val simRun = SimulationRun()
+            simRun.startConfigurationStamp = Clock.System.now()
+            (json!!.getOrEmptyObject("deviceType").getOrEmptyObject("Central Tower").getOrEmptyObject("applications").getOrEmptyArray("simora.applications.scenario.parking.ApplicationFactory_QuerySender")[0] as JsonParserObject).set("query", sparql)
+            simRun.parseConfig(json!!, "", false)
+            simRun.startSimulation()
+            for (logger in simRun.logger.loggers) {
+                if (logger is LoggerMeasure) {
+                    val res = logger.data.last()[LoggerMeasureBase.StatNetworkTraffic]
+                    logger.clear()
+                    return res.toLong()
+                }
+            }
+        } catch (e: Exception) {
+e.printStackTrace()
+}
         return -1
     }
 }
