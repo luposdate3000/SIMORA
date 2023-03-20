@@ -27,7 +27,7 @@ internal inline fun mainfunc(args: List<String>) {
                 a.add(i)
             }
             a.removeFirst()
-            EvaluationJavaBridge.evalConfigFileMerge(a)
+            EvaluationJavaBridge().evalConfigFileMerge(a)
         } else {
             Evaluation().evalConfigFileMerge(args)
         }

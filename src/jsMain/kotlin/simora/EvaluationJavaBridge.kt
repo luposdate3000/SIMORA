@@ -16,16 +16,13 @@
  */
 
 package simora
-import kotlinx.datetime.Clock
-import simora.parser.JsonParser
-import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
-public actual class EvaluationJavaBridge {
+public actual class EvaluationJavaBridge : IEvaluationJavaBridge {
 
-actual    public fun evalConfigFileMerge(configFileNames: List<String>) {
+    public override fun evalConfigFileMerge(configFileNames: List<String>) {
     }
-actual    public fun getIntermediateResultsFor(sparql: String): Long {
+    public override fun getIntermediateResultsFor(sparql: String): Long {
         return -1
     }
 }

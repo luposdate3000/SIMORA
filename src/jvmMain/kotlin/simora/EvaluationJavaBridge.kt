@@ -22,9 +22,9 @@ import simora.parser.JsonParser
 import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
-public actual class EvaluationJavaBridge {
+public actual class EvaluationJavaBridge : IEvaluationJavaBridge {
 
-actual    public fun evalConfigFileMerge(configFileNames: List<String>) {
+    public override fun evalConfigFileMerge(configFileNames: List<String>) {
         val stamp = Clock.System.now()
         val json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Config.defaultOutputDirectory + "/"
@@ -77,7 +77,7 @@ actual    public fun evalConfigFileMerge(configFileNames: List<String>) {
 
         GatewayServer(this).start()
     }
-actual    public fun getIntermediateResultsFor(sparql: String): Long {
+    public override fun getIntermediateResultsFor(sparql: String): Long {
         try {
             val simRun = SimulationRun()
             simRun.startConfigurationStamp = Clock.System.now() - initTime
