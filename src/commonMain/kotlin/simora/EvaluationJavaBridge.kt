@@ -78,20 +78,20 @@ public class EvaluationJavaBridge {
         GatewayServer(this).start()
     }
     public fun getIntermediateResultsFor(sparql: String): Long {
-try{
-        val simRun = SimulationRun()
-        simRun.startConfigurationStamp = Clock.System.now() - initTime
-        simRun.parseConfig(json, "", false)
-        simRun.startSimulation()
-        for (logger in simRun.logger.loggers) {
-            if (logger is LoggerMeasure) {
-                val res= logger.data.last()[StatNetworkTraffic]
-logger.clear()
-return res
+        try {
+            val simRun = SimulationRun()
+            simRun.startConfigurationStamp = Clock.System.now() - initTime
+            simRun.parseConfig(json, "", false)
+            simRun.startSimulation()
+            for (logger in simRun.logger.loggers) {
+                if (logger is LoggerMeasure) {
+                    val res = logger.data.last()[StatNetworkTraffic]
+                    logger.clear()
+                    return res
+                }
             }
-        }
-}catch(e:Exception){}
-logger.clear()
-return -1
+        } catch (e: Exception) {}
+        logger.clear()
+        return -1
     }
 }

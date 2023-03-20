@@ -26,12 +26,13 @@ internal abstract class LoggerMeasureBase : ILogger {
     override fun initialize(simRun: SimulationRun) {
         this.simRun = simRun
     }
-internal fun clear(){
-while(data.size>1){
-data.removeLast()
-}
-dataLabels.clear()
-}
+    internal fun clear() {
+        while (data.size> 1) {
+            data.removeLast()
+        }
+        dataLabels.clear()
+    }
+
     @ThreadLocal
     internal companion object {
         internal var StatCounter: Int = 0
