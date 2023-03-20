@@ -132,6 +132,7 @@ kotlin {
             val jvmMain by getting {
                 dependencies {
                     implementation("com.google.code.java-allocation-instrumenter:java-allocation-instrumenter:3.3.0")
+                    implementation("net.sf.py4j:py4j:0.10.9.5")
                 }
             }
             val jvmTest by getting {

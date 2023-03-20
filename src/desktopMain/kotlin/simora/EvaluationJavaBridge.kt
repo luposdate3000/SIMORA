@@ -21,7 +21,11 @@ import simora.parser.JsonParser
 import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
-public expect class EvaluationJavaBridge {
-expect public fun evalConfigFileMerge(configFileNames: List<String>)
-expect public fun getIntermediateResultsFor(sparql: String): Long
+public actual class EvaluationJavaBridge {
+
+ actual   public fun evalConfigFileMerge(configFileNames: List<String>) {
+    }
+actual    public fun getIntermediateResultsFor(sparql: String): Long {
+        return -1
+    }
 }
