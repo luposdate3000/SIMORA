@@ -30,11 +30,11 @@ internal abstract class LoggerMeasureBase : ILogger {
         while (data.size> 1) {
             data.removeLast()
         }
-for(arr in data){
-for(i in 0 until arr.size){
-arr[i]=0.0
-}
-}
+        for (arr in data) {
+            for (i in 0 until arr.size) {
+                arr[i] = 0.0
+            }
+        }
         dataLabels.clear()
     }
 

@@ -90,7 +90,7 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
         val pck = Package_Query(d.address, sparql.encodeToByteArray(), if (order != "") { order.encodeToByteArray() } else { null })
         val netpck = NetworkPackage(d.address, d.address, pck)
         simRun.addEvent(0L, d, d, netpck)
-simRun.run()
+        simRun.run()
         try {
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
