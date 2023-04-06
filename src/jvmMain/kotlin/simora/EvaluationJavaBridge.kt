@@ -81,25 +81,16 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
         try {
             val simRun = SimulationRun()
             simRun.startConfigurationStamp = Clock.System.now()
-println("a # ${JsonParser().jsonToString(json!!)}")
-val a=json!!.getOrEmptyObject("deviceType")
-println("b")
-val b=a.getOrEmptyObject("Central Tower")
-println("c")
-val c=b.getOrEmptyObject("applications")
-println("d + ${(c as JsonParserObject).map}")
-val d=c.getOrEmptyArray("simora.applications.scenario.parking.ApplicationFactory_QuerySender")
-println("e")
-val e=d[0]
-println("f")
-val f=e as JsonParserObject
-println("g1")
-f.set("query", sparql)
-println("g2")
-f.set("order", order)
-println("h")
+            val a = json!!.getOrEmptyObject("deviceType")
+            val b = a.getOrEmptyObject("Central Tower")
+            val c = b.getOrEmptyObject("applications")
+            val d = c.getOrEmptyArray("simora.applications.scenario.parking.ApplicationFactory_QuerySender")
+            val e = d[0]
+            val f = e as JsonParserObject
+            f.set("query", sparql)
+            f.set("order", order)
             simRun.parseConfig(json!!, "", false)
-            simRun.startSimulation()
+            simRun.startSimulation2()
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
                     val res = logger.data.last()[LoggerMeasureBase.StatNetworkTraffic]
@@ -108,8 +99,8 @@ println("h")
                 }
             }
         } catch (e: Exception) {
-e.printStackTrace()
-}
+            e.printStackTrace()
+        }
         return -1
     }
     public override fun getIntermediateResultsFor(sparql: String): Long {
@@ -127,8 +118,8 @@ e.printStackTrace()
                 }
             }
         } catch (e: Exception) {
-e.printStackTrace()
-}
+            e.printStackTrace()
+        }
         return -1
     }
 }

@@ -431,6 +431,12 @@ public class SimulationRun {
         shutDown()
         logger.onStopSimulation()
     }
+    public fun startSimulation2() {
+        maxClock = if (simMaxClock == notInitializedClock) maxClock else simMaxClock
+        logger.onStartSimulation()
+        startUp()
+        run()
+    }
 
     public fun run() {
         var nextEvent = futureEvents.extractMinValue()
