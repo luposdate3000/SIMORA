@@ -1,3 +1,6 @@
+package-lock.json
+package.json
+node_modules
 kotlin-js-store/
 src/luposdate3000_coverage_merged
 afl.*.log
