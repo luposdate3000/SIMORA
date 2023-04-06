@@ -37,7 +37,7 @@ public class Application_QuerySender(
         outputdirectory: String,
         label: String,
         order: String = "",
-    ) : this(logger, Package_Query(receiver, query.encodeToByteArray(), if (order != "") { query.encodeToByteArray() } else { null }), receiver, outputdirectory, label, order)
+    ) : this(logger, Package_Query(receiver, query.encodeToByteArray(), if (order != "") { order.encodeToByteArray() } else { null }), receiver, outputdirectory, label, order)
     private var first = true
     private lateinit var parent: IApplicationStack_Middleware
     private var awaitingQueries = mutableSetOf<Int>()

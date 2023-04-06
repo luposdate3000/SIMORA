@@ -17,6 +17,8 @@
 
 package simora
 import kotlinx.datetime.Clock
+import simora.applications.scenario.parking.Package_Query
+import simora.models.net.NetworkPackage
 import py4j.GatewayServer
 import simora.parser.JsonParser
 import simora.parser.JsonParserObject
@@ -24,8 +26,10 @@ import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
 public actual class EvaluationJavaBridge actual constructor () : IEvaluationJavaBridge {
+internal val simRun = SimulationRun()
     internal var json: JsonParserObject? = null
     public override fun evalConfigFileMerge(configFileNames: List<String>) {
+println("EvaluationJavaBridge.evalConfigFileMerge")
         val stamp = Clock.System.now()
         json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Config.defaultOutputDirectory + "/"
@@ -74,23 +78,19 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
         val numberOfRepetitions: Int = json!!.getOrDefault("repeatSimulationCount", 1)
         val measurementsm = mutableMapOf<String, MutableList<DoubleArray>>()
         var headerLine = ""
-
+            simRun.startConfigurationStamp = Clock.System.now()
+            simRun.parseConfig(json!!, "", false)
+            simRun.startSimulation2()
+println("waiting for connections")
         GatewayServer(this).start()
     }
     public override fun getIntermediateResultsFor(sparql: String, order: String): Long {
+println("EvaluationJavaBridge.getIntermediateResultsFor")
+val d=simRun.getAllDevicesForFeature(simRun.featureIdForName2("DatabaseQuery")).first()
+val pck=Package_Query(d.address, sparql.encodeToByteArray(), if (order != "") { order.encodeToByteArray() } else { null })
+val netpck=NetworkPackage(d.address, d.address,pck)
+simRun.addEvent(0L,d,d,netpck)
         try {
-            val simRun = SimulationRun()
-            simRun.startConfigurationStamp = Clock.System.now()
-            val a = json!!.getOrEmptyObject("deviceType")
-            val b = a.getOrEmptyObject("Central Tower")
-            val c = b.getOrEmptyObject("applications")
-            val d = c.getOrEmptyArray("simora.applications.scenario.parking.ApplicationFactory_QuerySender")
-            val e = d[0]
-            val f = e as JsonParserObject
-            f.set("query", sparql)
-            f.set("order", order)
-            simRun.parseConfig(json!!, "", false)
-            simRun.startSimulation2()
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
                     val res = logger.data.last()[LoggerMeasureBase.StatNetworkTraffic]
@@ -104,22 +104,6 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
         return -1
     }
     public override fun getIntermediateResultsFor(sparql: String): Long {
-        try {
-            val simRun = SimulationRun()
-            simRun.startConfigurationStamp = Clock.System.now()
-            (json!!.getOrEmptyObject("deviceType").getOrEmptyObject("Central Tower").getOrEmptyObject("applications").getOrEmptyArray("simora.applications.scenario.parking.ApplicationFactory_QuerySender")[0] as JsonParserObject).set("query", sparql)
-            simRun.parseConfig(json!!, "", false)
-            simRun.startSimulation()
-            for (logger in simRun.logger.loggers) {
-                if (logger is LoggerMeasure) {
-                    val res = logger.data.last()[LoggerMeasureBase.StatNetworkTraffic]
-                    logger.clear()
-                    return res.toLong()
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return -1
+return getIntermediateResultsFor(sparql,"")
     }
 }
