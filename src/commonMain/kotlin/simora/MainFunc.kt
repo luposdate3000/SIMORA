@@ -31,7 +31,7 @@ public inline fun mainfunc(args: List<String>) {
         } else {
             Evaluation().evalConfigFileMerge(args)
         }
-println("terminate")
+        println("terminate")
     } catch (e: Throwable) {
         e.printStackTrace()
         throw e

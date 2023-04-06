@@ -17,19 +17,19 @@
 
 package simora
 import kotlinx.datetime.Clock
+import py4j.GatewayServer
 import simora.applications.scenario.parking.Package_Query
 import simora.models.net.NetworkPackage
-import py4j.GatewayServer
 import simora.parser.JsonParser
 import simora.parser.JsonParserObject
 import simora.shared.inline.File
 
 @OptIn(kotlin.time.ExperimentalTime::class)
 public actual class EvaluationJavaBridge actual constructor () : IEvaluationJavaBridge {
-internal val simRun = SimulationRun()
+    internal val simRun = SimulationRun()
     internal var json: JsonParserObject? = null
     public override fun evalConfigFileMerge(configFileNames: List<String>) {
-println("EvaluationJavaBridge.evalConfigFileMerge")
+        println("EvaluationJavaBridge.evalConfigFileMerge")
         val stamp = Clock.System.now()
         json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Config.defaultOutputDirectory + "/"
@@ -78,18 +78,18 @@ println("EvaluationJavaBridge.evalConfigFileMerge")
         val numberOfRepetitions: Int = json!!.getOrDefault("repeatSimulationCount", 1)
         val measurementsm = mutableMapOf<String, MutableList<DoubleArray>>()
         var headerLine = ""
-            simRun.startConfigurationStamp = Clock.System.now()
-            simRun.parseConfig(json!!, "", false)
-            simRun.startSimulation2()
-println("waiting for connections")
+        simRun.startConfigurationStamp = Clock.System.now()
+        simRun.parseConfig(json!!, "", false)
+        simRun.startSimulation2()
+        println("waiting for connections")
         GatewayServer(this).start()
     }
     public override fun getIntermediateResultsFor(sparql: String, order: String): Long {
-println("EvaluationJavaBridge.getIntermediateResultsFor")
-val d=simRun.getAllDevicesForFeature(simRun.featureIdForName2("DatabaseQuery")).first()
-val pck=Package_Query(d.address, sparql.encodeToByteArray(), if (order != "") { order.encodeToByteArray() } else { null })
-val netpck=NetworkPackage(d.address, d.address,pck)
-simRun.addEvent(0L,d,d,netpck)
+        println("EvaluationJavaBridge.getIntermediateResultsFor")
+        val d = simRun.getAllDevicesForFeature(simRun.featureIdForName2("DatabaseQuery")).first()
+        val pck = Package_Query(d.address, sparql.encodeToByteArray(), if (order != "") { order.encodeToByteArray() } else { null })
+        val netpck = NetworkPackage(d.address, d.address, pck)
+        simRun.addEvent(0L, d, d, netpck)
         try {
             for (logger in simRun.logger.loggers) {
                 if (logger is LoggerMeasure) {
@@ -104,6 +104,6 @@ simRun.addEvent(0L,d,d,netpck)
         return -1
     }
     public override fun getIntermediateResultsFor(sparql: String): Long {
-return getIntermediateResultsFor(sparql,"")
+        return getIntermediateResultsFor(sparql, "")
     }
 }
