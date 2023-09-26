@@ -35,9 +35,6 @@ public class LinkManagerList : ILinkManagerWrite {
     override fun getSupportedLinkTypes(addr: Int): IntArray = supportedLinkTypes[addr]
     override fun getTransmissionDelay(addrSrc: Int, addrDest: Int, numberOfBytesToSend: Int): Long {
         val idx = link_Addresses[addrSrc].indexOf(addrDest)
-        if (idx <0) {
-            println("getTransmissionDelay .. $addrDest")
-        }
         val kiloBits = numberOfBytesToSend.toDouble() / 125
         val seconds = kiloBits / link_dataRateInKbps[addrSrc][idx]
         return (seconds * 1000 * 1000 * 1000).roundToLong()

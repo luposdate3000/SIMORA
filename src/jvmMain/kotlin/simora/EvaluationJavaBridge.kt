@@ -29,7 +29,6 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
     internal val simRun = SimulationRun()
     internal var json: JsonParserObject? = null
     public override fun evalConfigFileMerge(configFileNames: List<String>) {
-        println("EvaluationJavaBridge.evalConfigFileMerge")
         val stamp = Clock.System.now()
         json = JsonParser().fileMergeToJson(configFileNames)
         var outputdirectoryTmp = Config.defaultOutputDirectory + "/"
@@ -56,9 +55,8 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
             }
         }
         val outputdirectory = json!!.getOrDefault("outputDirectory", outputdirectoryTmp.replace("luposdate3000", "")) + "/"
-        println("outputdirectory=$outputdirectory")
         File(outputdirectory).mkdirs()
-        File("$outputdirectory.generated.parsed.json").withOutputStream { out -> // this reformats the json file, such that all files are structurally equal
+        File("$outputdirectory.generated.parsed.json").withOutputStream { out ->
             out.println(JsonParser().jsonToString(json!!))
         }
         json!!.getOrEmptyObject("logging").getOrEmptyObject("simora.LoggerMeasure")["enabled"] = true
@@ -85,7 +83,6 @@ public actual class EvaluationJavaBridge actual constructor () : IEvaluationJava
         GatewayServer(this).start()
     }
     public override fun getIntermediateResultsFor(sparql: String, order: String): Long {
-        println("EvaluationJavaBridge.getIntermediateResultsFor")
         val d = simRun.getAllDevicesForFeature(simRun.featureIdForName2("DatabaseQuery")).first()
         val pck = Package_Query(d.address, sparql.encodeToByteArray(), if (order != "") { order.encodeToByteArray() } else { null })
         val netpck = NetworkPackage(d.address, d.address, pck)

@@ -47,7 +47,6 @@ internal class Application_ParkingSensor(
     }
 
     override fun startUp() {
-        println("Application_ParkingSensor.startUp")
         startUpTimeStamp = Clock.System.now()
         parent.registerTimer(startClockInSec.toLong() * 1000000000L + random.nextLong(0L, sendingVarianceInSec.toLong() * 1000000000L), this)
         receiver = parent.closestDeviceWithFeature("Database")

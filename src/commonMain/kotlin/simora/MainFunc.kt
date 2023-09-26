@@ -20,7 +20,6 @@ package simora
 @Suppress("NOTHING_TO_INLINE")
 public inline fun mainfunc(args: List<String>) {
     try {
-        println("args $args")
         if (args.size> 0 && args[0] == "JavaBridge") {
             val a = mutableListOf<String>()
             for (i in args) {
@@ -31,7 +30,6 @@ public inline fun mainfunc(args: List<String>) {
         } else {
             Evaluation().evalConfigFileMerge(args)
         }
-        println("terminate")
     } catch (e: Throwable) {
         e.printStackTrace()
         throw e

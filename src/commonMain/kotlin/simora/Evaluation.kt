@@ -50,7 +50,6 @@ public class Evaluation {
             }
         }
         val outputdirectory = json.getOrDefault("outputDirectory", outputdirectoryTmp.replace("luposdate3000", "")) + "/"
-        println("outputdirectory=$outputdirectory")
         if (File(outputdirectory).exists()&&json.getOrDefault("exitIfExists",false)){
 return
 }

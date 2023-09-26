@@ -23,8 +23,6 @@ import simora.applications.IApplicationStack_Middleware
 internal class Application_ReceiveParkingSampleSOSAInternalID(private val ownAddress: Int) : IApplicationStack_Actuator {
     val relatedDatabase = ownAddress
 
-// val relatedDatabase=0
-//    val timeToSleep = 360000000000L
     internal companion object {
         var timeToSleep = 1L // wait before sending a query
         var timeToSleepStep = 100000000000L // increase time to wait, to keep ordering

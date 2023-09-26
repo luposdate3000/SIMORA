@@ -19,7 +19,7 @@ package simora.shared.inline
 import simora.shared.IMyOutputStream
 import java.io.OutputStream
 
-internal class MyOutputStream // kotlin.io.println("MyOutputStream.constructor $this")
+internal class MyOutputStream
 internal constructor(it: OutputStream) : IMyOutputStream {
     private val buffer: ByteArray = ByteArray(8192)
     private var bufferPos = 0
@@ -33,7 +33,6 @@ internal constructor(it: OutputStream) : IMyOutputStream {
     }
 
     private fun localFlush() {
-        // kotlin.io.println("MyOutputStream.localFlush $this $bufferPos")
         if (bufferPos > 0) {
             stream!!.write(buffer, 0, bufferPos)
             bufferPos = 0
@@ -41,14 +40,12 @@ internal constructor(it: OutputStream) : IMyOutputStream {
     }
 
     override fun flush() {
-        // kotlin.io.println("MyOutputStream.flush $this")
         localFlush()
         stream!!.flush()
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal inline fun _write(buf: ByteArray, off: Int, len: Int) {
-        // kotlin.io.println("MyOutputStream._write $this")
         if (bufferPos + len > buffer.size) {
             localFlush()
         }

@@ -191,19 +191,12 @@ public class ApplicationStack_RPL(
 
     internal companion object {
 
-        // ApplicationStack_RPL Constants (see section 17. of RFC 6550)
-        // ------------------------
-
-        // This is the default value for the DelayPackage_ApplicationStack_RPL_DAO Timer. Default is 1 second.
         internal const val DEFAULT_Package_ApplicationStack_RPL_DAO_DELAY: Int = 1
 
-        // The minimum increase in Rank between a node and any of its DODAG parents.
         internal const val MinHopRankIncrease: Int = 1
 
-        // This is the Rank for a DODAG root. ROOT_RANK has a value of MinHopRankIncrease
         internal const val ROOT_RANK: Int = MinHopRankIncrease
 
-        // This is the constant maximum for the Rank.
         internal const val INFINITE_RANK: Int = Int.MAX_VALUE
     }
 

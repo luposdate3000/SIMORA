@@ -36,7 +36,6 @@ internal class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOu
     }
 
     private fun localFlush() {
-        // kotlin.io.println("MyOutputStream.localFlush $this $bufferPos")
         if (bufferPos > 0) {
             fwrite(buffer.refTo(0), bufferPos.toULong(), 1, stream)
             bufferPos = 0
@@ -44,14 +43,12 @@ internal class MyOutputStream internal constructor(file: CPointer<FILE>) : IMyOu
     }
 
     override fun flush() {
-        // kotlin.io.println("MyOutputStream.flush $this")
         localFlush()
         fflush(stream)
     }
 
     @Suppress("NOTHING_TO_INLINE")
     internal inline fun _write(buf: ByteArray, off: Int, len: Int) {
-        // kotlin.io.println("MyOutputStream._write $this")
         if (bufferPos + len > buffer.size) {
             localFlush()
         }
